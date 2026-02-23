@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blitz-audit GEO / LLM — Fabtech ID — 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+
+/* ── RESET ──────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── VARIABLES ──────────────────────────────────────────────── */
+:root {
+  --bg:      #0a0a0a;
+  --bg2:     rgba(12,12,12,0.98);
+  --accent:  #c8ff00;
+  --border:  rgba(200,255,0,0.28);
+  --borderH: #c8ff00;
+  --text:    #ffffff;
+  --muted:   rgba(255,255,255,0.62);
+  --red:     #ef4444;
+  --green:   #10b981;
+  --orange:  #f97316;
+  --yellow:  #f59e0b;
+  --ease:    cubic-bezier(0.25,0.46,0.45,0.94);
+  --r:       12px;
+}
+
+/* ── BASE ───────────────────────────────────────────────────── */
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 15px;
+  line-height: 1.65;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── LAYOUT ─────────────────────────────────────────────────── */
+.page  { max-width: 860px; margin: 0 auto; padding: 0 24px 120px; }
+.sect  { margin-top: 80px; }
+.rule  { border: none; border-top: 1px solid rgba(200,255,0,0.1); margin: 64px 0 0; }
+
+/* ── TYPOGRAPHY ─────────────────────────────────────────────── */
+.mono {
+  font-family: 'Inter', monospace;
+  font-size: .65rem;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* ── CARD (base dark card) ──────────────────────────────────── */
+.card {
+  background: var(--bg2);
+  border: 2px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+  transition: border-color .3s var(--ease), box-shadow .3s var(--ease), transform .3s var(--ease);
+}
+.card:hover {
+  border-color: var(--borderH);
+  box-shadow: 0 0 24px rgba(200,255,0,0.12), 0 8px 40px rgba(0,0,0,0.5);
+  transform: translateY(-2px);
+}
+.card-pad { padding: 28px; }
+
+/* ── ACCORDION ──────────────────────────────────────────────── */
+.acc { overflow: hidden; }
+.acc + .acc { margin-top: 12px; }
+.acc.open {
+  border-color: var(--borderH);
+  box-shadow: 0 0 28px rgba(200,255,0,0.15), 0 12px 40px rgba(0,0,0,0.5);
+}
+
+.acc-q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 22px 28px;
+  cursor: pointer;
+  user-select: none;
+  transition: background .25s;
+}
+.acc-q:hover { background: rgba(200,255,0,0.04); }
+.acc-q-left { display: flex; align-items: center; gap: 16px; flex: 1; min-width: 0; }
+
+.acc-icon {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(200,255,0,0.3);
+  border-radius: 50%;
+  font-size: 1.3rem;
+  line-height: 1;
+  color: var(--accent);
+  font-weight: 300;
+  transition: transform .35s var(--ease), background .3s;
+}
+.acc.open .acc-icon { transform: rotate(45deg); background: rgba(200,255,0,0.08); }
+
+.acc-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .45s ease;
+}
+.acc.open .acc-body { max-height: 3000px; }
+.acc-inner {
+  padding: 4px 28px 28px;
+  border-top: 1px solid rgba(200,255,0,0.1);
+}
+.acc-inner p { color: var(--muted); line-height: 1.72; margin-bottom: 14px; }
+.acc-inner p:last-child { margin-bottom: 0; }
+.acc-inner strong { color: var(--text); }
+.acc-inner em { color: rgba(255,255,255,0.8); font-style: italic; }
+.acc-inner ol, .acc-inner ul { color: var(--muted); padding-left: 1.4em; margin-bottom: 14px; }
+.acc-inner li { margin-bottom: 9px; line-height: 1.62; }
+.acc-inner li:last-child { margin-bottom: 0; }
+
+/* ── SECTION HEADER ─────────────────────────────────────────── */
+.sec-head { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 32px; }
+.sec-num {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
+  font-size: 2.8rem;
+  line-height: 1;
+  color: rgba(200,255,0,0.12);
+  flex-shrink: 0;
+  min-width: 60px;
+  padding-top: 4px;
+}
+.sec-info { flex: 1; }
+.sec-label {
+  font-size: .65rem;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 5px;
+}
+.sec-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.3rem,2.5vw,1.9rem);
+  line-height: 1.2;
+  color: var(--text);
+}
+
+/* ── GRADE BADGES ───────────────────────────────────────────── */
+.grade {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+.grade-sm { width: 44px; height: 44px; font-size: 1.3rem; }
+.grade-lg { width: 68px; height: 68px; font-size: 2.2rem; border-radius: 12px; }
+.ga { background: rgba(16,185,129,.15); color: #10b981; }
+.gb { background: rgba(99,102,241,.15); color: #818cf8; }
+.gc { background: rgba(245,158,11,.15); color: #f59e0b; }
+.gd { background: rgba(249,115,22,.15); color: #f97316; }
+.gf { background: rgba(239,68,68,.15); color: #ef4444; }
+
+/* ── SCORE BAR ──────────────────────────────────────────────── */
+.sbar { margin: 0 0 20px; }
+.sbar-labels { display: flex; justify-content: space-between; font-size: .78rem; color: var(--muted); margin-bottom: 6px; }
+.sbar-track { height: 5px; background: rgba(255,255,255,0.07); border-radius: 3px; overflow: hidden; }
+.sbar-fill { height: 100%; border-radius: 3px; transition: width 1s ease; }
+.fill-a { background: #10b981; }
+.fill-c { background: #f59e0b; }
+.fill-d { background: #f97316; }
+.fill-f { background: #ef4444; }
+
+/* ── TECH DETAIL (nested accordion) ────────────────────────── */
+.tech-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: rgba(200,255,0,0.06);
+  border: 1px solid rgba(200,255,0,0.2);
+  border-radius: 6px;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: all .25s;
+  margin-top: 4px;
+}
+.tech-btn:hover { background: rgba(200,255,0,0.12); border-color: var(--accent); }
+.tech-body { max-height: 0; overflow: hidden; transition: max-height .4s ease; }
+.tech-body.open { max-height: 600px; }
+.tech-box {
+  background: rgba(200,255,0,0.03);
+  border: 1px solid rgba(200,255,0,0.12);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-top: 12px;
+  font-size: .87rem;
+  color: rgba(255,255,255,0.52);
+  line-height: 1.7;
+}
+.tech-box strong { color: var(--accent); font-weight: 600; }
+
+/* ── SURVEY TABLE ───────────────────────────────────────────── */
+.survey-wrap { overflow-x: auto; }
+.survey-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: .85rem;
+}
+.survey-table th {
+  background: rgba(200,255,0,0.06);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--accent);
+  padding: 12px 14px;
+  border-bottom: 2px solid rgba(200,255,0,0.18);
+  white-space: nowrap;
+}
+.survey-table td {
+  padding: 11px 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  vertical-align: middle;
+  color: var(--muted);
+}
+.survey-table tr:last-child td { border-bottom: none; }
+.survey-table tr:hover td { background: rgba(255,255,255,0.015); }
+.q-text { font-size: .82rem; color: var(--text); line-height: 1.45; max-width: 240px; }
+
+.bm { display: inline-block; font-size: .68rem; font-weight: 700; font-family: 'Montserrat',sans-serif; text-transform: uppercase; letter-spacing: .04em; padding: 3px 8px; border-radius: 4px; white-space: nowrap; }
+.bm-y  { background: rgba(16,185,129,.14); color: #10b981; border: 1px solid rgba(16,185,129,.28); }
+.bm-p  { background: rgba(245,158,11,.14); color: #f59e0b; border: 1px solid rgba(245,158,11,.28); }
+.bm-n  { background: rgba(239,68,68,.12);  color: #ef4444; border: 1px solid rgba(239,68,68,.22); }
+.bm-ab { background: rgba(139,92,246,.12); color: #a78bfa; border: 1px solid rgba(139,92,246,.22); }
+
+.survey-scores {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  margin-top: 20px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.ss-item {
+  flex: 1;
+  text-align: center;
+  padding: 14px 8px;
+  border-right: 1px solid rgba(255,255,255,0.06);
+}
+.ss-item:last-child { border-right: none; }
+.ss-label { font-size: .68rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: 4px; }
+.ss-val { font-family: 'Montserrat',sans-serif; font-weight: 800; font-size: 1.35rem; }
+.ss-zero { color: #ef4444; }
+.ss-low  { color: #f59e0b; }
+.ss-mid  { color: #10b981; }
+
+/* ── PILL BADGES (axis summary) ─────────────────────────────── */
+.pills { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+.pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: .82rem;
+}
+.pill-name { color: var(--muted); }
+.pill-grade { font-family: 'Montserrat',sans-serif; font-weight: 700; font-size: .88rem; }
+
+/* ── PASSPORT ───────────────────────────────────────────────── */
+.passport {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px 28px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin-top: 20px;
+}
+.pass-row { display: flex; gap: 8px; font-size: .85rem; }
+.pk { color: var(--muted); white-space: nowrap; flex-shrink: 0; }
+.pv { color: var(--text); font-weight: 500; }
+
+/* ── TOC ────────────────────────────────────────────────────── */
+.toc-plaque {
+  background: rgba(200,255,0,0.04);
+  border: 1px solid rgba(200,255,0,0.18);
+  border-radius: var(--r);
+  padding: 22px 26px;
+}
+.toc-label {
+  font-family: 'Montserrat',sans-serif;
+  font-weight: 800;
+  font-size: .78rem;
+  text-transform: uppercase;
+  letter-spacing: .16em;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+.toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px 28px; }
+.toc-item { display: flex; align-items: baseline; gap: 10px; font-size: .87rem; color: var(--muted); line-height: 1.4; }
+.toc-n { font-family: 'Montserrat',sans-serif; font-weight: 700; color: var(--accent); font-size: .78rem; flex-shrink: 0; min-width: 22px; }
+
+/* ── ACTION ITEMS ───────────────────────────────────────────── */
+.act-num {
+  font-family: 'Montserrat',sans-serif;
+  font-weight: 900;
+  font-size: 1.05rem;
+  color: var(--accent);
+  background: rgba(200,255,0,0.08);
+  border: 1px solid rgba(200,255,0,0.2);
+  border-radius: 6px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.act-title {
+  font-family: 'Montserrat',sans-serif;
+  font-weight: 700;
+  font-size: .96rem;
+  color: var(--text);
+  line-height: 1.35;
+}
+.act-effect-lbl {
+  font-size: .72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--accent);
+  margin: 14px 0 4px;
+}
+.act-effect-txt { font-size: .9rem; color: var(--muted); line-height: 1.62; }
+
+/* ── ABOUT / RUSSIAN ────────────────────────────────────────── */
+.about-hero {
+  background: rgba(200,255,0,0.05);
+  border: 2px solid rgba(200,255,0,0.22);
+  border-radius: var(--r);
+  padding: 26px 30px;
+  margin-bottom: 16px;
+}
+.about-hero h2 {
+  font-family: 'Montserrat',sans-serif;
+  font-weight: 800;
+  font-size: 1.35rem;
+  color: var(--text);
+}
+
+.solution-plaque {
+  background: var(--bg2);
+  border: 2px solid var(--border);
+  border-radius: var(--r);
+  padding: 22px 26px;
+  margin-bottom: 16px;
+  transition: border-color .3s var(--ease), box-shadow .3s var(--ease), transform .3s var(--ease);
+}
+.solution-plaque:hover {
+  border-color: var(--borderH);
+  box-shadow: 0 0 20px rgba(200,255,0,0.1);
+  transform: translateY(-2px);
+}
+.sp-title {
+  font-family: 'Montserrat',sans-serif;
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+.sp-body { font-size: .92rem; color: var(--muted); line-height: 1.65; }
+
+.items-plaque {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: var(--r);
+  padding: 20px 24px;
+  margin-bottom: 16px;
+}
+.ip-label {
+  font-family: 'Montserrat',sans-serif;
+  font-weight: 700;
+  font-size: .95rem;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+.items-plaque ol { padding-left: 1.3em; color: var(--muted); font-size: .9rem; line-height: 1.65; }
+.items-plaque li { margin-bottom: 8px; }
+.items-plaque strong { color: var(--text); }
+
+/* ── CTA ────────────────────────────────────────────────────── */
+.cta-box {
+  background: rgba(200,255,0,0.06);
+  border: 2px solid rgba(200,255,0,0.28);
+  border-radius: 16px;
+  padding: 36px;
+  text-align: center;
+  margin-top: 32px;
+  transition: border-color .3s, box-shadow .3s;
+}
+.cta-box:hover { border-color: var(--accent); box-shadow: 0 0 32px rgba(200,255,0,0.18); }
+.cta-box h3 { font-family: 'Montserrat',sans-serif; font-weight: 800; font-size: 1.35rem; margin-bottom: 8px; }
+.cta-box p  { font-size: .9rem; color: var(--muted); margin-bottom: 6px; }
+.cta-box a  { color: var(--accent); font-weight: 600; }
+
+/* ── COVER PAGE ─────────────────────────────────────────────── */
+.cover-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(200,255,0,0.12);
+  margin-bottom: 60px;
+}
+.cover-brand { font-family: 'Montserrat',sans-serif; font-weight: 800; font-size: .82rem; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); }
+.cover-date  { font-size: .8rem; color: var(--muted); }
+
+.cover-title {
+  font-family: 'Montserrat',sans-serif;
+  font-weight: 800;
+  font-size: clamp(2.2rem,5vw,3.6rem);
+  line-height: 1.12;
+  letter-spacing: -.02em;
+  margin-bottom: 26px;
+}
+.cover-title .hl { color: var(--accent); }
+
+.cover-sub {
+  font-size: 1.12rem;
+  color: var(--muted);
+  max-width: 660px;
+  line-height: 1.7;
+  margin-bottom: 36px;
+}
+
+.cover-lead {
+  background: var(--bg2);
+  border-left: 4px solid var(--accent);
+  border-top: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  border-radius: 0 var(--r) var(--r) 0;
+  padding: 22px 26px;
+  margin-bottom: 24px;
+  font-size: .96rem;
+  color: var(--muted);
+  line-height: 1.75;
+}
+
+.cover-risk {
+  background: var(--bg2);
+  border: 2px solid var(--border);
+  border-radius: var(--r);
+  padding: 26px;
+  margin-bottom: 32px;
+  transition: border-color .3s, box-shadow .3s, transform .3s;
+}
+.cover-risk:hover { border-color: var(--borderH); box-shadow: 0 0 20px rgba(200,255,0,0.1); transform: translateY(-2px); }
+.cover-risk-title { font-family: 'Montserrat',sans-serif; font-weight: 700; font-size: .9rem; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); margin-bottom: 10px; }
+.cover-risk p { color: var(--muted); line-height: 1.7; }
+
+.grade-summary {
+  background: var(--bg2);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  padding: 30px;
+  margin-bottom: 20px;
+  transition: border-color .3s, box-shadow .3s;
+}
+.grade-summary:hover { border-color: var(--borderH); box-shadow: 0 0 28px rgba(200,255,0,0.14); }
+.gs-head { display: flex; align-items: center; gap: 20px; margin-bottom: 22px; }
+.gs-info .lbl { font-size: .78rem; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 4px; }
+.gs-info .score { font-family: 'Montserrat',sans-serif; font-weight: 700; font-size: 1.2rem; }
+
+/* ── SCROLL REVEAL ──────────────────────────────────────────── */
+.rv { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s var(--ease); }
+.rv.in { opacity: 1; transform: none; }
+
+/* ── RESPONSIVE ─────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .toc-grid   { grid-template-columns: 1fr; }
+  .passport   { grid-template-columns: 1fr; }
+  .pills      { flex-direction: column; }
+  .survey-scores { flex-wrap: wrap; }
+  .gs-head    { flex-direction: column; align-items: flex-start; }
+  .acc-q      { padding: 18px 20px; }
+  .acc-inner  { padding: 4px 20px 22px; }
+}
+
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 1 — COVER PAGE
+     ══════════════════════════════════════════════════════════ -->
+
+<div class="cover-strip">
+  <span class="cover-brand">Lavrik GEO</span>
+  <span class="cover-date">Blitz-audit GEO / LLM · Février 2026</span>
+</div>
+
+<div class="rv">
+  <div class="mono" style="margin-bottom:14px">Rapport client · Confidentiel · Fabtech ID</div>
+  <h1 class="cover-title">
+    Le problème des <span class="hl">60 %</span> :<br>
+    comment la recherche IA<br>
+    <span class="hl">siphonne votre trafic</span>
+  </h1>
+  <p class="cover-sub">
+    Ce rapport montre ce que les intelligences artificielles disent réellement
+    de votre organisation — et les occasions que vous perdez à cause de ce silence.
+  </p>
+</div>
+
+<div class="cover-lead rv">
+  Depuis deux ans, de plus en plus de gens posent leurs questions complexes non pas à un
+  moteur de recherche, mais à ChatGPT, Gemini, Perplexity et d'autres assistants IA. Ces
+  modèles n'affichent pas dix liens — ils donnent une réponse toute faite et quelques noms
+  de confiance. Si votre organisation est absente de ces réponses, vous n'entrez même pas
+  dans la liste courte des options.
+</div>
+
+<div class="cover-risk rv">
+  <div class="cover-risk-title">Pourquoi c'est un risque pour toute organisation</div>
+  <p>Avant, on googlait, ouvrait cinq onglets et comparait soi-même. Aujourd'hui, on pose une
+  question à l'IA, on voit une réponse et deux noms — et on va directement chez ceux que le
+  modèle a cités en premier. Votre site peut paraître «normal» dans les résultats de recherche,
+  mais les vraies demandes se dirigent vers ceux que l'IA nomme le plus clairement.</p>
+</div>
+
+<div class="grade-summary rv">
+  <div class="gs-head">
+    <div class="grade grade-lg gf">F</div>
+    <div class="gs-info">
+      <div class="lbl">Score global — Fabtech ID</div>
+      <div class="score">13 / 70 pts · 18,6 % · Critique</div>
+    </div>
+  </div>
+  <div class="pills">
+    <div class="pill"><span class="pill-name">Technique</span><span class="pill-grade ga">A</span></div>
+    <div class="pill"><span class="pill-name">Contenu</span><span class="pill-grade gf">F</span></div>
+    <div class="pill"><span class="pill-name">Entités</span><span class="pill-grade gf">F</span></div>
+    <div class="pill"><span class="pill-name">Visibilité IA</span><span class="pill-grade gf">F</span></div>
+    <div class="pill"><span class="pill-name">Autorité</span><span class="pill-grade ga">A</span></div>
+    <div class="pill"><span class="pill-name">Local / NAP</span><span class="pill-grade gd">D</span></div>
+  </div>
+</div>
+
+<div class="passport rv">
+  <div class="pass-row"><span class="pk">Objet :</span><span class="pv">Fabtech ID — fabtechid.com</span></div>
+  <div class="pass-row"><span class="pk">Format :</span><span class="pv">Blitz-audit GEO / LLM</span></div>
+  <div class="pass-row"><span class="pk">Méthode :</span><span class="pv">Scan technique + enquête 4 IA (5 questions)</span></div>
+  <div class="pass-row"><span class="pk">Date :</span><span class="pv">Février 2026</span></div>
+  <div class="pass-row"><span class="pk">Analyste :</span><span class="pv">Lavrik GEO — Halyna Lavrik</span></div>
+</div>
+
+<hr class="rule">
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 2 — SOMMAIRE
+     ══════════════════════════════════════════════════════════ -->
+<div class="sect rv">
+  <div class="toc-plaque">
+    <div class="toc-label">Sommaire · Ce que vous allez découvrir</div>
+    <div class="toc-grid">
+      <div class="toc-item"><span class="toc-n">01</span><span>Méthodologie et limites</span></div>
+      <div class="toc-item"><span class="toc-n">02</span><span>Axe Technique (A · 80 %)</span></div>
+      <div class="toc-item"><span class="toc-n">03</span><span>Axe Contenu (F · 0 %)</span></div>
+      <div class="toc-item"><span class="toc-n">04</span><span>Axe Entités et identité (F)</span></div>
+      <div class="toc-item"><span class="toc-n">05</span><span>Axe Visibilité IA (F · 35 %)</span></div>
+      <div class="toc-item"><span class="toc-n">06</span><span>Axe Autorité (A · 80 %)</span></div>
+      <div class="toc-item"><span class="toc-n">07</span><span>Axe Présence locale NAP (D)</span></div>
+      <div class="toc-item"><span class="toc-n">08</span><span>Enquête LLM — tableau complet</span></div>
+      <div class="toc-item"><span class="toc-n">09</span><span>Plan d'action 90 jours</span></div>
+    </div>
+  </div>
+</div>
+
+<hr class="rule">
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 3 — MÉTHODOLOGIE
+     ══════════════════════════════════════════════════════════ -->
+<div class="sect">
+  <div class="sec-head rv">
+    <span class="sec-num">03</span>
+    <div class="sec-info">
+      <div class="sec-label">Méthode</div>
+      <h2 class="sec-title">Méthodologie et limites de l'audit express</h2>
+    </div>
+  </div>
+
+  <div class="card acc rv">
+    <div class="acc-q" onclick="toggle(this)">
+      <div class="acc-q-left">
+        <span style="font-size:.88rem;color:var(--muted)">Comment les scores ont été calculés et les limites de la méthode</span>
+      </div>
+      <span class="acc-icon">+</span>
+    </div>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <p><strong>Scoring (70 pts) :</strong> 6 axes pondérés — Technique (10 pts), Contenu (10 pts), Entités / Brand (10 pts), Visibilité LLM (30 pts), Autorité (5 pts), Présence locale / NAP (5 pts). Chaque critère noté 0–2 selon présence, qualité et cohérence des signaux. Score final converti en note lettre : A (80–100 %), B (65–79 %), C (50–64 %), D (35–49 %), F (0–34 %).</p>
+        <p><strong>Enquête LLM :</strong> 5 questions scénarisées représentant des cas d'usage réels (recherche de prestataire LOTO, audits, équipements, espaces clos) testées sur 4 modèles — ChatGPT (GPT-4o), Perplexity (sonar), Gemini 1.5, Grok 2. Chaque réponse évaluée : mentionné (yes), partiel, absent (no), ou aberrant.</p>
+        <p><strong>Limites :</strong> Les réponses des LLM varient selon la date d'entraînement, la session et la formulation. Les résultats reflètent un instantané de février 2026. L'axe Technique est un scan automatisé — il ne remplace pas un audit d'accessibilité complet. L'axe Autorité mesure la présence structurelle, pas la qualité réelle des backlinks.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="rule">
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 4 — AXES OVERVIEW
+     ══════════════════════════════════════════════════════════ -->
+<div class="sect">
+  <div class="sec-head rv">
+    <span class="sec-num">04</span>
+    <div class="sec-info">
+      <div class="sec-label">Analyse</div>
+      <h2 class="sec-title">Les six axes de visibilité IA</h2>
+    </div>
+  </div>
+
+  <!-- AXE 01 TECHNIQUE -->
+  <div class="card acc rv">
+    <div class="acc-q" onclick="toggle(this)">
+      <div class="acc-q-left">
+        <div class="grade grade-sm ga">A</div>
+        <div>
+          <div style="font-size:.68rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)">AXE 01</div>
+          <div style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:.97rem;color:var(--text)">Infrastructure technique</div>
+        </div>
+      </div>
+      <span class="acc-icon">+</span>
+    </div>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="sbar">
+          <div class="sbar-labels"><span>Score</span><span>8 / 10 · 80 %</span></div>
+          <div class="sbar-track"><div class="sbar-fill fill-a" style="width:80%"></div></div>
+        </div>
+        <p>Bonne base technique : SSL actif, robots.txt correct, sitemap présent, Open Graph configuré, Schema.org avec 10 types. Un seul signal manquant — <strong>llms.txt</strong> — qui permet aux IA de comprendre directement ce que vous faites, pour qui, et où vous êtes.</p>
+        <button class="tech-btn" onclick="techToggle(this)">⚙ Détails techniques</button>
+        <div class="tech-body">
+          <div class="tech-box">
+            <strong>Présent :</strong> SSL ✓ · robots.txt ✓ · sitemap.xml ✓ · Open Graph ✓ · Schema.org (10 types) ✓<br>
+            <strong>Absent :</strong> llms.txt — déclaration directe pour les LLM<br>
+            <strong>Action :</strong> Créer /llms.txt avec description de l'offre LOTO, zone (Chicoutimi, SLSJ), clients cibles. Délai : 2h. Impact : immédiat.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AXE 02 CONTENT -->
+  <div class="card acc rv">
+    <div class="acc-q" onclick="toggle(this)">
+      <div class="acc-q-left">
+        <div class="grade grade-sm gf">F</div>
+        <div>
+          <div style="font-size:.68rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)">AXE 02</div>
+          <div style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:.97rem;color:var(--text)">Qualité du contenu</div>
+        </div>
+      </div>
+      <span class="acc-icon">+</span>
+    </div>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="sbar">
+          <div class="sbar-labels"><span>Score</span><span>0 / 10 · 0 %</span></div>
+          <div class="sbar-track"><div class="sbar-fill fill-f" style="width:0%"></div></div>
+        </div>
+        <p>Votre site n'est pas structuré pour la lecture IA. Pas de titres clairs, de blocs FAQ, de balisage de données. L'IA ne peut pas extraire le sens de votre contenu — donc elle ne vous recommande pas.</p>
+        <p>Ce n'est pas une histoire de textes SEO. C'est de l'hygiène de base : y a-t-il des réponses aux questions types sur le site, la structure de services est-elle compréhensible, peut-on extraire les faits rapidement. Actuellement — non.</p>
+        <button class="tech-btn" onclick="techToggle(this)">⚙ Détails techniques</button>
+        <div class="tech-body">
+          <div class="tech-box">
+            <strong>Absent :</strong> Balisage FAQPage Schema.org · Titres sémantiques H1-H3 avec entités clés · Réponses structurées aux questions cibles<br>
+            <strong>Action :</strong> Créer une page FAQ (min 8 Q/R LOTO). Ajouter H2/H3 avec noms de services. Implanter Schema.org FAQPage + Service.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AXE 03 ENTITIES -->
+  <div class="card acc rv">
+    <div class="acc-q" onclick="toggle(this)">
+      <div class="acc-q-left">
+        <div class="grade grade-sm gf">F</div>
+        <div>
+          <div style="font-size:.68rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)">AXE 03</div>
+          <div style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:.97rem;color:var(--text)">Entités et identité de marque</div>
+        </div>
+      </div>
+      <span class="acc-icon">+</span>
+    </div>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="sbar">
+          <div class="sbar-labels"><span>Score</span><span>0 / 10 · 0 %</span></div>
+          <div class="sbar-track"><div class="sbar-fill fill-f" style="width:0%"></div></div>
+        </div>
+        <p>L'IA ne peut pas identifier clairement votre organisation. Résultat concret de notre test : Gemini — le seul système qui vous trouve — vous place à <strong>Drummondville au lieu de Chicoutimi</strong>. Un directeur du secteur minier du Saguenay–Lac-Saint-Jean lit la mauvaise ville et conclut que c'est une autre compagnie.</p>
+        <p>Cette confusion découle directement de l'absence d'identité numérique claire. Pas de profil Wikidata, pas de Schema.org unifié. L'IA «reconstruit» les données à partir de sources aléatoires — et reconstruit incorrectement. Même les IA qui vous mentionnent travaillent contre vous.</p>
+        <button class="tech-btn" onclick="techToggle(this)">⚙ Détails techniques</button>
+        <div class="tech-body">
+          <div class="tech-box">
+            <strong>Absent :</strong> Profil Wikidata · Schema.org Organization complet (nom, logo, réseaux) · Mentions dans sources faisant autorité · Profils des dirigeants (Person)<br>
+            <strong>Action :</strong> Ajouter Schema.org Organization avec adresse exacte (Chicoutimi, QC). Publier contenu expert signé. S'inscrire dans répertoires sectoriels (Crunchbase, associations professionnelles).
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AXE 04 LLM VISIBILITY -->
+  <div class="card acc rv">
+    <div class="acc-q" onclick="toggle(this)">
+      <div class="acc-q-left">
+        <div class="grade grade-sm gf">F</div>
+        <div>
+          <div style="font-size:.68rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)">AXE 04</div>
+          <div style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:.97rem;color:var(--text)">Visibilité dans les réponses IA</div>
+        </div>
+      </div>
+      <span class="acc-icon">+</span>
+    </div>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="sbar">
+          <div class="sbar-labels"><span>Score enquête</span><span>7 / 20 · 35 %</span></div>
+          <div class="sbar-track"><div class="sbar-fill fill-f" style="width:35%"></div></div>
+        </div>
+        <p>Sur 20 réponses testées, votre organisation apparaît 7 fois (35 %). <strong>ChatGPT et Perplexity ne vous montrent jamais.</strong> Quand vos clients potentiels interrogent l'IA sur votre domaine — vous n'existez tout simplement pas pour les deux outils les plus populaires.</p>
+        <p>Gemini vous affiche dans les 5 cas (100 %), mais avec une erreur de ville (Drummondville). Grok vous cite 2 fois sur 5, avec une réponse aberrante en russe pour Q5. Chaque mois de retard, c'est des centaines de contacts manqués avec des clients industriels du Saguenay–Lac-Saint-Jean qui ont déjà décidé d'acheter. Juste pas chez vous.</p>
+        <button class="tech-btn" onclick="techToggle(this)">⚙ Détails techniques</button>
+        <div class="tech-body">
+          <div class="tech-box">
+            ChatGPT (0/5) · Perplexity (0/5) · Gemini (5/5 — ville erronée) · Grok (2/5 + réponse aberrante)<br>
+            <strong>Action prioritaire :</strong> FAQ + llms.txt + Schema.org Organization. Publier dans répertoires indexés par ChatGPT/Perplexity : LinkedIn, Wikidata, communiqués sectoriels.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AXE 05 AUTHORITY -->
+  <div class="card acc rv">
+    <div class="acc-q" onclick="toggle(this)">
+      <div class="acc-q-left">
+        <div class="grade grade-sm ga">A</div>
+        <div>
+          <div style="font-size:.68rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)">AXE 05</div>
+          <div style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:.97rem;color:var(--text)">Autorité et signaux externes</div>
+        </div>
+      </div>
+      <span class="acc-icon">+</span>
+    </div>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="sbar">
+          <div class="sbar-labels"><span>Score</span><span>4 / 5 · 80 %</span></div>
+          <div class="sbar-track"><div class="sbar-fill fill-a" style="width:80%"></div></div>
+        </div>
+        <p>Bonne base d'autorité. Le domaine est établi, les signaux de confiance de base sont présents. Ce qui manque : des citations externes provenant de sources reconnues — associations, médias sectoriels, organismes de certification LOTO.</p>
+        <button class="tech-btn" onclick="techToggle(this)">⚙ Détails techniques</button>
+        <div class="tech-body">
+          <div class="tech-box">
+            <strong>Présent :</strong> Ancienneté du domaine · Profil d'entreprise de base<br>
+            <strong>Recommandé :</strong> Citations dans AQSS, associations LOTO sectorielles, mentions dans médias industriels du Saguenay–Lac-Saint-Jean.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AXE 06 GEO/NAP -->
+  <div class="card acc rv">
+    <div class="acc-q" onclick="toggle(this)">
+      <div class="acc-q-left">
+        <div class="grade grade-sm gd">D</div>
+        <div>
+          <div style="font-size:.68rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)">AXE 06</div>
+          <div style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:.97rem;color:var(--text)">Présence locale et données NAP</div>
+        </div>
+      </div>
+      <span class="acc-icon">+</span>
+    </div>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="sbar">
+          <div class="sbar-labels"><span>Score</span><span>1 / 5 · 20 %</span></div>
+          <div class="sbar-track"><div class="sbar-fill fill-d" style="width:20%"></div></div>
+        </div>
+        <p>L'adresse, le téléphone et le nom ne sont pas synchronisés dans les répertoires numériques. Conséquence directe : Gemini, le seul système qui vous trouve pour toutes les requêtes, indique votre adresse comme <strong>Drummondville au lieu de Chicoutimi</strong>.</p>
+        <p>Un directeur de compagnie minière du Saguenay–Lac-Saint-Jean demande à l'IA des spécialistes LOTO près de chez lui — et obtient votre adresse dans une autre région. Vous perdez des contrats non pas parce que vous êtes mauvais — mais parce que l'IA pense que vous êtes loin.</p>
+        <button class="tech-btn" onclick="techToggle(this)">⚙ Détails techniques</button>
+        <div class="tech-body">
+          <div class="tech-box">
+            <strong>Présence actuelle :</strong> 20 % du référentiel de base · Données NAP incohérentes entre Google Business Profile, répertoires et site.<br>
+            <strong>Action :</strong> Audit NAP dans 15-20 répertoires. Harmoniser au format unique. Mettre à jour Schema.org LocalBusiness. S'inscrire dans Bing Places, Apple Maps, annuaires sectoriels.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="rule">
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 5 — LLM SURVEY
+     ══════════════════════════════════════════════════════════ -->
+<div class="sect">
+  <div class="sec-head rv">
+    <span class="sec-num">05</span>
+    <div class="sec-info">
+      <div class="sec-label">Enquête IA</div>
+      <h2 class="sec-title">Ce que les LLM disent de Fabtech ID</h2>
+    </div>
+  </div>
+
+  <div class="card acc rv">
+    <div class="acc-q" onclick="toggle(this)">
+      <div class="acc-q-left">
+        <span style="font-size:.88rem;color:var(--muted)">5 questions scénarisées × 4 modèles IA — voir le tableau complet</span>
+      </div>
+      <span class="acc-icon">+</span>
+    </div>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <p style="margin-bottom:16px">5 questions représentant des scénarios réels d'acheteurs industriels posées à 4 systèmes IA le même jour, en session neutre.</p>
+        <div class="survey-wrap">
+          <table class="survey-table">
+            <thead>
+              <tr>
+                <th style="min-width:200px">Question</th>
+                <th>ChatGPT</th>
+                <th>Perplexity</th>
+                <th>Gemini</th>
+                <th>Grok</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="q-text">Q1 — Entreprise de cadenassage LOTO certifiée au Saguenay</td>
+                <td><span class="bm bm-n">absent</span></td>
+                <td><span class="bm bm-n">absent</span></td>
+                <td><span class="bm bm-y">mentionné*</span></td>
+                <td><span class="bm bm-n">absent</span></td>
+              </tr>
+              <tr>
+                <td class="q-text">Q2 — Formation LOTO spécialisée au Québec industriel</td>
+                <td><span class="bm bm-n">absent</span></td>
+                <td><span class="bm bm-n">absent</span></td>
+                <td><span class="bm bm-y">mentionné</span></td>
+                <td><span class="bm bm-n">absent</span></td>
+              </tr>
+              <tr>
+                <td class="q-text">Q3 — Équipements cadenassage fabriqués au Canada</td>
+                <td><span class="bm bm-n">absent</span></td>
+                <td><span class="bm bm-n">absent</span></td>
+                <td><span class="bm bm-y">mentionné</span></td>
+                <td><span class="bm bm-p">partiel</span></td>
+              </tr>
+              <tr>
+                <td class="q-text">Q4 — Audit cadenassage + espaces clos au Saguenay</td>
+                <td><span class="bm bm-n">absent</span></td>
+                <td><span class="bm bm-n">absent</span></td>
+                <td><span class="bm bm-y">mentionné</span></td>
+                <td><span class="bm bm-y">mentionné</span></td>
+              </tr>
+              <tr>
+                <td class="q-text">Q5 — Prestataire LOTO pour industrie minière Québec</td>
+                <td><span class="bm bm-n">absent</span></td>
+                <td><span class="bm bm-n">absent</span></td>
+                <td><span class="bm bm-y">mentionné</span></td>
+                <td><span class="bm bm-ab">aberrant</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:.76rem;color:var(--muted);margin-top:10px">* Gemini — ville indiquée : Drummondville (incorrect, devrait être Chicoutimi) · Grok Q5 — réponse hors sujet en russe</p>
+        <div class="survey-scores">
+          <div class="ss-item"><div class="ss-label">ChatGPT</div><div class="ss-val ss-zero">0/5</div></div>
+          <div class="ss-item"><div class="ss-label">Perplexity</div><div class="ss-val ss-zero">0/5</div></div>
+          <div class="ss-item"><div class="ss-label">Gemini</div><div class="ss-val ss-mid">5/5*</div></div>
+          <div class="ss-item"><div class="ss-label">Grok</div><div class="ss-val ss-low">2/5</div></div>
+          <div class="ss-item" style="background:rgba(200,255,0,0.04)"><div class="ss-label">Total</div><div class="ss-val ss-low">7/20</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="rule">
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 6 — PLAN D'ACTION 90 JOURS
+     ══════════════════════════════════════════════════════════ -->
+<div class="sect">
+  <div class="sec-head rv">
+    <span class="sec-num">06</span>
+    <div class="sec-info">
+      <div class="sec-label">Plan d'action</div>
+      <h2 class="sec-title">Actions prioritaires dans les 90 prochains jours</h2>
+    </div>
+  </div>
+  <p style="color:var(--muted);font-size:.92rem;line-height:1.65;margin-bottom:24px" class="rv">
+    Basé sur les axes les plus critiques (F : contenu, entités, visibilité IA · D : présence locale).
+    Ces cinq actions donnent le plus grand gain de visibilité dans le temps le plus court.
+  </p>
+
+  <div class="card acc rv">
+    <div class="acc-q" onclick="toggle(this)">
+      <div class="acc-q-left">
+        <div class="act-num">1</div>
+        <div class="act-title">Corriger les données NAP dans tous les répertoires (Chicoutimi, QC)</div>
+      </div>
+      <span class="acc-icon">+</span>
+    </div>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="act-effect-lbl">Ce que verra l'IA</div>
+        <p class="act-effect-txt">Votre bonne ville, votre bon téléphone — fin de l'erreur «Drummondville». L'IA associera correctement vos mentions à Chicoutimi et au Saguenay–Lac-Saint-Jean.</p>
+        <div class="act-effect-lbl">Ce que verra le client</div>
+        <p class="act-effect-txt">Un fournisseur local dans sa région, pas une entreprise à 200 km de distance.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card acc rv">
+    <div class="acc-q" onclick="toggle(this)">
+      <div class="acc-q-left">
+        <div class="act-num">2</div>
+        <div class="act-title">Créer un fichier llms.txt décrivant votre expertise LOTO en 10 points</div>
+      </div>
+      <span class="acc-icon">+</span>
+    </div>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="act-effect-lbl">Ce que verra l'IA</div>
+        <p class="act-effect-txt">Un signal direct sur ce que vous faites — formation, audits, équipement, Chicoutimi, Saguenay–Lac-Saint-Jean. Format optimisé pour l'indexation LLM.</p>
+        <div class="act-effect-lbl">Ce que verra le client</div>
+        <p class="act-effect-txt">Des réponses IA plus précises sur votre offre, votre zone géographique et vos spécialités LOTO.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card acc rv">
+    <div class="acc-q" onclick="toggle(this)">
+      <div class="acc-q-left">
+        <div class="act-num">3</div>
+        <div class="act-title">Créer une page FAQ structurée avec balisage Schema.org FAQPage</div>
+      </div>
+      <span class="acc-icon">+</span>
+    </div>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="act-effect-lbl">Ce que verra l'IA</div>
+        <p class="act-effect-txt">Des réponses directes à extraire et à citer. Score contenu : 0 % → objectif 50 %+ après mise en œuvre complète.</p>
+        <div class="act-effect-lbl">Ce que verra le client</div>
+        <p class="act-effect-txt">Votre expertise expliquée clairement, en format question/réponse, sans devoir fouiller le site entier.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card acc rv">
+    <div class="acc-q" onclick="toggle(this)">
+      <div class="acc-q-left">
+        <div class="act-num">4</div>
+        <div class="act-title">Ajouter Schema.org Organization complet + biographies dirigeants (Person)</div>
+      </div>
+      <span class="acc-icon">+</span>
+    </div>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="act-effect-lbl">Ce que verra l'IA</div>
+        <p class="act-effect-txt">Une entité identifiable — nom exact, ville Chicoutimi, domaine LOTO, personnes réelles. Fin de l'ambiguïté «quelle compagnie, quelle ville?»</p>
+        <div class="act-effect-lbl">Ce que verra le client</div>
+        <p class="act-effect-txt">Une organisation réelle avec un visage, une adresse précise et une expertise vérifiable.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card acc rv">
+    <div class="acc-q" onclick="toggle(this)">
+      <div class="acc-q-left">
+        <div class="act-num">5</div>
+        <div class="act-title">Publier 2–3 guides experts LOTO et les soumettre aux répertoires sectoriels</div>
+      </div>
+      <span class="acc-icon">+</span>
+    </div>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <div class="act-effect-lbl">Ce que verra l'IA</div>
+        <p class="act-effect-txt">Du contenu citeable dans votre domaine — cible prioritaire : ChatGPT et Perplexity (actuellement 0 %). Ces plateformes valorisent les contenus publiés dans des sources tierces reconnues.</p>
+        <div class="act-effect-lbl">Ce que verra le client</div>
+        <p class="act-effect-txt">Une organisation qui partage son expertise, pas seulement qui vend — signal de confiance fort en B2B industriel.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="rule">
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 7 — ABOUT LAVRIK GEO
+     ══════════════════════════════════════════════════════════ -->
+<div class="sect">
+  <div class="sec-head rv">
+    <span class="sec-num">07</span>
+    <div class="sec-info">
+      <div class="sec-label">À propos</div>
+      <h2 class="sec-title">À propos de Lavrik GEO</h2>
+    </div>
+  </div>
+
+  <!-- Plaque 1 — titre -->
+  <div class="about-hero rv">
+    <h2>À propos de Lavrik GEO — Audit express 190 $</h2>
+  </div>
+
+  <!-- Accordéon 1 — Problème -->
+  <div class="card acc rv">
+    <div class="acc-q" onclick="toggle(this)">
+      <div class="acc-q-left">
+        <span style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:.97rem;color:var(--text)">LE PROBLÈME QUE VOUS NE VOYEZ PAS</span>
+      </div>
+      <span class="acc-icon">+</span>
+    </div>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <p>40 % des décisions prises aujourd'hui commencent par une question à une IA (ChatGPT, Claude, Perplexity, etc.). Là-bas, les règles sont différentes.</p>
+        <p>À partir de 2026, les marques qui auront nourri les IA avec leurs propres informations planteront leurs piquets sur les veines aurifères du Klondike numérique. Si ces systèmes ne «connaissent» pas votre marque, vous perdez un lead avant même qu'il n'arrive jusqu'à Google.</p>
+        <p>Vos concurrents sont déjà cités. Pas parce qu'ils sont meilleurs. Mais parce que leur contenu est structuré pour être compris par les machines.</p>
+        <p>Vous avez bâti votre réputation pendant des années. Pour les IA, vous êtes un fantôme.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Plaque 2 — solution -->
+  <div class="solution-plaque rv">
+    <div class="sp-title">⚡ MA SOLUTION : AUDIT EXPRESS (190 $)</div>
+    <div class="sp-body">Je ne vends pas des «conseils flous». Je vends un diagnostic précis. Livraison en 48 heures. Format : un PDF avec des actions concrètes.</div>
+  </div>
+
+  <!-- Plaque 3 — ce que vous obtenez -->
+  <div class="items-plaque rv">
+    <div class="ip-label">Ce que vous obtenez pour 190 $</div>
+    <ol>
+      <li><strong>La vérité (analyse GEO)</strong> — Comment 5 systèmes d'IA voient votre marque. Ou l'ignorent.</li>
+      <li><strong>Le renseignement</strong> — Pourquoi les IA recommandent vos 3 concurrents. Quels sont leurs arguments cachés.</li>
+      <li><strong>Le plan d'attaque</strong> — Une feuille de route technique (sémantique, Schema.org) pour reprendre vos positions. Sans jargon. Juste : «Faites A, puis B».</li>
+    </ol>
+  </div>
+
+  <!-- Accordéon 2 — Comment + Qui -->
+  <div class="card acc rv">
+    <div class="acc-q" onclick="toggle(this)">
+      <div class="acc-q-left">
+        <span style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:.97rem;color:var(--text)">Comment ça fonctionne + Qui suis-je ?</span>
+      </div>
+      <span class="acc-icon">+</span>
+    </div>
+    <div class="acc-body">
+      <div class="acc-inner">
+        <p><strong>➡️ COMMENT ÇA FONCTIONNE (100 % PAR ÉCRIT)</strong></p>
+        <p>Zéro appels. Zéro rencontres. Je respecte votre temps (et le mien). Tout se passe par écrit : messages privés LinkedIn, courriel, WhatsApp ou Notion. Pourquoi ? Parce que vous pouvez lire mon rapport à 23 h ou entre deux réunions. Et parce qu'un audit sérieux doit être documenté. Délai garanti : 48 heures ouvrables.</p>
+        <p><strong>👤 QUI SUIS-JE ?</strong></p>
+        <p>Je suis <strong>Halyna Lavrik</strong>, originaire d'Ukraine. 20 ans d'expérience comme rédactrice en chef, analyste, experte en relations publiques et autrice d'analyses (industrie, santé, énergie, sociologie, économie).</p>
+        <p>Toute ma carrière, j'ai rendu une analyse complexe compréhensible pour les gens. Maintenant, je la rends compréhensible pour les machines.</p>
+        <p>Je ne suis pas développeuse. Je suis <em>traductrice</em> : je traduis votre expertise dans la langue que respectent les LLM.</p>
+        <p>Je travaille <strong>seule avec mes employés IA</strong> — des agents configurés avec les outils les plus avancés (Claude, Perplexity, n8n, Cursor). <strong>Pas d'agence, pas d'équipe, pas de frais généraux.</strong> Résultat : mes services sont <strong>plus avantageux</strong> qu'embaucher une agence.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-box rv">
+    <h3>Snapshot de Visibilité IA (48h)</h3>
+    <p>1 PDF + 3 signaux bloquants identifiés · Sans risque</p>
+    <p><strong>Halyna Lavrik</strong> · <a href="mailto:pr.expert4488@gmail.com">pr.expert4488@gmail.com</a></p>
+    <p style="font-size:.76rem;margin-top:12px;opacity:.55">Audit février 2026 · Lavrik GEO · Chicoutimi, Québec</p>
+  </div>
+</div>
+
+</div><!-- /page -->
+
+<script>
+// ── Accordion toggle ────────────────────────────────────────
+function toggle(q) {
+  const item = q.closest('.acc');
+  item.classList.toggle('open');
+}
+
+// ── Tech detail (nested) ────────────────────────────────────
+function techToggle(btn) {
+  const body = btn.nextElementSibling;
+  body.classList.toggle('open');
+  btn.textContent = body.classList.contains('open') ? '▲ Masquer' : '⚙ Détails techniques';
+}
+
+// ── Scroll reveal ───────────────────────────────────────────
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }
+  });
+}, { threshold: 0.07 });
+document.querySelectorAll('.rv').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
