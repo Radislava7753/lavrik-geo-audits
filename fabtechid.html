@@ -423,6 +423,36 @@ a:hover { text-decoration: underline; }
 .cta-box h3 { font-family: 'Montserrat',sans-serif; font-weight: 800; font-size: 1.35rem; margin-bottom: 8px; }
 .cta-box p  { font-size: .9rem; color: var(--muted); margin-bottom: 6px; }
 .cta-box a  { color: var(--accent); font-weight: 600; }
+.cta-main-btn {
+  display: inline-block;
+  background: var(--accent);
+  color: #000;
+  font-family: 'Montserrat',sans-serif;
+  font-weight: 900;
+  font-size: 1.1rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 18px 44px;
+  border-radius: 8px;
+  box-shadow: 0 0 28px rgba(200,255,0,.45);
+  transition: box-shadow .25s, transform .2s;
+  margin-bottom: 14px;
+  display: inline-block;
+}
+.cta-main-btn:hover { box-shadow: 0 0 44px rgba(200,255,0,.7); transform: translateY(-3px); color:#000; }
+.cta-sub-link { display:block; font-size:.85rem; color:#88bbff; text-decoration:none; margin-top:6px; }
+.cta-sub-link:hover { text-decoration:underline; }
+.cta-stripe {
+  background: rgba(200,255,0,.05);
+  border: 1.5px solid rgba(200,255,0,.22);
+  border-radius: 14px;
+  padding: 40px 32px 36px;
+  text-align: center;
+  margin: 44px 0;
+}
+.cta-stripe-title { font-family:'Montserrat',sans-serif; font-weight:800; font-size:1.25rem; margin-bottom:10px; color:#fff; }
+.cta-stripe-sub { font-size:.88rem; color:var(--muted); margin-bottom:22px; }
 
 /* ── COVER PAGE ─────────────────────────────────────────────── */
 .cover-strip {
@@ -597,6 +627,13 @@ a:hover { text-decoration: underline; }
       <div class="toc-item"><span class="toc-n">09</span><span>Plan d'action 90 jours</span></div>
     </div>
   </div>
+</div>
+
+<div class="cta-stripe rv">
+  <div class="cta-stripe-title">Votre entreprise est invisible dans 65 % des réponses IA</div>
+  <div class="cta-stripe-sub">Obtenez l'audit complet + plan correctif en 48h — 190 $</div>
+  <a class="cta-main-btn" href="https://docs.google.com/forms/d/e/1FAIpQLSctf7q4fbSbNHrt_u-GAjB3KTE7M6RdJ1vNTVGLT8VbVZjuCg/viewform" target="_blank" rel="noopener">Obtenir l'audit complet — 190 $</a>
+  <a class="cta-sub-link" href="https://docs.google.com/forms/d/e/1FAIpQLSctf7q4fbSbNHrt_u-GAjB3KTE7M6RdJ1vNTVGLT8VbVZjuCg/viewform" target="_blank" rel="noopener">→ Remplir le questionnaire de pré-audit</a>
 </div>
 
 <hr class="rule">
@@ -1026,6 +1063,13 @@ a:hover { text-decoration: underline; }
   </div>
 </div>
 
+<div class="cta-stripe rv">
+  <div class="cta-stripe-title">Vous venez de voir le problème — voici comment le corriger</div>
+  <div class="cta-stripe-sub">Chaque semaine de retard, c'est des clients B2B qui choisissent un concurrent mieux structuré dans les IA</div>
+  <a class="cta-main-btn" href="https://docs.google.com/forms/d/e/1FAIpQLSctf7q4fbSbNHrt_u-GAjB3KTE7M6RdJ1vNTVGLT8VbVZjuCg/viewform" target="_blank" rel="noopener">Démarrer maintenant</a>
+  <a class="cta-sub-link" href="https://docs.google.com/forms/d/e/1FAIpQLSctf7q4fbSbNHrt_u-GAjB3KTE7M6RdJ1vNTVGLT8VbVZjuCg/viewform" target="_blank" rel="noopener">→ Remplir le questionnaire de pré-audit</a>
+</div>
+
 <hr class="rule">
 
 <!-- ══════════════════════════════════════════════════════════
@@ -1100,12 +1144,13 @@ a:hover { text-decoration: underline; }
     </div>
   </div>
 
-  <!-- CTA -->
-  <div class="cta-box rv">
-    <h3>Snapshot de Visibilité IA (48h)</h3>
-    <p>1 PDF + 3 signaux bloquants identifiés · Sans risque</p>
-    <p><strong>Halyna Lavrik</strong> · <a href="mailto:pr.expert4488@gmail.com">pr.expert4488@gmail.com</a></p>
-    <p style="font-size:.76rem;margin-top:12px;opacity:.55">Audit février 2026 · Lavrik GEO · Chicoutimi, Québec</p>
+  <!-- CTA FINAL -->
+  <div class="cta-stripe rv" style="margin-top:44px">
+    <div class="cta-stripe-title">Prêt à corriger votre visibilité IA ?</div>
+    <div class="cta-stripe-sub">Audit complet 190 $ · Résultats en 48h · Halyna Lavrik · Chicoutimi, Québec</div>
+    <a class="cta-main-btn" href="https://docs.google.com/forms/d/e/1FAIpQLSctf7q4fbSbNHrt_u-GAjB3KTE7M6RdJ1vNTVGLT8VbVZjuCg/viewform" target="_blank" rel="noopener">Démarrer l'audit — 190 $</a>
+    <a class="cta-sub-link" href="https://docs.google.com/forms/d/e/1FAIpQLSctf7q4fbSbNHrt_u-GAjB3KTE7M6RdJ1vNTVGLT8VbVZjuCg/viewform" target="_blank" rel="noopener">→ Remplir le questionnaire de pré-audit</a>
+    <div style="font-size:.76rem;margin-top:16px;opacity:.45">Réponse sous 24h · Consultation 30 min offerte · Sans engagement</div>
   </div>
 </div>
 
