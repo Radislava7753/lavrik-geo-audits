@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GEO Blitz Audit &mdash; Fabmec</title>
+<style>
+  :root {
+    --bg:     #0d0e0f;
+    --bg2:    #111213;
+    --border: #222426;
+    --lime:   #c8ff00;
+    --text:   #e8e8e8;
+    --muted:  #888;
+    --font:   'Calibri', 'Segoe UI', system-ui, sans-serif;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--text); font-family:var(--font); font-size:16px; line-height:1.7; }
+  a { color:var(--lime); }
+
+  /* ── Layout ── */
+  .container { max-width:1400px; margin:0 auto; padding:24px 20px; }
+
+  /* ── Section titles — bien visibles ── */
+  .section-title {
+    font-size:15px; font-weight:800; color:var(--lime);
+    letter-spacing:2.5px; text-transform:uppercase;
+    margin:44px 0 18px; padding-bottom:10px;
+    border-bottom:2px solid #1c2500;
+    display:flex; align-items:center; gap:10px;
+  }
+  .section-title::before {
+    content:''; display:inline-block;
+    width:5px; height:18px; background:var(--lime); border-radius:2px; flex-shrink:0;
+  }
+
+  /* ── Top bar ── */
+  .top-bar { display:flex; justify-content:space-between; align-items:center; padding:20px 0 22px; border-bottom:1px solid #1a1a1a; margin-bottom:60px; }
+  .top-bar-logo { font-size:13px; font-weight:900; color:var(--lime); letter-spacing:2.5px; text-transform:uppercase; }
+  .top-bar-date { font-size:13px; color:#444; }
+
+  /* ── Hero ── */
+  .hero { display:flex; justify-content:space-between; align-items:flex-start; gap:48px; margin-bottom:52px; padding-bottom:48px; border-bottom:1px solid #1a1a1a; flex-wrap:wrap; }
+  .hero-body { flex:1; min-width:280px; }
+  .hero-label { font-size:11px; font-weight:700; letter-spacing:2.5px; color:var(--lime); text-transform:uppercase; margin-bottom:24px; }
+  .hero-title {
+    font-size:clamp(36px,5.5vw,68px); font-weight:900; line-height:1.08;
+    color:#fff; margin-bottom:28px; letter-spacing:-.5px;
+  }
+  .hero-lime { color:var(--lime); }
+  .hero-sub { font-size:17px; color:#888; line-height:1.7; max-width:560px; }
+
+  /* Grade + légende lisible */
+  .grade-block { text-align:right; flex-shrink:0; }
+  .grade-badge { font-size:56px; font-weight:900; line-height:1; }
+  .grade-explain { font-size:13px; color:#aaa; margin-top:6px; margin-bottom:12px; }
+  .legend-pills { display:flex; flex-direction:column; gap:6px; align-items:flex-end; }
+  .legend-pill {
+    font-size:13px; padding:5px 12px; border-radius:20px;
+    display:inline-flex; align-items:center; gap:8px;
+  }
+  .lp-leader  { background:#003322; color:#00ff88; border:1px solid #00884455; }
+  .lp-mention { background:#0d1a33; color:#88bbff; border:1px solid #4466aa55; }
+  .lp-ignore  { background:#330000; color:#ff6666; border:1px solid #aa333355; }
+  .lp-count   { font-weight:900; font-size:16px; }
+
+  /* ── Intro plaque ── */
+  .intro-plaque { background:var(--bg2); border:1px solid #2a2a2a; border-left:4px solid var(--lime); border-radius:4px; padding:28px 32px; margin-bottom:20px; }
+  .intro-plaque p { margin-bottom:14px; font-size:17px; line-height:1.85; }
+  .intro-plaque p:last-child { margin-bottom:0; }
+
+  /* Pill "Voir le détail" */
+  details.intro-detail summary {
+    cursor:pointer; list-style:none; margin-top:20px;
+    display:inline-flex; align-items:center; gap:8px;
+    padding:10px 20px; border:1px solid #3a3a3a; border-radius:24px;
+    background:#181818; color:#aaa; font-size:14px; font-weight:600;
+    letter-spacing:.5px; transition:border-color .2s, color .2s;
+  }
+  details.intro-detail summary:hover { border-color:#888; color:#ddd; }
+  details.intro-detail summary::after { content:" ›"; font-size:16px; }
+  details.intro-detail[open] summary::after { content:" ↑"; }
+  .intro-detail-content { background:var(--bg); padding:20px 24px; border-radius:4px; margin-top:12px; font-size:15px; line-height:1.8; }
+
+  /* ── Score strip ── */
+  .score-strip { display:flex; gap:12px; margin-bottom:28px; flex-wrap:wrap; }
+  .score-card { flex:1; min-width:160px; background:var(--bg2); border:1px solid var(--border); border-radius:6px; padding:20px 20px; }
+  .sc-label { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:8px; }
+  .sc-value { font-size:30px; font-weight:900; margin-bottom:6px; }
+  .sc-sub { font-size:14px; color:#aaa; line-height:1.5; }
+
+  /* ── CTA ── */
+  .cta-block { text-align:center; padding:44px 24px 40px; background:var(--bg2); border:1px solid #2a2a2a; border-radius:6px; margin-bottom:36px; }
+  .cta-title { font-size:13px; color:var(--muted); text-transform:uppercase; letter-spacing:2px; margin-bottom:22px; }
+  .cta-btn { display:inline-block; background:var(--lime); color:#000; font-size:19px; font-weight:900; letter-spacing:1px; padding:20px 48px; border-radius:6px; text-decoration:none; text-transform:uppercase; box-shadow:0 0 28px rgba(200,255,0,.45), 0 0 56px rgba(200,255,0,.2); transition:box-shadow .3s, transform .2s; }
+  .cta-btn:hover { box-shadow:0 0 40px rgba(200,255,0,.65), 0 0 80px rgba(200,255,0,.35); transform:translateY(-3px); color:#000; }
+  .cta-form-link { margin-top:18px; font-size:14px; color:var(--muted); }
+  .cta-form-link a { color:#88bbff; text-decoration:none; }
+  .cta-form-link a:hover { text-decoration:underline; }
+  .cta-badge { display:inline-block; margin-top:14px; font-size:12px; color:#555; border:1px solid #2a2a2a; border-radius:20px; padding:5px 16px; }
+
+  /* ── Survey table TRANSPOSÉ ── */
+  .survey-table-wrap { overflow-x:auto; margin-bottom:36px; }
+  table.survey { width:100%; border-collapse:collapse; }
+
+  .th-model-col {
+    background:#0a0a0a; color:#666; font-size:13px; font-weight:600;
+    padding:16px 16px; text-align:left; width:110px;
+    border-right:2px solid #1a1a1a; white-space:nowrap;
+  }
+  .th-scenario-col { padding:18px 16px; text-align:left; min-width:240px; }
+  .scenario-id-top { font-size:30px; font-weight:900; line-height:1; }
+  .scenario-type-top { font-size:10px; letter-spacing:2px; text-transform:uppercase; margin-top:5px; opacity:.85; font-weight:700; }
+  .scenario-q-top {
+    font-size:13px; line-height:1.55; color:#bbb; margin-top:12px;
+    font-style:italic; padding-top:10px; border-top:1px solid rgba(255,255,255,.08);
+  }
+
+  .td-model-name {
+    padding:14px 16px; vertical-align:middle;
+    background:#0e0f10; border-right:2px solid #1a1a1a; width:110px;
+  }
+  .model-name-label { font-size:15px; font-weight:700; color:#ccc; }
+
+  .td-model-cell { padding:3px; vertical-align:top; border-left:1px solid var(--border); }
+
+  /* Accordion cellule */
+  details.model-cell { width:100%; }
+  details.model-cell summary { list-style:none; cursor:pointer; }
+  details.model-cell summary::-webkit-details-marker { display:none; }
+  .cell-status { padding:10px 12px; display:flex; flex-direction:column; gap:5px; min-height:90px; transition:opacity .15s; }
+  .cell-status:hover { opacity:.85; }
+  .status-badge { font-size:11px; font-weight:800; letter-spacing:.5px; padding:3px 8px; border-radius:3px; display:inline-block; align-self:flex-start; }
+  .cell-headline { font-size:13px; line-height:1.45; color:#ccc; flex:1; padding-top:5px; }
+  .toggle-arrow { font-size:14px; color:#555; align-self:flex-end; transition:transform .2s; }
+  details.model-cell[open] .toggle-arrow { transform:rotate(90deg); color:var(--lime); }
+  .cell-response { padding:14px 16px; background:#090909; border-top:1px solid var(--border); }
+  .response-label { font-size:10px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin-bottom:10px; }
+  .cell-response p { font-size:14px; line-height:1.75; color:#bbb; margin-bottom:8px; }
+  .cell-response p:last-child { margin-bottom:0; }
+
+  tr { border-bottom:1px solid var(--border); }
+  tr:nth-child(even) { background:#0f0f10; }
+
+  /* ── SOV bars ── */
+  .sov-section { margin-bottom:28px; }
+  .sov-row { display:flex; align-items:center; gap:14px; margin-bottom:12px; }
+  .sov-label { font-size:13px; width:210px; color:#bbb; flex-shrink:0; font-weight:600; }
+  .sov-bar { flex:1; height:22px; background:#1a1a1a; border-radius:3px; display:flex; overflow:hidden; }
+  .sov-leader { background:#00ff88; }
+  .sov-ment   { background:#88bbff; }
+  .sov-ign    { background:#ff4444; }
+  .sov-nums { font-size:13px; color:var(--muted); width:120px; text-align:right; flex-shrink:0; }
+  .sov-legend { display:flex; gap:20px; font-size:13px; margin-top:10px; flex-wrap:wrap; }
+  .sov-legend span { display:flex; align-items:center; gap:6px; color:var(--muted); }
+  .legend-dot { width:12px; height:12px; border-radius:2px; flex-shrink:0; }
+
+  /* ── Model cards ── */
+  .model-cards { display:flex; gap:14px; margin-bottom:36px; flex-wrap:wrap; }
+  .model-card { flex:1; min-width:150px; background:var(--bg2); border-radius:6px; padding:20px; text-align:center; }
+  .mc-name { font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px; }
+  .mc-score { font-size:38px; font-weight:900; margin:8px 0 6px; }
+  .mc-detail { font-size:13px; color:var(--muted); }
+
+  /* ── Recommandations — 3 tuiles ── */
+  .recs-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-bottom:36px; }
+  .rec-tile {
+    background:var(--bg2); border:1.5px solid rgba(200,255,0,.3); border-radius:12px;
+    overflow:hidden; display:flex; flex-direction:column;
+    box-shadow:0 0 18px rgba(200,255,0,.09), 0 0 48px rgba(200,255,0,.04);
+    transition:box-shadow .25s;
+  }
+  .rec-tile:hover {
+    box-shadow:0 0 28px rgba(200,255,0,.18), 0 0 72px rgba(200,255,0,.08);
+  }
+  .rec-tile-icon {
+    padding:26px 26px 0; opacity:.28; color:#999;
+    display:flex; justify-content:flex-start;
+  }
+  .rec-tile-details { flex:1; display:flex; flex-direction:column; }
+  .rec-tile-summary {
+    padding:16px 26px 24px; cursor:pointer; list-style:none;
+    display:flex; flex-direction:column; gap:8px;
+  }
+  .rec-tile-summary::-webkit-details-marker { display:none; }
+  .rec-tile-num { font-size:36px; font-weight:900; line-height:1; opacity:.2; margin-bottom:4px; }
+  .rec-tile-title { font-size:16px; font-weight:800; color:#e8e8e8; line-height:1.45; }
+  .rec-tile-footer { display:flex; justify-content:space-between; align-items:center; margin-top:12px; }
+  .rec-tile-tag { font-size:11px; letter-spacing:1.5px; text-transform:uppercase; opacity:.6; font-weight:700; }
+  .rec-tile-arrow { font-size:20px; color:#444; transition:transform .2s, color .2s; }
+  .rec-tile-details[open] .rec-tile-arrow { transform:rotate(90deg); color:var(--lime); }
+  .rec-tile-body {
+    background:#0a0a0a; padding:22px 26px;
+    border-top:1px solid var(--border);
+    font-size:14px; color:#aaa; line-height:1.85;
+  }
+
+  /* ── FAQ ── */
+  .faq-item { background:var(--bg2); border:1px solid var(--border); border-radius:6px; margin-bottom:10px; }
+  .faq-item summary {
+    cursor:pointer; padding:18px 22px; font-size:16px; font-weight:600;
+    color:#ddd; list-style:none; display:flex; justify-content:space-between; align-items:center;
+  }
+  .faq-item summary::after { content:"›"; color:var(--lime); font-size:22px; }
+  .faq-item[open] summary::after { content:"↑"; }
+  .faq-answer { padding:0 22px 20px; font-size:15px; color:#aaa; line-height:1.8; }
+
+  /* ── QUI SUIS-JE ── */
+  .qui-block { background:var(--bg2); border:1px solid #2a2a2a; border-radius:6px; padding:32px 36px; margin-bottom:28px; display:flex; gap:28px; align-items:flex-start; }
+  .qui-avatar { width:76px; height:76px; border-radius:50%; border:2px solid var(--lime); background:#1a1a1a; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:32px; font-weight:900; color:var(--lime); }
+  .qui-content { flex:1; }
+  .qui-name { font-size:24px; font-weight:900; color:var(--lime); margin-bottom:5px; }
+  .qui-tagline { font-size:14px; color:var(--muted); margin-bottom:18px; }
+  .qui-bio p { font-size:15px; line-height:1.85; margin-bottom:12px; color:#ccc; }
+  .qui-bio p:last-child { margin-bottom:0; }
+
+  /* ── PASSEZ À L'ACTION ── */
+  .action-block { background:linear-gradient(135deg,#0d1a0d,#0a0a0a); border:1px solid #2a4a2a; border-radius:6px; padding:44px 32px; margin-bottom:28px; text-align:center; }
+  .action-title { font-size:28px; font-weight:900; color:var(--lime); margin-bottom:6px; }
+  .action-sub { font-size:12px; color:var(--muted); letter-spacing:3px; text-transform:uppercase; margin-bottom:36px; }
+  .action-steps { display:flex; justify-content:center; gap:36px; flex-wrap:wrap; margin-bottom:36px; }
+  .action-step { text-align:center; max-width:190px; }
+  .step-num { font-size:44px; font-weight:900; color:var(--lime); opacity:.3; line-height:1; }
+  .step-text { font-size:15px; color:#ccc; margin-top:10px; line-height:1.6; }
+  .step-text strong { color:#fff; }
+  .action-btn { display:inline-block; border:2px solid var(--lime); color:var(--lime); font-size:15px; font-weight:700; padding:16px 36px; border-radius:6px; text-decoration:none; letter-spacing:1px; transition:background .2s,color .2s; }
+  .action-btn:hover { background:var(--lime); color:#000; }
+
+  /* ── Contact plaque ── */
+  .contact-plaque { background:var(--bg2); border:1px solid #333; border-radius:8px; padding:32px 36px; margin-top:36px; text-align:center; }
+  .cp-name { font-size:24px; font-weight:900; color:var(--lime); margin-bottom:8px; }
+  .cp-title { font-size:15px; color:#aaa; margin-bottom:24px; }
+  .cp-links { display:flex; justify-content:center; gap:16px; flex-wrap:wrap; }
+  .cp-link { display:flex; align-items:center; gap:10px; font-size:15px; color:#ccc; text-decoration:none; background:#0d0e0f; border:1px solid #333; border-radius:6px; padding:14px 22px; transition:border-color .2s, color .2s; font-weight:600; }
+  .cp-link:hover { border-color:var(--lime); color:var(--lime); }
+  .cp-icon { font-size:18px; }
+  .cp-tagline { font-size:12px; color:#2e2e2e; margin-top:18px; }
+
+  /* ── Footer minimal ── */
+  .footer { border-top:1px solid #181818; margin-top:20px; padding-top:14px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px; }
+  .footer-left { font-size:11px; color:#2e2e2e; }
+  .footer-right { font-size:11px; color:#2e2e2e; }
+
+  @media(max-width:768px) {
+    body { font-size:15px; }
+    .hero { flex-direction:column; gap:32px; }
+    .grade-block { text-align:left; }
+    .legend-pills { align-items:flex-start; }
+    .th-scenario-col { min-width:190px; }
+    .recs-grid { grid-template-columns:1fr; }
+    .qui-block { flex-direction:column; }
+    .action-steps { gap:20px; }
+    .cp-links { flex-direction:column; align-items:center; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ── TOP BAR ────────────────────────────────────────────────────────── -->
+<div class="top-bar">
+  <div class="top-bar-logo">LAVRIK GEO</div>
+  <div class="top-bar-date">Blitz-audit GEO / LLM &middot; F&eacute;vrier 2026</div>
+</div>
+
+<!-- ── HERO ──────────────────────────────────────────────────────────── -->
+<div class="hero">
+  <div class="hero-body">
+    <div class="hero-label">RAPPORT CLIENT &middot; CONFIDENTIEL &middot; FABMEC</div>
+    <h1 class="hero-title">
+      Le probl&egrave;me des <span class="hero-lime">60%</span>:<br>
+      comment la recherche IA<br>
+      <span class="hero-lime">siphonne votre trafic</span>
+    </h1>
+    <p class="hero-sub">Ce rapport montre ce que les intelligences artificielles disent r&eacute;ellement de votre organisation &mdash; et les occasions que vous perdez &agrave; cause de ce silence.</p>
+  </div>
+  <div class="grade-block">
+    <div class="grade-badge" style="color:#ffee88">C</div>
+    <div class="grade-explain">62 % des r&eacute;ponses IA mentionnent Fabmec</div>
+    <div class="legend-pills">
+      <div class="legend-pill lp-leader">
+        <span>&#9733; LEADER</span>
+        <span class="lp-count">3</span>
+        <span style="font-size:11px;color:#557755">fois recommand&eacute; en 1er</span>
+      </div>
+      <div class="legend-pill lp-mention">
+        <span>&#9670; MENTIONN&Eacute;</span>
+        <span class="lp-count">7</span>
+        <span style="font-size:11px;color:#445577">fois cit&eacute; dans la r&eacute;ponse</span>
+      </div>
+      <div class="legend-pill lp-ignore">
+        <span>&#10005; IGNOR&Eacute;</span>
+        <span class="lp-count">6</span>
+        <span style="font-size:11px;color:#774444">fois absent de la r&eacute;ponse</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── INTRO ──────────────────────────────────────────────────────────── -->
+<div class="section-title">Diagnostic &eacute;ditorial</div>
+<div class="intro-plaque">
+  <p>Fabmec est partout. Et nulle part.</p><p>Quand un ingénieur chez Rio Tinto tape «&nbsp;Fabmec&nbsp;» dans ChatGPT, il obtient l'entreprise qu'il attendait&nbsp;: 130&nbsp;employés, 5,55&nbsp;M$ d'investissement gouvernemental, le convoyeur tubulaire de 1,6&nbsp;km, l'acquisition de MYK. Les faits sont là. Le dossier est solide.</p><p>Mais quand ce même ingénieur tape «&nbsp;meilleur fabricant industriel au Saguenay–Lac-Saint-Jean&nbsp;», Fabmec arrive en quatrième position ou disparaît complètement — après HARtech, Groupe AMI et CMB. Et quand il cherche un spécialiste en traitement des gaz pour alumineries — le cœur de votre expertise, vos projets Rio Tinto, votre vraie valeur — vous n'existez dans aucune réponse IA.</p><p>Le problème n'est pas votre réputation. Votre réputation est excellente. Le problème, c'est que les modèles d'IA n'apprennent pas de ce que vous êtes. Ils apprennent de ce que vous publiez.</p>
+  <details class="intro-detail">
+    <summary>Voir le d&eacute;tail chiffr&eacute; de l&rsquo;audit</summary>
+    <div class="intro-detail-content">
+<strong>Ce que l'audit révèle en chiffres :</strong><br>
+&bull;&nbsp;Sc&eacute;nario A (B2B Intent) : 2 mentions sur 4 mod&egrave;les &mdash; vous &ecirc;tes connu, pas en t&ecirc;te de liste<br>
+&bull;&nbsp;Sc&eacute;nario B (Expertise gaz alumineries) : 0 mention sur 4 mod&egrave;les &mdash; silence total sur votre vraie sp&eacute;cialit&eacute;<br>
+&bull;&nbsp;Sc&eacute;nario C (Due Diligence) : 3 mod&egrave;les sur 4 vous identifient comme LEADER avec des faits pr&eacute;cis<br>
+&bull;&nbsp;Sc&eacute;nario D (Marque employeur) : 4 mod&egrave;les sur 4 &mdash; image positive, comparaison favorable vs Proco et Canmec<br><br>
+<strong>Diagnostic en une phrase :</strong> Fabmec est excellent &agrave; &ecirc;tre <em>reconnu</em> quand on le cherche directement. Z&eacute;ro &agrave; &ecirc;tre <em>d&eacute;couvert</em> quand un prospect cherche une expertise sans conna&icirc;tre votre nom.</div>
+  </details>
+</div>
+
+<!-- ── CTA ───────────────────────────────────────────────────────────── -->
+
+<div class="cta-block">
+  <div class="cta-title">Vous voulez les chiffres complets ?</div>
+  <a href="https://docs.google.com/forms/d/e/1FAIpQLSctf7q4fbSbNHrt_u-GAjB3KTE7M6RdJ1vNTVGLT8VbVZjuCg/viewform" target="_blank" class="cta-btn">Acheter l&rsquo;audit complet — 190 $</a>
+  <div class="cta-form-link">
+    Ou remplissez le formulaire : <a href="https://docs.google.com/forms/d/e/1FAIpQLSctf7q4fbSbNHrt_u-GAjB3KTE7M6RdJ1vNTVGLT8VbVZjuCg/viewform" target="_blank">Demander l&rsquo;audit →</a>
+  </div>
+  <div class="cta-badge">✓ Livraison sous 48–72h · Format HTML + PDF</div>
+</div>
+
+<!-- ── SCORE STRIP ────────────────────────────────────────────────────── -->
+<div class="score-strip">
+  <div class="score-card">
+    <div class="sc-label">Visibilit&eacute; globale</div>
+    <div class="sc-value" style="color:#ffee88">62%</div>
+    <div class="sc-sub">10 r&eacute;ponses IA sur 16 vous citent ou vous recommandent</div>
+  </div>
+  <div class="score-card">
+    <div class="sc-label">Recommand&eacute; en t&ecirc;te (LEADER)</div>
+    <div class="sc-value" style="color:#00ff88">19%</div>
+    <div class="sc-sub">3 fois Fabmec appara&icirc;t en premier dans la r&eacute;ponse de l&rsquo;IA</div>
+  </div>
+  <div class="score-card">
+    <div class="sc-label">Angle mort critique</div>
+    <div class="sc-value" style="color:#ff4444">B &mdash; 0/4</div>
+    <div class="sc-sub">Aucune IA ne cite Fabmec quand on cherche un expert en traitement des gaz pour alumineries &mdash; pourtant votre vraie sp&eacute;cialit&eacute;</div>
+  </div>
+  <div class="score-card">
+    <div class="sc-label">Meilleur sc&eacute;nario</div>
+    <div class="sc-value" style="color:#ffee88">C &mdash; 3/4</div>
+    <div class="sc-sub">Quand on tape directement &laquo;&nbsp;Fabmec&nbsp;&raquo; pour v&eacute;rifier l&rsquo;entreprise, 3 IA sur 4 retournent un profil pr&eacute;cis&nbsp;: employ&eacute;s, investissements, projets r&eacute;cents</div>
+  </div>
+</div>
+
+<!-- ── SURVEY TABLE ───────────────────────────────────────────────────── -->
+<div class="section-title">R&eacute;sultats de l&rsquo;audit &mdash; 4 sc&eacute;narios &times; 4 mod&egrave;les IA</div>
+<div class="survey-table-wrap">
+  <table class="survey">
+    <thead>
+      <tr>
+        <th class="th-model-col">Mod&egrave;le IA</th>
+        
+<th class="th-scenario-col" style="background:#0d1a2a;border-top:4px solid #88bbff">
+  <div class="scenario-id-top" style="color:#88bbff">A</div>
+  <div class="scenario-type-top" style="color:#88bbff">B2B INTENT</div>
+  <div class="scenario-q-top">Quelles sont les meilleures entreprises de fabrication mécanique industrielle et de structures d&#x27;acier au Saguenay-Lac-Saint-Jean pour des projets clés en main?</div>
+</th>
+<th class="th-scenario-col" style="background:#0a1a0a;border-top:4px solid #88ffaa">
+  <div class="scenario-id-top" style="color:#88ffaa">B</div>
+  <div class="scenario-type-top" style="color:#88ffaa">EXPERTISE</div>
+  <div class="scenario-q-top">Quels entrepreneurs québécois ont l&#x27;expertise pour installer des équipements de traitement des gaz pour des alumineries ou des usines thermiques à la biomasse?</div>
+</th>
+<th class="th-scenario-col" style="background:#1a1a0a;border-top:4px solid #ffee88">
+  <div class="scenario-id-top" style="color:#ffee88">C</div>
+  <div class="scenario-type-top" style="color:#ffee88">DUE DILIGENCE</div>
+  <div class="scenario-q-top">Fais-moi un résumé des capacités financières, de la taille et des réalisations récentes de l&#x27;entreprise Fabmec à Chicoutimi/Jonquière.</div>
+</th>
+<th class="th-scenario-col" style="background:#0a0d1a;border-top:4px solid #aabbff">
+  <div class="scenario-id-top" style="color:#aabbff">D</div>
+  <div class="scenario-type-top" style="color:#aabbff">EMPLOYER BRAND</div>
+  <div class="scenario-q-top">Quels sont les avantages de travailler chez Fabmec au Saguenay pour un travailleur de la construction ou un soudeur, comparativement à Proco ou Canmec?</div>
+</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+<tr>
+  <td class="td-model-name">
+    <div class="model-name-label">ChatGPT</div>
+  </td>
+  <td class="td-model-cell">
+<details class="model-cell" id="cell-A-chatgpt">
+  <summary>
+    <div class="cell-status" style="background:#0d1a33;border-left:3px solid #88bbff">
+      <span class="status-badge" style="color:#88bbff;background:#0d1a33">◆ MENTIONNÉ</span>
+      <span class="cell-headline">3e sur une longue liste — pas en tête</span>
+      <span class="toggle-arrow">›</span>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">Analyse — ChatGPT</div>
+    <p>Fabmec arrive en 3e position sur la liste des fabricants industriels régionaux, après HARtech et Groupe AMI. L&#x27;IA cite le bon secteur d&#x27;activité mais n&#x27;évoque ni les projets Rio Tinto ni l&#x27;investissement gouvernemental de 5,55 M$.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell" id="cell-B-chatgpt">
+  <summary>
+    <div class="cell-status" style="background:#330000;border-left:3px solid #ff4444">
+      <span class="status-badge" style="color:#ff4444;background:#330000">✕ IGNORÉ</span>
+      <span class="cell-headline">Silence total. Combustion Expert nommé à votre place</span>
+      <span class="toggle-arrow">›</span>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">Analyse — ChatGPT</div>
+    <p>Combustion Expert et Wellons sont recommandés pour le traitement des gaz industriels. Fabmec est totalement absent, même si l&#x27;entreprise a réalisé des projets concrets dans ce domaine pour les alumineries.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell" id="cell-C-chatgpt">
+  <summary>
+    <div class="cell-status" style="background:#0d1a33;border-left:3px solid #88bbff">
+      <span class="status-badge" style="color:#88bbff;background:#0d1a33">◆ MENTIONNÉ</span>
+      <span class="cell-headline">Solide. 130 employés, 5,55 M$, Rio Tinto — les faits sont là</span>
+      <span class="toggle-arrow">›</span>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">Analyse — ChatGPT</div>
+    <p>130 employés, investissement de 5,55 M$ (gouvernemental), convoyeur tubulaire de 1,6 km. Profil complet — mais les acquisitions récentes (MYK, Usifab Express) ne sont pas encore indexées par ChatGPT.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell" id="cell-D-chatgpt">
+  <summary>
+    <div class="cell-status" style="background:#0d1a33;border-left:3px solid #88bbff">
+      <span class="status-badge" style="color:#88bbff;background:#0d1a33">◆ MENTIONNÉ</span>
+      <span class="cell-headline">Favorable. Meilleur que Proco sur formation et stabilité</span>
+      <span class="toggle-arrow">›</span>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">Analyse — ChatGPT</div>
+    <p>Image d&#x27;employeur stable et favorable. L&#x27;IA présente Fabmec comme meilleur que Proco sur la formation interne et la stabilité d&#x27;emploi — avantage compétitif clair pour les opérateurs et soudeurs.</p>
+  </div>
+</details></td>
+</tr>
+<tr>
+  <td class="td-model-name">
+    <div class="model-name-label">Perplexity</div>
+  </td>
+  <td class="td-model-cell">
+<details class="model-cell" id="cell-A-perplexity">
+  <summary>
+    <div class="cell-status" style="background:#330000;border-left:3px solid #ff4444">
+      <span class="status-badge" style="color:#ff4444;background:#330000">✕ IGNORÉ</span>
+      <span class="cell-headline">Absent. HARtech et AMI recommandés à votre place</span>
+      <span class="toggle-arrow">›</span>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">Analyse — Perplexity</div>
+    <p>Perplexity recommande HARtech et Groupe AMI comme leaders régionaux. Fabmec n&#x27;apparaît pas dans la réponse, malgré 130 employés et des certifications confirmées. L&#x27;IA cite des entreprises mieux référencées dans les annuaires externes.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell" id="cell-B-perplexity">
+  <summary>
+    <div class="cell-status" style="background:#330000;border-left:3px solid #ff4444">
+      <span class="status-badge" style="color:#ff4444;background:#330000">✕ IGNORÉ</span>
+      <span class="cell-headline">Zéro. DCM, Beaulier, O&#x27;Connell à votre place</span>
+      <span class="toggle-arrow">›</span>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">Analyse — Perplexity</div>
+    <p>Perplexity cite DCM, Beaulier et O&#x27;Connell comme experts régionaux. Fabmec — acteur majeur sur les chantiers AP60 de Rio Tinto — n&#x27;apparaît dans aucune réponse.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell" id="cell-C-perplexity">
+  <summary>
+    <div class="cell-status" style="background:#003322;border-left:3px solid #00ff88">
+      <span class="status-badge" style="color:#00ff88;background:#003322">★ LEADER</span>
+      <span class="cell-headline">Complet et précis. ~175 employés, 8,175 M$, expansion confirmée</span>
+      <span class="toggle-arrow">›</span>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">Analyse — Perplexity</div>
+    <p>Environ 175 employés, revenus estimés à 8,175 M$, 40 projets actifs, expansion récente confirmée. Profil le plus complet parmi les 4 modèles — tous les faits clés sont correctement indexés.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell" id="cell-D-perplexity">
+  <summary>
+    <div class="cell-status" style="background:#0d1a33;border-left:3px solid #88bbff">
+      <span class="status-badge" style="color:#88bbff;background:#0d1a33">◆ MENTIONNÉ</span>
+      <span class="cell-headline">Positif. «Croissance rapide = bonnes chances d&#x27;avancement»</span>
+      <span class="toggle-arrow">›</span>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">Analyse — Perplexity</div>
+    <p>«Croissance rapide = bonnes chances d&#x27;avancement» — Perplexity souligne le dynamisme de l&#x27;entreprise et les opportunités de carrière liées à l&#x27;expansion en cours.</p>
+  </div>
+</details></td>
+</tr>
+<tr>
+  <td class="td-model-name">
+    <div class="model-name-label">Gemini</div>
+  </td>
+  <td class="td-model-cell">
+<details class="model-cell" id="cell-A-gemini">
+  <summary>
+    <div class="cell-status" style="background:#0d1a33;border-left:3px solid #88bbff">
+      <span class="status-badge" style="color:#88bbff;background:#0d1a33">◆ MENTIONNÉ</span>
+      <span class="cell-headline">Présent — mais après Proco et GTR Soudure</span>
+      <span class="toggle-arrow">›</span>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">Analyse — Gemini</div>
+    <p>Fabmec figure dans la liste, mais après Proco et GTR Soudure. L&#x27;IA reconnaît la spécialisation en fabrication mécanique sans placer Fabmec parmi les premiers recommandés.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell" id="cell-B-gemini">
+  <summary>
+    <div class="cell-status" style="background:#330000;border-left:3px solid #ff4444">
+      <span class="status-badge" style="color:#ff4444;background:#330000">✕ IGNORÉ</span>
+      <span class="cell-headline">Introuvable. Alco TMI nommé pour vos projets Rio Tinto</span>
+      <span class="toggle-arrow">›</span>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">Analyse — Gemini</div>
+    <p>Gemini recommande Alco TMI pour les projets liés aux alumineries. L&#x27;expertise gaz de Fabmec sur les chantiers AP60 et Barrette-Chapais n&#x27;est pas reconnue par l&#x27;IA.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell" id="cell-C-gemini">
+  <summary>
+    <div class="cell-status" style="background:#003322;border-left:3px solid #00ff88">
+      <span class="status-badge" style="color:#00ff88;background:#003322">★ LEADER</span>
+      <span class="cell-headline">Impressionnant. 40 projets actifs, acquisitions citées</span>
+      <span class="toggle-arrow">›</span>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">Analyse — Gemini</div>
+    <p>40 projets actifs mentionnés, acquisitions récentes citées, capacités industrielles détaillées. Gemini reconnaît Fabmec comme chef de file régional avec une description précise et actuelle.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell" id="cell-D-gemini">
+  <summary>
+    <div class="cell-status" style="background:#0d1a33;border-left:3px solid #88bbff">
+      <span class="status-badge" style="color:#88bbff;background:#0d1a33">◆ MENTIONNÉ</span>
+      <span class="cell-headline">Bien positionné. Culture de proximité et projets variés</span>
+      <span class="toggle-arrow">›</span>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">Analyse — Gemini</div>
+    <p>Culture de proximité et diversité des mandats industriels soulignés. Fabmec présenté comme un milieu de travail à taille humaine comparé aux grandes usines standardisées de la région.</p>
+  </div>
+</details></td>
+</tr>
+<tr>
+  <td class="td-model-name">
+    <div class="model-name-label">Grok</div>
+  </td>
+  <td class="td-model-cell">
+<details class="model-cell" id="cell-A-grok">
+  <summary>
+    <div class="cell-status" style="background:#330000;border-left:3px solid #ff4444">
+      <span class="status-badge" style="color:#ff4444;background:#330000">✕ IGNORÉ</span>
+      <span class="cell-headline">Invisible. Quatre concurrents nommés, zéro Fabmec</span>
+      <span class="toggle-arrow">›</span>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">Analyse — Grok</div>
+    <p>Canmec, Proco, CMB et HARtech sont cités. Fabmec est complètement absent de la réponse, même si ses projets avec Rio Tinto sont documentés publiquement.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell" id="cell-B-grok">
+  <summary>
+    <div class="cell-status" style="background:#330000;border-left:3px solid #ff4444">
+      <span class="status-badge" style="color:#ff4444;background:#330000">✕ IGNORÉ</span>
+      <span class="cell-headline">Absent. Fives Solios et Aluminair à la place</span>
+      <span class="toggle-arrow">›</span>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">Analyse — Grok</div>
+    <p>Fives Solios et Aluminair sont cités à la place d&#x27;acteurs locaux. Zéro mention de Fabmec, malgré des projets réels et documentés dans ce secteur précis.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell" id="cell-C-grok">
+  <summary>
+    <div class="cell-status" style="background:#003322;border-left:3px solid #00ff88">
+      <span class="status-badge" style="color:#00ff88;background:#003322">★ LEADER</span>
+      <span class="cell-headline">Le plus détaillé — inclut l&#x27;acquisition Usifab Express d&#x27;oct. 2025</span>
+      <span class="toggle-arrow">›</span>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">Analyse — Grok</div>
+    <p>Le profil le plus récent des 4 modèles : acquisition Usifab Express d&#x27;octobre 2025 incluse, 130+ employés et détails financiers complets. Grok prouve que les données récentes sont bien accessibles aux IA.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell" id="cell-D-grok">
+  <summary>
+    <div class="cell-status" style="background:#0d1a33;border-left:3px solid #88bbff">
+      <span class="status-badge" style="color:#88bbff;background:#0d1a33">◆ MENTIONNÉ</span>
+      <span class="cell-headline">Bon portrait. 6 postes ouverts cités, expansion reconnue</span>
+      <span class="toggle-arrow">›</span>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">Analyse — Grok</div>
+    <p>6 postes ouverts cités, expansion en cours reconnue. Grok présente une image positive de l&#x27;employeur avec des données concrètes sur le recrutement actif et les perspectives de carrière.</p>
+  </div>
+</details></td>
+</tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ── SOV BARS ──────────────────────────────────────────────────────── -->
+<div class="section-title">Part de voix par sc&eacute;nario</div>
+<div class="sov-section">
+  
+<div class="sov-row">
+  <span class="sov-label">A &mdash; B2B INTENT</span>
+  <div class="sov-bar">
+    <div class="sov-leader" style="width:0%"></div>
+    <div class="sov-ment"   style="width:50%"></div>
+    <div class="sov-ign"    style="width:50%"></div>
+  </div>
+  <span class="sov-nums">0★ · 2◆ · 2✕ / 4</span>
+</div>
+<div class="sov-row">
+  <span class="sov-label">B &mdash; EXPERTISE</span>
+  <div class="sov-bar">
+    <div class="sov-leader" style="width:0%"></div>
+    <div class="sov-ment"   style="width:0%"></div>
+    <div class="sov-ign"    style="width:100%"></div>
+  </div>
+  <span class="sov-nums">0★ · 0◆ · 4✕ / 4</span>
+</div>
+<div class="sov-row">
+  <span class="sov-label">C &mdash; DUE DILIGENCE</span>
+  <div class="sov-bar">
+    <div class="sov-leader" style="width:75%"></div>
+    <div class="sov-ment"   style="width:25%"></div>
+    <div class="sov-ign"    style="width:0%"></div>
+  </div>
+  <span class="sov-nums">3★ · 1◆ · 0✕ / 4</span>
+</div>
+<div class="sov-row">
+  <span class="sov-label">D &mdash; EMPLOYER BRAND</span>
+  <div class="sov-bar">
+    <div class="sov-leader" style="width:0%"></div>
+    <div class="sov-ment"   style="width:100%"></div>
+    <div class="sov-ign"    style="width:0%"></div>
+  </div>
+  <span class="sov-nums">0★ · 4◆ · 0✕ / 4</span>
+</div>
+  <div class="sov-legend">
+    <span><div class="legend-dot" style="background:#00ff88"></div> &#9733; LEADER &mdash; Fabmec recommand&eacute; en t&ecirc;te</span>
+    <span><div class="legend-dot" style="background:#88bbff"></div> &#9670; MENTIONN&Eacute; &mdash; Fabmec cit&eacute; dans la liste</span>
+    <span><div class="legend-dot" style="background:#ff4444"></div> &#10005; IGNOR&Eacute; &mdash; Fabmec absent de la r&eacute;ponse</span>
+  </div>
+</div>
+
+<!-- ── MODEL CARDS ───────────────────────────────────────────────────── -->
+<div class="section-title">Performance par mod&egrave;le IA</div>
+<div class="model-cards">
+<div class="model-card" style="border-top:3px solid #00ff88">
+  <div class="mc-name">ChatGPT</div>
+  <div class="mc-score" style="color:#00ff88">75%</div>
+  <div class="mc-detail">0★ LEADER &middot; 3◆ MEN. &middot; 1✕ IGN.</div>
+</div>
+<div class="model-card" style="border-top:3px solid #ffee88">
+  <div class="mc-name">Perplexity</div>
+  <div class="mc-score" style="color:#ffee88">50%</div>
+  <div class="mc-detail">1★ LEADER &middot; 1◆ MEN. &middot; 2✕ IGN.</div>
+</div>
+<div class="model-card" style="border-top:3px solid #00ff88">
+  <div class="mc-name">Gemini</div>
+  <div class="mc-score" style="color:#00ff88">75%</div>
+  <div class="mc-detail">1★ LEADER &middot; 2◆ MEN. &middot; 1✕ IGN.</div>
+</div>
+<div class="model-card" style="border-top:3px solid #ffee88">
+  <div class="mc-name">Grok</div>
+  <div class="mc-score" style="color:#ffee88">50%</div>
+  <div class="mc-detail">1★ LEADER &middot; 1◆ MEN. &middot; 2✕ IGN.</div>
+</div></div>
+
+<!-- ── RECOMMANDATIONS ───────────────────────────────────────────────── -->
+<div class="section-title">3 recommandations GEO prioritaires</div>
+<div class="recs-grid">
+<div class="rec-tile">
+  <div class="rec-tile-icon"><svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="7" y="4" width="26" height="32" rx="3" stroke="currentColor" stroke-width="1.8" fill="none"/><line x1="13" y1="13" x2="27" y2="13" stroke="currentColor" stroke-width="1.8"/><line x1="13" y1="19" x2="27" y2="19" stroke="currentColor" stroke-width="1.8"/><line x1="13" y1="25" x2="20" y2="25" stroke="currentColor" stroke-width="1.8"/><path d="M30 29 L38 21 L43 26 L35 34 Z" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linejoin="round"/><line x1="30" y1="34" x2="28" y2="40" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+  <details class="rec-tile-details">
+    <summary class="rec-tile-summary">
+      <div class="rec-tile-num" style="color:#ff4444">01</div>
+      <div class="rec-tile-title">Créer du contenu sur le traitement des gaz pour aluminéries</div>
+      <div class="rec-tile-footer">
+        <span class="rec-tile-tag" style="color:#ff4444">CONTENU</span>
+        <span class="rec-tile-arrow">&#8250;</span>
+      </div>
+    </summary>
+    <div class="rec-tile-body">Zéro mention sur les 4 modèles pour le scénario B — votre spécialité technique la plus différenciatrice. Publier 2-3 études de cas structurées sur les projets Rio Tinto AP60 et Barrette-Chapais, avec les termes exacts que les ingénieurs de procédés utilisent dans leurs recherches. Objectif : que Fabmec apparaisse sur les requêtes « traitement gaz aluminérie Québec » en 60-90 jours.</div>
+  </details>
+</div>
+<div class="rec-tile">
+  <div class="rec-tile-icon"><svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="4" width="40" height="11" rx="2.5" stroke="currentColor" stroke-width="1.8" fill="none"/><rect x="4" y="19" width="18" height="25" rx="2.5" stroke="currentColor" stroke-width="1.8" fill="none"/><rect x="26" y="19" width="18" height="11" rx="2.5" stroke="currentColor" stroke-width="1.8" fill="none"/><rect x="26" y="33" width="18" height="11" rx="2.5" stroke="currentColor" stroke-width="1.8" fill="none"/></svg></div>
+  <details class="rec-tile-details">
+    <summary class="rec-tile-summary">
+      <div class="rec-tile-num" style="color:#ffee88">02</div>
+      <div class="rec-tile-title">Structurer la page principale pour les requêtes B2B génériques</div>
+      <div class="rec-tile-footer">
+        <span class="rec-tile-tag" style="color:#ffee88">STRUCTURE</span>
+        <span class="rec-tile-arrow">&#8250;</span>
+      </div>
+    </summary>
+    <div class="rec-tile-body">Sur la requête « meilleures entreprises fabrication mécanique industrielle Saguenay », Fabmec arrive en 3e-4e position ou disparaît. Les modèles citent HARtech, Groupe AMI et CMB parce que ces entreprises utilisent des formulations précises que les IA reconnaissent. Retravailler le H1 et les méta-descriptions du site fabmec.ca avec les mots-clés exacts du secteur : « clés en main », « structures d’acier », « mécanique industrielle », « Saguenay-Lac-Saint-Jean ».</div>
+  </details>
+</div>
+<div class="rec-tile">
+  <div class="rec-tile-icon"><svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 17 L6 31 L14 31 L30 40 L30 8 L14 17 Z" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linejoin="round"/><line x1="36" y1="17" x2="43" y2="17" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><line x1="34" y1="24" x2="43" y2="24" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><line x1="36" y1="31" x2="43" y2="31" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></div>
+  <details class="rec-tile-details">
+    <summary class="rec-tile-summary">
+      <div class="rec-tile-num" style="color:#88bbff">03</div>
+      <div class="rec-tile-title">Capitaliser sur l’investissement de 5,55 M$ — communiqué structuré</div>
+      <div class="rec-tile-footer">
+        <span class="rec-tile-tag" style="color:#88bbff">AUTORITÉ</span>
+        <span class="rec-tile-arrow">&#8250;</span>
+      </div>
+    </summary>
+    <div class="rec-tile-body">Les 4 modèles connaissent l’investissement gouvernemental de janvier 2025. C’est votre meilleur actif de crédibilité IA actuellement. Publier un communiqué de presse structuré (avec les chiffres exacts : 8,175 M$ total, 5,55 M$ financés par Investissement Québec) sur des sites indexés par les LLM (PR Newswire, Cision, CNW), puis le republier en format FAQ sur le site. Objectif : consolider le score LEADER sur le scénario C, actuellement votre seul point fort.</div>
+  </details>
+</div>
+</div>
+
+<!-- ── FAQ ───────────────────────────────────────────────────────────── -->
+<div class="section-title">Questions fr&eacute;quentes</div>
+
+<details class="faq-item">
+  <summary>Mon entreprise existe depuis 15&nbsp;ans. Pourquoi l&rsquo;intelligence artificielle ne sait-elle presque rien sur nous&nbsp;?</summary>
+  <div class="faq-answer">L&rsquo;IA ne &laquo;&nbsp;voit&nbsp;&raquo; pas vos ann&eacute;es d&rsquo;exp&eacute;rience&nbsp;: elle voit seulement votre trace num&eacute;rique. Si vos pages cl&eacute;s, vos preuves (&eacute;tudes de cas, t&eacute;moignages, m&eacute;dias) et vos signaux structur&eacute;s (Schema, FAQ, comparatifs) sont faibles ou mal organis&eacute;s, ChatGPT va citer les acteurs qui ont davantage nourri l&rsquo;&eacute;cosyst&egrave;me num&eacute;rique, m&ecirc;me s&rsquo;ils sont plus jeunes ou moins comp&eacute;tents. L&rsquo;anciennet&eacute; compte moins que la clart&eacute; et la structure de votre pr&eacute;sence en ligne.</div>
+</details>
+<details class="faq-item">
+  <summary>Je n&rsquo;ai pas de site web moderne. Est-ce que &ccedil;a vaut quand m&ecirc;me la peine&nbsp;?</summary>
+  <div class="faq-answer">Oui, parce que vos clients, partenaires et donneurs d&rsquo;ouvrage lisent d&rsquo;abord ce qui existe d&eacute;j&agrave;, m&ecirc;me si le design n&rsquo;est plus &agrave; la mode. Ils ont surtout besoin de clart&eacute;, de structure et d&rsquo;autorit&eacute;. Un site lisible pour l&rsquo;IA, soutenu par quelques sources externes de qualit&eacute;, vaut mieux qu&rsquo;un &laquo;&nbsp;beau&nbsp;&raquo; site presque vide de contenu strat&eacute;gique.</div>
+</details>
+<details class="faq-item">
+  <summary>En combien de temps ChatGPT peut-il commencer &agrave; me recommander&nbsp;?</summary>
+  <div class="faq-answer">En g&eacute;n&eacute;ral, il faut compter de 2 &agrave; 6&nbsp;mois pour voir les premiers changements sur les requ&ecirc;tes cibl&eacute;es, selon la concurrence et le volume de nouveaux signaux (pages, mentions, avis, listes &laquo;&nbsp;meilleurs&nbsp;X&nbsp;&raquo;). Les cycles de mise &agrave; jour ne sont pas instantan&eacute;s, mais ils r&eacute;compensent les signaux clairs, r&eacute;p&eacute;t&eacute;s et coh&eacute;rents.</div>
+</details>
+<details class="faq-item">
+  <summary>Les 190&nbsp;$ &mdash; concr&egrave;tement, qu&rsquo;est-ce que je re&ccedil;ois&nbsp;?</summary>
+  <div class="faq-answer">Vous recevez un audit cibl&eacute; de votre visibilit&eacute; dans ChatGPT, Claude, Perplexity et Gemini, bas&eacute; sur 12&nbsp;sc&eacute;narios r&eacute;els de votre march&eacute;, avec un verdict simple&nbsp;: o&ugrave; vous &ecirc;tes cit&eacute;, o&ugrave; vous &ecirc;tes absent et pourquoi. Le rapport inclut trois plans d&rsquo;actions rapides et une mini feuille de route sur 60&ndash;90&nbsp;jours pour corriger vos &laquo;&nbsp;zones aveugles&nbsp;&raquo;.</div>
+</details>
+<details class="faq-item">
+  <summary>Et si l&rsquo;audit montre que tout va d&eacute;j&agrave; bien&nbsp;?</summary>
+  <div class="faq-answer">Dans ce cas, vous avez achet&eacute; une assurance peu co&ucirc;teuse&nbsp;: la certitude que vous apparaissez bien dans la &laquo;&nbsp;shortlist&nbsp;&raquo; recommand&eacute;e par l&rsquo;IA. Ensuite, on passe en mode optimisation fine&nbsp;: mieux contr&ocirc;ler la fa&ccedil;on dont on vous pr&eacute;sente, dans quels cas d&rsquo;usage vous sortez, et comment d&eacute;passer vos concurrents dans les comparatifs.</div>
+</details>
+<details class="faq-item">
+  <summary>Qu&rsquo;est-ce que l&rsquo;IA &laquo;&nbsp;lit&nbsp;&raquo; exactement sur mon entreprise quand elle formule ses r&eacute;ponses&nbsp;?</summary>
+  <div class="faq-answer">L&rsquo;IA s&rsquo;appuie sur un ensemble de signaux&nbsp;: votre site web, vos &eacute;tudes de cas et documents, les revues sp&eacute;cialis&eacute;es, les plateformes d&rsquo;avis, les annuaires, les m&eacute;dias et tout contenu structur&eacute; qu&rsquo;elle a pu indexer. Les marques fortes ne sont pas que des logos, mais un profil num&eacute;rique clair et coh&eacute;rent que les algorithmes peuvent facilement assembler en une r&eacute;ponse.</div>
+</details>
+
+<!-- ── PASSEZ À L'ACTION ─────────────────────────────────────────────── -->
+<div class="section-title" style="margin-top:44px">PASSEZ &Agrave; L&rsquo;ACTION (SANS RISQUE)</div>
+
+<div class="action-block">
+  <div class="action-title">Ne me croyez pas sur parole.</div>
+  <div class="action-sub">V&eacute;rifiez par vous-m&ecirc;me.</div>
+  <div class="action-steps">
+    <div class="action-step">
+      <div class="step-num">1</div>
+      <div class="step-text">&Eacute;crivez-moi<br><strong>&laquo;&nbsp;AUDIT&nbsp;&raquo;</strong><br>en message priv&eacute;</div>
+    </div>
+    <div class="action-step">
+      <div class="step-num">2</div>
+      <div class="step-text">Je vous enverrai un rapport gratuit &mdash; 3&nbsp;signaux bloquants identifi&eacute;s</div>
+    </div>
+    <div class="action-step">
+      <div class="step-num">3</div>
+      <div class="step-text">Si le r&eacute;sultat vous choque, on lance l&rsquo;audit complet (190&nbsp;$)</div>
+    </div>
+  </div>
+  <a href="https://linkedin.com/in/lavrikgeo" target="_blank" class="action-btn">&rarr; Me contacter sur LinkedIn</a>
+</div>
+
+<!-- ── QUI SUIS-JE ────────────────────────────────────────────────────── -->
+<div class="section-title">QUI SUIS-JE&nbsp;?</div>
+
+<div class="qui-block">
+  <div class="qui-avatar">H</div>
+  <div class="qui-content">
+    <div class="qui-name">Halyna Lavrik</div>
+    <div class="qui-tagline">Sp&eacute;cialiste en visibilit&eacute; IA &middot; GEO Analyst &middot; Chicoutimi, Qu&eacute;bec</div>
+    <div class="qui-bio">
+      <p>Je suis Halyna Lavrik. 20&nbsp;ans d&rsquo;exp&eacute;rience comme r&eacute;dactrice en chef, analyste, experte en relations publiques et conseill&egrave;re en communication strat&eacute;gique pour des entreprises B2B.</p>
+      <p>J&rsquo;ai d&eacute;couvert la GEO (Generative Engine Optimization) en observant comment les moteurs de recherche IA recommandent &mdash; ou ignorent &mdash; les entreprises r&eacute;gionales face aux multinationales. J&rsquo;ai d&eacute;velopp&eacute; ce protocole d&rsquo;audit pour mesurer, avec des donn&eacute;es r&eacute;elles, ce que les IA disent de votre entreprise.</p>
+      <p>Je ne suis pas d&eacute;veloppeuse. Je suis traductrice&nbsp;: je traduis votre expertise dans la langue que respectent les LLM.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONTACT PLAQUE ─────────────────────────────────────────────────── -->
+<div class="contact-plaque">
+  <div class="cp-name">Halyna Lavrik</div>
+  <div class="cp-title">Sp&eacute;cialiste en visibilit&eacute; IA pour entreprises B2B &middot; Saguenay, Qu&eacute;bec</div>
+  <div class="cp-links">
+    <a href="mailto:pr.expert4488@gmail.com" class="cp-link">
+      <span class="cp-icon">&#9993;</span> pr.expert4488@gmail.com
+    </a>
+    <a href="https://linkedin.com/in/lavrikgeo" target="_blank" class="cp-link">
+      <span class="cp-icon">&#128101;</span> linkedin.com/in/lavrikgeo
+    </a>
+  </div>
+  <div class="cp-tagline">1 PDF + 3 signaux bloquants identifi&eacute;s &middot; Audit f&eacute;vrier 2026 &middot; Lavrik GEO &middot; Chicoutimi, Qu&eacute;bec</div>
+</div>
+
+<!-- ── FOOTER ────────────────────────────────────────────────────────── -->
+<div class="footer">
+  <div class="footer-left">GEO Blitz Audit &middot; Fabmec &middot; 2026-02-24</div>
+  <div class="footer-right">Lavrik GEO &middot; Chicoutimi</div>
+</div>
+
+</div>
+</body>
+</html>
