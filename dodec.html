@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GEO Blitz Audit &mdash; Dodec</title>
+<style>
+  :root {
+    --bg:     #0d0e0f;
+    --bg2:    #111213;
+    --border: #222426;
+    --lime:   #c8ff00;
+    --text:   #e8e8e8;
+    --muted:  #888;
+    --font:   'Calibri', 'Segoe UI', system-ui, sans-serif;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--text); font-family:var(--font); font-size:16px; line-height:1.7; }
+  a { color:var(--lime); }
+  .container { max-width:1400px; margin:0 auto; padding:24px 20px; }
+
+  .section-title {
+    font-size:15px; font-weight:800; color:var(--lime);
+    letter-spacing:2.5px; text-transform:uppercase;
+    margin:44px 0 18px; padding-bottom:10px;
+    border-bottom:2px solid #1c2500;
+    display:flex; align-items:center; gap:10px;
+  }
+  .section-title::before {
+    content:''; display:inline-block;
+    width:5px; height:18px; background:var(--lime); border-radius:2px; flex-shrink:0;
+  }
+
+  /* Top bar */
+  .top-bar { display:flex; justify-content:space-between; align-items:center; padding:20px 0 22px; border-bottom:1px solid #1a1a1a; margin-bottom:60px; }
+  .top-bar-logo { font-size:13px; font-weight:900; color:var(--lime); letter-spacing:2.5px; text-transform:uppercase; }
+  .top-bar-date { font-size:13px; color:#444; }
+
+  /* Hero */
+  .hero { display:flex; justify-content:space-between; align-items:flex-start; gap:48px; margin-bottom:52px; padding-bottom:48px; border-bottom:1px solid #1a1a1a; flex-wrap:wrap; }
+  .hero-body { flex:1; min-width:280px; }
+  .hero-label { font-size:11px; font-weight:700; letter-spacing:2.5px; color:var(--lime); text-transform:uppercase; margin-bottom:24px; }
+  .hero-title { font-size:clamp(36px,5.5vw,68px); font-weight:900; line-height:1.08; color:#fff; margin-bottom:28px; letter-spacing:-.5px; }
+  .hero-lime { color:var(--lime); }
+  .hero-sub { font-size:17px; color:#888; line-height:1.7; max-width:560px; }
+
+  /* Grade */
+  .grade-block { text-align:right; flex-shrink:0; }
+  .grade-badge { font-size:56px; font-weight:900; line-height:1; }
+  .grade-explain { font-size:13px; color:#aaa; margin-top:6px; margin-bottom:12px; }
+  .legend-pills { display:flex; flex-direction:column; gap:6px; align-items:flex-end; }
+  .legend-pill { font-size:13px; padding:5px 12px; border-radius:20px; display:inline-flex; align-items:center; gap:8px; }
+  .lp-leader  { background:#003322; color:#00ff88; border:1px solid #00884455; }
+  .lp-mention { background:#0d1a33; color:#88bbff; border:1px solid #4466aa55; }
+  .lp-ignore  { background:#330000; color:#ff6666; border:1px solid #aa333355; }
+  .lp-count   { font-weight:900; font-size:16px; }
+
+  /* Intro */
+  .intro-plaque { background:var(--bg2); border:1px solid #2a2a2a; border-left:4px solid var(--lime); border-radius:4px; padding:28px 32px; margin-bottom:20px; }
+  .intro-plaque p { margin-bottom:14px; font-size:17px; line-height:1.85; }
+  .intro-plaque p:last-child { margin-bottom:0; }
+  details.intro-detail summary {
+    cursor:pointer; list-style:none; margin-top:20px;
+    display:inline-flex; align-items:center; gap:8px;
+    padding:10px 20px; border:1px solid #3a3a3a; border-radius:24px;
+    background:#181818; color:#aaa; font-size:14px; font-weight:600;
+    letter-spacing:.5px; transition:border-color .2s, color .2s;
+  }
+  details.intro-detail summary:hover { border-color:#888; color:#ddd; }
+  details.intro-detail summary::after { content:" ›"; font-size:16px; }
+  details.intro-detail[open] summary::after { content:" ↑"; }
+  .intro-detail-content { background:var(--bg); padding:20px 24px; border-radius:4px; margin-top:12px; font-size:15px; line-height:1.8; }
+
+  /* Score strip */
+  .score-strip { display:flex; gap:12px; margin-bottom:28px; flex-wrap:wrap; }
+  .score-card { flex:1; min-width:160px; background:var(--bg2); border:1px solid var(--border); border-radius:6px; padding:20px; }
+  .sc-label { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:8px; }
+  .sc-value { font-size:30px; font-weight:900; margin-bottom:6px; }
+  .sc-sub { font-size:14px; color:#aaa; line-height:1.5; }
+
+  /* CTA */
+  .cta-block { text-align:center; padding:44px 24px 40px; background:var(--bg2); border:1px solid #2a2a2a; border-radius:6px; margin-bottom:36px; }
+  .cta-title { font-size:13px; color:var(--muted); text-transform:uppercase; letter-spacing:2px; margin-bottom:22px; }
+  .cta-btn { display:inline-block; background:var(--lime); color:#000; font-size:19px; font-weight:900; letter-spacing:1px; padding:20px 48px; border-radius:6px; text-decoration:none; text-transform:uppercase; box-shadow:0 0 28px rgba(200,255,0,.45); transition:box-shadow .3s, transform .2s; }
+  .cta-btn:hover { box-shadow:0 0 40px rgba(200,255,0,.65); transform:translateY(-3px); color:#000; }
+  .cta-form-link { margin-top:18px; font-size:14px; color:var(--muted); }
+  .cta-form-link a { color:#88bbff; text-decoration:none; }
+  .cta-badge { display:inline-block; margin-top:14px; font-size:12px; color:#555; border:1px solid #2a2a2a; border-radius:20px; padding:5px 16px; }
+
+  /* Survey table */
+  .survey-table-wrap { overflow-x:auto; margin-bottom:36px; }
+  table.survey { width:100%; border-collapse:collapse; }
+  .th-model-col { background:#0a0a0a; color:#666; font-size:13px; font-weight:600; padding:16px; text-align:left; width:110px; border-right:2px solid #1a1a1a; white-space:nowrap; }
+  .th-scenario-col { padding:18px 16px; text-align:left; min-width:240px; }
+  .scenario-id-top { font-size:30px; font-weight:900; line-height:1; }
+  .scenario-type-top { font-size:10px; letter-spacing:2px; text-transform:uppercase; margin-top:5px; opacity:.85; font-weight:700; }
+  .scenario-q-top { font-size:13px; line-height:1.55; color:#bbb; margin-top:12px; font-style:italic; padding-top:10px; border-top:1px solid rgba(255,255,255,.08); }
+  .td-model-name { padding:14px 16px; vertical-align:middle; background:#0e0f10; border-right:2px solid #1a1a1a; width:110px; }
+  .model-name-label { font-size:15px; font-weight:700; color:#ccc; }
+  .td-model-cell { padding:3px; vertical-align:top; border-left:1px solid var(--border); }
+  details.model-cell { width:100%; }
+  details.model-cell summary { list-style:none; cursor:pointer; }
+  details.model-cell summary::-webkit-details-marker { display:none; }
+  .cell-status { padding:10px 12px; display:flex; flex-direction:column; gap:5px; min-height:90px; transition:opacity .15s; }
+  .cell-status:hover { opacity:.85; }
+  .status-badge { font-size:11px; font-weight:800; letter-spacing:.5px; padding:3px 8px; border-radius:3px; display:inline-block; align-self:flex-start; }
+  .cell-headline { font-size:13px; line-height:1.45; color:#ccc; flex:1; padding-top:5px; }
+  .toggle-arrow { font-size:14px; color:#555; align-self:flex-end; transition:transform .2s; }
+  details.model-cell[open] .toggle-arrow { transform:rotate(90deg); color:var(--lime); }
+  .cell-response { padding:14px 16px; background:#090909; border-top:1px solid var(--border); }
+  .response-label { font-size:10px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin-bottom:10px; }
+  .cell-response p { font-size:14px; line-height:1.75; color:#bbb; margin-bottom:8px; }
+  .cell-response p:last-child { margin-bottom:0; }
+  tr { border-bottom:1px solid var(--border); }
+  tr:nth-child(even) { background:#0f0f10; }
+
+  /* SOV */
+  .sov-section { margin-bottom:28px; }
+  .sov-row { display:flex; align-items:center; gap:14px; margin-bottom:12px; }
+  .sov-label { font-size:13px; width:220px; color:#bbb; flex-shrink:0; font-weight:600; }
+  .sov-bar { flex:1; height:22px; background:#1a1a1a; border-radius:3px; display:flex; overflow:hidden; }
+  .sov-leader { background:#00ff88; }
+  .sov-ment   { background:#88bbff; }
+  .sov-ign    { background:#ff4444; }
+  .sov-nums { font-size:13px; color:var(--muted); width:120px; text-align:right; flex-shrink:0; }
+  .sov-legend { display:flex; gap:20px; font-size:13px; margin-top:10px; flex-wrap:wrap; }
+  .sov-legend span { display:flex; align-items:center; gap:6px; color:var(--muted); }
+  .legend-dot { width:12px; height:12px; border-radius:2px; flex-shrink:0; }
+
+  /* Model cards */
+  .model-cards { display:flex; gap:14px; margin-bottom:36px; flex-wrap:wrap; }
+  .model-card { flex:1; min-width:150px; background:var(--bg2); border-radius:6px; padding:20px; text-align:center; }
+  .mc-name { font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px; }
+  .mc-score { font-size:38px; font-weight:900; margin:8px 0 6px; }
+  .mc-detail { font-size:13px; color:var(--muted); }
+
+  /* Paradoxe Dodec */
+  .paradox-block {
+    background:var(--bg2); border:1px solid #2a2a2a; border-radius:10px;
+    padding:36px 32px; margin-bottom:36px;
+  }
+  .paradox-title {
+    font-size:18px; font-weight:900; color:var(--lime);
+    letter-spacing:1px; text-transform:uppercase; margin-bottom:28px;
+  }
+  .paradox-cols {
+    display:flex; align-items:center; gap:0; margin-bottom:24px; flex-wrap:wrap; gap:8px;
+  }
+  .paradox-col {
+    flex:1; min-width:240px; padding:28px 24px; border-radius:8px; text-align:center;
+  }
+  .paradox-good { background:#002211; border:1.5px solid #00883344; }
+  .paradox-bad  { background:#220000; border:1.5px solid #aa222244; }
+  .paradox-divider {
+    font-size:22px; font-weight:900; color:#333; padding:0 16px; flex-shrink:0;
+  }
+  .paradox-label { font-size:14px; color:#aaa; line-height:1.5; margin-bottom:16px; }
+  .paradox-label strong { color:#ddd; }
+  .paradox-score { font-size:52px; font-weight:900; line-height:1; margin-bottom:10px; }
+  .paradox-score-green { color:#00ff88; }
+  .paradox-score-red   { color:#ff4444; }
+  .paradox-sub { font-size:13px; color:#888; line-height:1.5; margin-bottom:14px; }
+  .paradox-icons { font-size:16px; letter-spacing:4px; opacity:.5; }
+  .paradox-insight {
+    background:#0a0a0a; border-left:3px solid var(--lime); padding:18px 22px;
+    font-size:15px; color:#ccc; line-height:1.85; border-radius:0 4px 4px 0;
+  }
+
+  /* Wappalyzer */
+  .wappa-block {
+    background:var(--bg2); border:1px solid #2a2a2a; border-radius:10px;
+    padding:32px; margin-bottom:36px;
+  }
+  .wappa-title { font-size:17px; font-weight:800; color:#ddd; margin-bottom:20px; }
+  .wappa-table { border:1px solid #2a2a2a; border-radius:6px; overflow:hidden; margin-bottom:20px; }
+  .wappa-row { display:grid; grid-template-columns:200px 1fr 1fr; }
+  .wappa-header { background:#0a0a0a; }
+  .wappa-header .wappa-cell { font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:#555; font-weight:700; }
+  .wappa-cell { padding:12px 16px; font-size:14px; color:#bbb; border-bottom:1px solid #1a1a1a; }
+  .wappa-signal { font-weight:700; color:#888; background:#0d0d0d; }
+  .wappa-you { background:#0d1020; }
+  .wappa-win { color:#88ff88; }
+  .wappa-gap { color:#ff8888; }
+  .wappa-critical { background:#0d0505; }
+  .wappa-critical .wappa-cell { border-color:#331111; }
+  .wappa-why { font-size:12px; opacity:.7; font-style:italic; margin-left:4px; }
+  .wappa-conclusion {
+    font-size:15px; color:#aaa; line-height:1.85;
+    background:#0a0a0a; padding:18px 22px; border-radius:4px; border-left:3px solid #ff4444;
+  }
+
+  /* Recommandations */
+  .recs-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-bottom:36px; }
+  .rec-tile {
+    background:var(--bg2); border:1.5px solid rgba(200,255,0,.3); border-radius:12px;
+    overflow:hidden; display:flex; flex-direction:column;
+    box-shadow:0 0 18px rgba(200,255,0,.09), 0 0 48px rgba(200,255,0,.04);
+    transition:box-shadow .25s;
+  }
+  .rec-tile:hover { box-shadow:0 0 28px rgba(200,255,0,.18), 0 0 72px rgba(200,255,0,.08); }
+  .rec-tile-icon { padding:26px 26px 0; opacity:.28; color:#999; display:flex; justify-content:flex-start; }
+  .rec-tile-details { flex:1; display:flex; flex-direction:column; }
+  .rec-tile-summary { padding:16px 26px 24px; cursor:pointer; list-style:none; display:flex; flex-direction:column; gap:8px; }
+  .rec-tile-summary::-webkit-details-marker { display:none; }
+  .rec-tile-num { font-size:36px; font-weight:900; line-height:1; opacity:.2; margin-bottom:4px; }
+  .rec-tile-title { font-size:16px; font-weight:800; color:#e8e8e8; line-height:1.45; }
+  .rec-tile-footer { display:flex; justify-content:space-between; align-items:center; margin-top:12px; }
+  .rec-tile-tag { font-size:11px; letter-spacing:1.5px; text-transform:uppercase; opacity:.6; font-weight:700; }
+  .rec-tile-arrow { font-size:20px; color:#444; transition:transform .2s, color .2s; }
+  .rec-tile-details[open] .rec-tile-arrow { transform:rotate(90deg); color:var(--lime); }
+  .rec-tile-body { background:#0a0a0a; padding:22px 26px; border-top:1px solid var(--border); font-size:14px; color:#aaa; line-height:1.85; }
+
+  /* FAQ */
+  .faq-item { background:var(--bg2); border:1px solid var(--border); border-radius:6px; margin-bottom:10px; }
+  .faq-item summary { cursor:pointer; padding:18px 22px; font-size:16px; font-weight:600; color:#ddd; list-style:none; display:flex; justify-content:space-between; align-items:center; }
+  .faq-item summary::after { content:"›"; color:var(--lime); font-size:22px; }
+  .faq-item[open] summary::after { content:"↑"; }
+  .faq-answer { padding:0 22px 20px; font-size:15px; color:#aaa; line-height:1.8; }
+
+  /* Qui */
+  .qui-block { background:var(--bg2); border:1px solid #2a2a2a; border-radius:6px; padding:32px 36px; margin-bottom:28px; display:flex; gap:28px; align-items:flex-start; }
+  .qui-avatar { width:76px; height:76px; border-radius:50%; border:2px solid var(--lime); background:#1a1a1a; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:32px; font-weight:900; color:var(--lime); }
+  .qui-name { font-size:24px; font-weight:900; color:var(--lime); margin-bottom:5px; }
+  .qui-tagline { font-size:14px; color:var(--muted); margin-bottom:18px; }
+  .qui-bio p { font-size:15px; line-height:1.85; margin-bottom:12px; color:#ccc; }
+
+  /* Action */
+  .action-block { background:linear-gradient(135deg,#0d1a0d,#0a0a0a); border:1px solid #2a4a2a; border-radius:6px; padding:44px 32px; margin-bottom:28px; text-align:center; }
+  .action-title { font-size:28px; font-weight:900; color:var(--lime); margin-bottom:6px; }
+  .action-sub { font-size:12px; color:var(--muted); letter-spacing:3px; text-transform:uppercase; margin-bottom:36px; }
+  .action-steps { display:flex; justify-content:center; gap:36px; flex-wrap:wrap; margin-bottom:36px; }
+  .action-step { text-align:center; max-width:190px; }
+  .step-num { font-size:44px; font-weight:900; color:var(--lime); opacity:.3; line-height:1; }
+  .step-text { font-size:15px; color:#ccc; margin-top:10px; line-height:1.6; }
+  .step-text strong { color:#fff; }
+  .action-btn { display:inline-block; border:2px solid var(--lime); color:var(--lime); font-size:15px; font-weight:700; padding:16px 36px; border-radius:6px; text-decoration:none; letter-spacing:1px; transition:background .2s,color .2s; }
+  .action-btn:hover { background:var(--lime); color:#000; }
+
+  /* Contact */
+  .contact-plaque { background:var(--bg2); border:1px solid #333; border-radius:8px; padding:32px 36px; margin-top:36px; text-align:center; }
+  .cp-name { font-size:24px; font-weight:900; color:var(--lime); margin-bottom:8px; }
+  .cp-title { font-size:15px; color:#aaa; margin-bottom:24px; }
+  .cp-links { display:flex; justify-content:center; gap:16px; flex-wrap:wrap; }
+  .cp-link { display:flex; align-items:center; gap:10px; font-size:15px; color:#ccc; text-decoration:none; background:#0d0e0f; border:1px solid #333; border-radius:6px; padding:14px 22px; transition:border-color .2s,color .2s; font-weight:600; }
+  .cp-link:hover { border-color:var(--lime); color:var(--lime); }
+  .cp-icon { font-size:18px; }
+  .cp-tagline { font-size:12px; color:#2e2e2e; margin-top:18px; }
+
+  .footer { border-top:1px solid #181818; margin-top:20px; padding-top:14px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px; }
+  .footer-left { font-size:11px; color:#2e2e2e; }
+  .footer-right { font-size:11px; color:#2e2e2e; }
+
+  @media(max-width:768px) {
+    .hero { flex-direction:column; gap:32px; }
+    .grade-block { text-align:left; }
+    .legend-pills { align-items:flex-start; }
+    .th-scenario-col { min-width:190px; }
+    .recs-grid { grid-template-columns:1fr; }
+    .qui-block { flex-direction:column; }
+    .paradox-cols { flex-direction:column; }
+    .wappa-row { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div class="top-bar-logo">LAVRIK GEO</div>
+  <div class="top-bar-date">Blitz-audit GEO / LLM &middot; F&eacute;vrier 2026</div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-body">
+    <div class="hero-label">RAPPORT CLIENT &middot; CONFIDENTIEL &middot; DODEC</div>
+    <h1 class="hero-title">
+      Votre site est<br>
+      <span class="hero-lime">plus rapide</span>.<br>
+      L&rsquo;IA recommande<br>
+      <span class="hero-lime">vos concurrents</span>.
+    </h1>
+    <p class="hero-sub">Ce rapport montre ce que les intelligences artificielles disent de Dodec &mdash; et pourquoi une entreprise fond&eacute;e en 1975, certifi&eacute;e ISO 9001, CWB et ASME, reste invisible sur les requ&ecirc;tes g&eacute;n&eacute;riques.</p>
+  </div>
+  <div class="grade-block">
+    <div class="grade-badge" style="color:#ffee88">C</div>
+    <div class="grade-explain">62 % des r&eacute;ponses IA mentionnent Dodec</div>
+    <div class="legend-pills">
+      <div class="legend-pill lp-leader">
+        <span>&#9733; LEADER</span>
+        <span class="lp-count">8</span>
+        <span style="font-size:11px;color:#557755">fois recommand&eacute; en 1er</span>
+      </div>
+      <div class="legend-pill lp-mention">
+        <span>&#9670; MENTIONN&Eacute;</span>
+        <span class="lp-count">2</span>
+        <span style="font-size:11px;color:#445577">fois cit&eacute; dans la r&eacute;ponse</span>
+      </div>
+      <div class="legend-pill lp-ignore">
+        <span>&#10005; IGNOR&Eacute;</span>
+        <span class="lp-count">6</span>
+        <span style="font-size:11px;color:#774444">fois absent de la r&eacute;ponse</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INTRO -->
+<div class="section-title">Diagnostic &eacute;ditorial</div>
+<div class="intro-plaque">
+  <p>Votre site est plus rapide, plus moderne et mieux instrument&eacute; que celui de Fabmec. Pourtant, ChatGPT recommande Fabmec dans les appels d&rsquo;offres industriels &mdash; et ne vous mentionne pas.</p>
+  <p>La raison tient &agrave; un seul &eacute;cart technique : un plugin SEO sur le site WordPress de Fabmec g&eacute;n&egrave;re automatiquement la couche s&eacute;mantique que les LLM utilisent pour identifier une entreprise. Votre plateforme Webflow ne le fait pas par d&eacute;faut.</p>
+  <p>Cinquante ans d&rsquo;expertise, de certifications et de partenariats internationaux &mdash; Hardox, Sumitomo, FLSMIDTH &mdash; restent invisibles pour l&rsquo;IA. Non pas parce que l&rsquo;information n&rsquo;existe pas. Parce qu&rsquo;elle n&rsquo;est pas balis&eacute;e dans la langue que les LLM lisent.</p>
+  <p>Ce n&rsquo;est pas un probl&egrave;me de budget, ni de design, ni de r&eacute;putation. C&rsquo;est un probl&egrave;me de structure &mdash; et il a une correction pr&eacute;cise.</p>
+  <details class="intro-detail">
+    <summary>Voir le d&eacute;tail chiffr&eacute; de l&rsquo;audit</summary>
+    <div class="intro-detail-content">
+      <strong>Scores par sc&eacute;nario :</strong><br>
+      &bull;&nbsp;A (B2B Intent) : 1/4 &mdash; seul Gemini vous mentionne. ChatGPT, Perplexity et Grok recommandent vos concurrents.<br>
+      &bull;&nbsp;B (Certifications ASME/CWB) : 1/4 &mdash; m&ecirc;me r&eacute;sultat. Vos certifications existent sur votre site, l&rsquo;IA ne les lit pas.<br>
+      &bull;&nbsp;C (Due Diligence) : 4/4 LEADER &mdash; quand on cherche Dodec directement, le profil est complet et pr&eacute;cis.<br>
+      &bull;&nbsp;D (Marque employeur) : 4/4 LEADER &mdash; image d&rsquo;employeur excellente sur tous les mod&egrave;les.<br><br>
+      <strong>Diagnostic en une phrase :</strong> Dodec est parfaitement reconnu quand on le cherche. Compl&egrave;tement absent quand un prospect cherche votre expertise sans conna&icirc;tre votre nom.
+    </div>
+  </details>
+</div>
+
+<!-- CTA -->
+
+<div class="cta-block">
+  <div class="cta-title">Vous voulez les chiffres complets ?</div>
+  <a href="https://docs.google.com/forms/d/e/1FAIpQLSctf7q4fbSbNHrt_u-GAjB3KTE7M6RdJ1vNTVGLT8VbVZjuCg/viewform" target="_blank" class="cta-btn">Acheter l&rsquo;audit complet — 190 $</a>
+  <div class="cta-form-link">Ou remplissez le formulaire : <a href="https://docs.google.com/forms/d/e/1FAIpQLSctf7q4fbSbNHrt_u-GAjB3KTE7M6RdJ1vNTVGLT8VbVZjuCg/viewform" target="_blank">Demander l&rsquo;audit →</a></div>
+  <div class="cta-badge">✓ Livraison sous 48–72h · Format HTML + PDF</div>
+</div>
+
+<!-- SCORE STRIP -->
+<div class="score-strip">
+  <div class="score-card">
+    <div class="sc-label">Visibilit&eacute; globale</div>
+    <div class="sc-value" style="color:#ffee88">62%</div>
+    <div class="sc-sub">10 r&eacute;ponses IA sur 16 vous citent</div>
+  </div>
+  <div class="score-card">
+    <div class="sc-label">Recommand&eacute; en t&ecirc;te (LEADER)</div>
+    <div class="sc-value" style="color:#00ff88">50%</div>
+    <div class="sc-sub">8 fois Dodec appara&icirc;t en premier &mdash; exclusivement sur recherche directe</div>
+  </div>
+  <div class="score-card">
+    <div class="sc-label">Angle mort critique</div>
+    <div class="sc-value" style="color:#ff4444">A+B &mdash; 2/8</div>
+    <div class="sc-sub">Sur les requ&ecirc;tes B2B et certifications, seul Gemini vous trouve. Trois mod&egrave;les sur quatre vous ignorent</div>
+  </div>
+  <div class="score-card">
+    <div class="sc-label">Meilleur sc&eacute;nario</div>
+    <div class="sc-value" style="color:#ffee88">C+D &mdash; 8/8</div>
+    <div class="sc-sub">Profil complet et solide quand on cherche Dodec directement ou comme employeur</div>
+  </div>
+</div>
+
+<!-- PARADOXE DODEC -->
+<div class="section-title">Le Paradoxe Dodec</div>
+
+<div class="paradox-block">
+  <div class="paradox-title">Le Paradoxe Dodec</div>
+  <div class="paradox-cols">
+    <div class="paradox-col paradox-good">
+      <div class="paradox-label">Quand on cherche<br><strong>«&nbsp;Dodec&nbsp;»</strong> directement</div>
+      <div class="paradox-score paradox-score-green">8 / 8</div>
+      <div class="paradox-sub">LEADER sur les 4 mod&egrave;les<br>Due diligence + Marque employeur</div>
+      <div class="paradox-icons">★ ★ ★ ★ ★ ★ ★ ★</div>
+    </div>
+    <div class="paradox-divider">vs</div>
+    <div class="paradox-col paradox-bad">
+      <div class="paradox-label">Quand un prospect cherche<br><strong>votre expertise</strong></div>
+      <div class="paradox-score paradox-score-red">2 / 8</div>
+      <div class="paradox-sub">IGNORÉ sur ChatGPT, Perplexity, Grok<br>B2B intent + Certifications ASME/CWB</div>
+      <div class="paradox-icons">✕ ✕ ✕ ◆ ✕ ✕ ✕ ◆</div>
+    </div>
+  </div>
+  <div class="paradox-insight">
+    <strong>Ce que &ccedil;a signifie&nbsp;:</strong> Les clients qui vous <em>connaissent d&eacute;j&agrave;</em> vous trouvent parfaitement.
+    Les clients qui <em>cherchent votre expertise sans conna&icirc;tre votre nom</em> ne vous voient pas.
+    L’IA sert exactement ceux que vous n’avez pas encore.
+  </div>
+</div>
+
+<!-- SURVEY TABLE -->
+<div class="section-title">R&eacute;sultats de l&rsquo;audit &mdash; 4 sc&eacute;narios &times; 4 mod&egrave;les IA</div>
+<div class="survey-table-wrap">
+  <table class="survey">
+    <thead>
+      <tr>
+        <th class="th-model-col">Mod&egrave;le IA</th>
+        
+<th class="th-scenario-col" style="background:#0d1a2a;border-top:4px solid #88bbff">
+  <div class="scenario-id-top" style="color:#88bbff">A</div>
+  <div class="scenario-type-top" style="color:#88bbff">B2B INTENT</div>
+  <div class="scenario-q-top">Meilleurs fabricants de structures d’acier et d’équipements industriels au Saguenay–Lac-Saint-Jean</div>
+</th>
+<th class="th-scenario-col" style="background:#0a1a0a;border-top:4px solid #88ffaa">
+  <div class="scenario-id-top" style="color:#88ffaa">B</div>
+  <div class="scenario-type-top" style="color:#88ffaa">CERTIFICATIONS</div>
+  <div class="scenario-q-top">Entreprise certifiée ASME, CWB et ISO 9001 pour fabrication sous pression et soudage industriel lourd au Québec</div>
+</th>
+<th class="th-scenario-col" style="background:#1a1a0a;border-top:4px solid #ffee88">
+  <div class="scenario-id-top" style="color:#ffee88">C</div>
+  <div class="scenario-type-top" style="color:#ffee88">DUE DILIGENCE</div>
+  <div class="scenario-q-top">Industries Dodec — profil, références et capacités</div>
+</th>
+<th class="th-scenario-col" style="background:#0a0d1a;border-top:4px solid #aabbff">
+  <div class="scenario-id-top" style="color:#aabbff">D</div>
+  <div class="scenario-type-top" style="color:#aabbff">MARQUE EMPLOYEUR</div>
+  <div class="scenario-q-top">Travailler chez Dodec — culture, conditions et perspectives de carrière</div>
+</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+<tr>
+  <td class="td-model-name"><div class="model-name-label">ChatGPT</div></td>
+  <td class="td-model-cell">
+<details class="model-cell">
+  <summary>
+    <div class="cell-status" style="background:#330000;border-left:3px solid #ff4444">
+      <span class="status-badge" style="color:#ff4444;background:#330000">✕ IGNORÉ</span>
+      <span class="cell-headline">Absent. Technosoudé et Fabmec recommandés à votre place</span>
+      <span class="toggle-arrow">›</span>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">Analyse — ChatGPT</div>
+    <p>ChatGPT cite Technosoudé et Fabmec comme fabricants de référence dans la région. Dodec n’apparaît pas dans la réponse, malgré 50 ans d’activité, une superficie de 70 00 pi² et des partenariats avec Hardox et Sumitomo.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell">
+  <summary>
+    <div class="cell-status" style="background:#330000;border-left:3px solid #ff4444">
+      <span class="status-badge" style="color:#ff4444;background:#330000">✕ IGNORÉ</span>
+      <span class="cell-headline">Silence total. Les grands joueurs nationaux à votre place</span>
+      <span class="toggle-arrow">›</span>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">Analyse — ChatGPT</div>
+    <p>ChatGPT cite des acteurs nationaux certifiés ASME sans évoquer les spécialistes régionaux. Dodec — certifié ISO 9001-2015, CWB et ASME/CSA — n’apparaît pas, parce que ces certifications ne sont pas balisées en JSON-LD sur son site.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell">
+  <summary>
+    <div class="cell-status" style="background:#003322;border-left:3px solid #00ff88">
+      <span class="status-badge" style="color:#00ff88;background:#003322">★ LEADER</span>
+      <span class="cell-headline">Profil complet. 1975, ISO 9001, partenaires internationaux cités</span>
+      <span class="toggle-arrow">›</span>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">Analyse — ChatGPT</div>
+    <p>ChatGPT retourne un profil précis : fondé en 1975, certifié ISO 9001-2015 et CWB, spécialisé en fabrication mécanique lourde. Partenariats Hardox et Sumitomo reconnus. Quand on cherche Dodec directement, le profil est solide et crédible.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell">
+  <summary>
+    <div class="cell-status" style="background:#003322;border-left:3px solid #00ff88">
+      <span class="status-badge" style="color:#00ff88;background:#003322">★ LEADER</span>
+      <span class="cell-headline">Image positive. Employeur stable, 50 ans de continuité</span>
+      <span class="toggle-arrow">›</span>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">Analyse — ChatGPT</div>
+    <p>ChatGPT présente Dodec comme un employeur régional stable avec une longue continuité (depuis 1975) et des projets techniques variés. Milieu de travail spécialisé en fabrication lourde, bien positionné vs les grandes usines standardisées.</p>
+  </div>
+</details></td>
+</tr>
+<tr>
+  <td class="td-model-name"><div class="model-name-label">Perplexity</div></td>
+  <td class="td-model-cell">
+<details class="model-cell">
+  <summary>
+    <div class="cell-status" style="background:#330000;border-left:3px solid #ff4444">
+      <span class="status-badge" style="color:#ff4444;background:#330000">✕ IGNORÉ</span>
+      <span class="cell-headline">Zéro. Groupe LAR et Industries Comi cités à votre place</span>
+      <span class="toggle-arrow">›</span>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">Analyse — Perplexity</div>
+    <p>Perplexity recommande Groupe LAR et Industries Comi. Dodec est complètement absent, y compris de la liste des sous-traitants spécialisés en soudage industriel lourd et en fabrication clés en main.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell">
+  <summary>
+    <div class="cell-status" style="background:#330000;border-left:3px solid #ff4444">
+      <span class="status-badge" style="color:#ff4444;background:#330000">✕ IGNORÉ</span>
+      <span class="cell-headline">Zéro. Les certifications existent, l’IA ne les lit pas</span>
+      <span class="toggle-arrow">›</span>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">Analyse — Perplexity</div>
+    <p>Perplexity ignore Dodec sur les requêtes de certification. Paradoxe : l’entreprise possède toutes les certifications demandées, mais aucune balise structurée ne les signale aux LLM. Le contenu existe sur le site, la structure lisible par IA n’existe pas.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell">
+  <summary>
+    <div class="cell-status" style="background:#003322;border-left:3px solid #00ff88">
+      <span class="status-badge" style="color:#00ff88;background:#003322">★ LEADER</span>
+      <span class="cell-headline">Solide. 70 000 pi², certifications, capacités techniques</span>
+      <span class="toggle-arrow">›</span>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">Analyse — Perplexity</div>
+    <p>Perplexity retourne les données clés : superficie de 70 00 pi², certifications ASME et CWB, spécialisation en soudage industriel lourd et en structures d’acier. Profil complèt et précis sur la recherche directe.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell">
+  <summary>
+    <div class="cell-status" style="background:#003322;border-left:3px solid #00ff88">
+      <span class="status-badge" style="color:#00ff88;background:#003322">★ LEADER</span>
+      <span class="cell-headline">Favorable. Projets industriels complexes, formation interne</span>
+      <span class="toggle-arrow">›</span>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">Analyse — Perplexity</div>
+    <p>Perplexity souligne la diversité des mandats (alumineries, mines, énergie) et l’environnement technique exigeant comme atouts pour les soudeurs et techniciens en recherche de progression. Image d’employeur compétent et stable.</p>
+  </div>
+</details></td>
+</tr>
+<tr>
+  <td class="td-model-name"><div class="model-name-label">Gemini</div></td>
+  <td class="td-model-cell">
+<details class="model-cell">
+  <summary>
+    <div class="cell-status" style="background:#330000;border-left:3px solid #ff4444">
+      <span class="status-badge" style="color:#ff4444;background:#330000">✕ MENTIONÉ</span>
+      <span class="cell-headline">Présent — mais après Fabmec et Mécart</span>
+      <span class="toggle-arrow">›</span>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">Analyse — Gemini</div>
+    <p>Gemini mentionne Dodec dans sa liste, après Fabmec et Mécart. L’IA reconnaît la spécialisation en structures d’acier mais ne place pas Dodec parmi les premiers recommandés. Avantage Gemini : connexion directe à Google Analytics 4 utilisé sur dodec.net.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell">
+  <summary>
+    <div class="cell-status" style="background:#330000;border-left:3px solid #ff4444">
+      <span class="status-badge" style="color:#ff4444;background:#330000">✕ MENTIONÉ</span>
+      <span class="cell-headline">Cité — seul modèle à reconnaître les certifications</span>
+      <span class="toggle-arrow">›</span>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">Analyse — Gemini</div>
+    <p>Gemini est le seul modèle à mentionner Dodec dans le contexte des certifications industrielles. La connexion Google Analytics 4 / Google Search Console donne à Gemini un signal indirect sur l’autorité du domaine — avantage que ChatGPT et Perplexity n’ont pas.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell">
+  <summary>
+    <div class="cell-status" style="background:#003322;border-left:3px solid #00ff88">
+      <span class="status-badge" style="color:#00ff88;background:#003322">★ LEADER</span>
+      <span class="cell-headline">Excellent. Partenaires, certifications et ancienneté confirmés</span>
+      <span class="toggle-arrow">›</span>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">Analyse — Gemini</div>
+    <p>Gemini présente Dodec comme un fabricant établi avec des partenariats industriels de premier plan (Hardox, FLSMIDTH, Sumitomo) et des certifications reconnues. L’ancienneté de 50 ans est soulignée comme indicateur de fiabilité.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell">
+  <summary>
+    <div class="cell-status" style="background:#003322;border-left:3px solid #00ff88">
+      <span class="status-badge" style="color:#00ff88;background:#003322">★ LEADER</span>
+      <span class="cell-headline">Bien positionné. Culture technique, projets de grande échelle</span>
+      <span class="toggle-arrow">›</span>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">Analyse — Gemini</div>
+    <p>Gemini met en avant la culture d’excellence technique et les projets de grande envergure pour les secteurs mines et aluminium. Dodec présenté comme alternative régionale de choix pour les professionnels du soudage industriel.</p>
+  </div>
+</details></td>
+</tr>
+<tr>
+  <td class="td-model-name"><div class="model-name-label">Grok</div></td>
+  <td class="td-model-cell">
+<details class="model-cell">
+  <summary>
+    <div class="cell-status" style="background:#330000;border-left:3px solid #ff4444">
+      <span class="status-badge" style="color:#ff4444;background:#330000">✕ IGNORÉ</span>
+      <span class="cell-headline">Invisible. Quatre sous-traitants nommés, zéro Dodec</span>
+      <span class="toggle-arrow">›</span>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">Analyse — Grok</div>
+    <p>Grok cite quatre fabricants régionaux sans mentionner Dodec. L’absence de balisage schema.org sur le site Webflow signifie que le modèle ne peut pas parser la spécialisation de l’entreprise à partir de sa structure HTML.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell">
+  <summary>
+    <div class="cell-status" style="background:#330000;border-left:3px solid #ff4444">
+      <span class="status-badge" style="color:#ff4444;background:#330000">✕ IGNORÉ</span>
+      <span class="cell-headline">Absent. CWB et ASME non identifiés pour Dodec</span>
+      <span class="toggle-arrow">›</span>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">Analyse — Grok</div>
+    <p>Grok ne reconnaît pas Dodec comme expert certifié dans ce domaine. Sans page dédiée « Nos certifications » avec balisage schema.org de type Credential ou Certification, les LLM ne peuvent pas associer ces acréditations à l’entreprise.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell">
+  <summary>
+    <div class="cell-status" style="background:#003322;border-left:3px solid #00ff88">
+      <span class="status-badge" style="color:#00ff88;background:#003322">★ LEADER</span>
+      <span class="cell-headline">Précis. Fabricant lourd certifié, références industries minieres et alumineries</span>
+      <span class="toggle-arrow">›</span>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">Analyse — Grok</div>
+    <p>Grok identifie Dodec comme spécialiste en fabrication lourde pour les industries minières et les alumineries. Certifications, année de fondation et positionnement régional correctement représentés.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell">
+  <summary>
+    <div class="cell-status" style="background:#003322;border-left:3px solid #00ff88">
+      <span class="status-badge" style="color:#00ff88;background:#003322">★ LEADER</span>
+      <span class="cell-headline">Portrait complet. Certifications valorisées, partenaires de prestige</span>
+      <span class="toggle-arrow">›</span>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">Analyse — Grok</div>
+    <p>Grok présente les certifications CWB et ASME comme atout pour le développement de compétences des employés. Les partenariats Hardox et Sumitomo signalés comme indicateurs d’un environnement de travail à haut niveau technique.</p>
+  </div>
+</details></td>
+</tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- SOV -->
+<div class="section-title">Part de voix par sc&eacute;nario</div>
+<div class="sov-section">
+  
+<div class="sov-row">
+  <span class="sov-label">A &mdash; B2B INTENT</span>
+  <div class="sov-bar">
+    <div class="sov-leader" style="width:0%"></div>
+    <div class="sov-ment"   style="width:25%"></div>
+    <div class="sov-ign"    style="width:75%"></div>
+  </div>
+  <span class="sov-nums">0★ · 1◆ · 3✕ / 4</span>
+</div>
+<div class="sov-row">
+  <span class="sov-label">B &mdash; CERTIFICATIONS</span>
+  <div class="sov-bar">
+    <div class="sov-leader" style="width:0%"></div>
+    <div class="sov-ment"   style="width:25%"></div>
+    <div class="sov-ign"    style="width:75%"></div>
+  </div>
+  <span class="sov-nums">0★ · 1◆ · 3✕ / 4</span>
+</div>
+<div class="sov-row">
+  <span class="sov-label">C &mdash; DUE DILIGENCE</span>
+  <div class="sov-bar">
+    <div class="sov-leader" style="width:100%"></div>
+    <div class="sov-ment"   style="width:0%"></div>
+    <div class="sov-ign"    style="width:0%"></div>
+  </div>
+  <span class="sov-nums">4★ · 0◆ · 0✕ / 4</span>
+</div>
+<div class="sov-row">
+  <span class="sov-label">D &mdash; MARQUE EMPLOYEUR</span>
+  <div class="sov-bar">
+    <div class="sov-leader" style="width:100%"></div>
+    <div class="sov-ment"   style="width:0%"></div>
+    <div class="sov-ign"    style="width:0%"></div>
+  </div>
+  <span class="sov-nums">4★ · 0◆ · 0✕ / 4</span>
+</div>
+  <div class="sov-legend">
+    <span><div class="legend-dot" style="background:#00ff88"></div> &#9733; LEADER &mdash; recommand&eacute; en t&ecirc;te</span>
+    <span><div class="legend-dot" style="background:#88bbff"></div> &#9670; MENTIONN&Eacute; &mdash; cit&eacute; dans la liste</span>
+    <span><div class="legend-dot" style="background:#ff4444"></div> &#10005; IGNOR&Eacute; &mdash; absent de la r&eacute;ponse</span>
+  </div>
+</div>
+
+<!-- MODEL CARDS -->
+<div class="section-title">Performance par mod&egrave;le IA</div>
+<div class="model-cards">
+<div class="model-card" style="border-top:3px solid #ffee88">
+  <div class="mc-name">ChatGPT</div>
+  <div class="mc-score" style="color:#ffee88">50%</div>
+  <div class="mc-detail">2★ LEADER &middot; 0◆ MEN. &middot; 2✕ IGN.</div>
+</div>
+<div class="model-card" style="border-top:3px solid #ffee88">
+  <div class="mc-name">Perplexity</div>
+  <div class="mc-score" style="color:#ffee88">50%</div>
+  <div class="mc-detail">2★ LEADER &middot; 0◆ MEN. &middot; 2✕ IGN.</div>
+</div>
+<div class="model-card" style="border-top:3px solid #00ff88">
+  <div class="mc-name">Gemini</div>
+  <div class="mc-score" style="color:#00ff88">100%</div>
+  <div class="mc-detail">2★ LEADER &middot; 2◆ MEN. &middot; 0✕ IGN.</div>
+</div>
+<div class="model-card" style="border-top:3px solid #ffee88">
+  <div class="mc-name">Grok</div>
+  <div class="mc-score" style="color:#ffee88">50%</div>
+  <div class="mc-detail">2★ LEADER &middot; 0◆ MEN. &middot; 2✕ IGN.</div>
+</div></div>
+
+<!-- WAPPALYZER INSIGHT -->
+<div class="section-title">L&rsquo;avantage concurrentiel de Fabmec &mdash; analyse technique</div>
+
+<div class="wappa-block">
+  <div class="wappa-title">Pourquoi Fabmec vous devance &mdash; une seule technologie</div>
+  <div class="wappa-table">
+    <div class="wappa-row wappa-header">
+      <div class="wappa-cell">Signal</div>
+      <div class="wappa-cell">Fabmec (fabmec.ca)</div>
+      <div class="wappa-cell wappa-you">Dodec (dodec.net)</div>
+    </div>
+    <div class="wappa-row">
+      <div class="wappa-cell wappa-signal">Plateforme</div>
+      <div class="wappa-cell">WordPress 6.9.1</div>
+      <div class="wappa-cell wappa-you"><strong>Webflow 1.6.0</strong></div>
+    </div>
+    <div class="wappa-row wappa-critical">
+      <div class="wappa-cell wappa-signal">Plugin SEO</div>
+      <div class="wappa-cell wappa-win">✅ RankMath SEO <span class="wappa-why">→ g&eacute;n&egrave;re automatiquement schema.org</span></div>
+      <div class="wappa-cell wappa-you wappa-gap">❌ Aucun <span class="wappa-why">→ l’IA ne peut pas parser votre entreprise</span></div>
+    </div>
+    <div class="wappa-row">
+      <div class="wappa-cell wappa-signal">CDN / vitesse</div>
+      <div class="wappa-cell">WP Fastest Cache + Apache</div>
+      <div class="wappa-cell wappa-you wappa-win">✅ Cloudflare + HTTP/3 (plus rapide)</div>
+    </div>
+    <div class="wappa-row">
+      <div class="wappa-cell wappa-signal">Analytique</div>
+      <div class="wappa-cell">Google Tag Manager</div>
+      <div class="wappa-cell wappa-you wappa-win">✅ Google Analytics 4 (plus pr&eacute;cis)</div>
+    </div>
+    <div class="wappa-row">
+      <div class="wappa-cell wappa-signal">Bilingue</div>
+      <div class="wappa-cell wappa-win">✅ WPML 4.8.6 (FR + EN)</div>
+      <div class="wappa-cell wappa-you">Une seule langue</div>
+    </div>
+  </div>
+  <div class="wappa-conclusion">
+    Vous avez investi dans la bonne infrastructure. Fabmec a investi dans le bon <em>signal s&eacute;mantique</em>.
+    RankMath g&eacute;n&egrave;re automatiquement des balises JSON-LD que les LLM utilisent pour identifier une entreprise :
+    type d’organisation, localisation, services, certifications. Webflow ne le fait pas nativement.
+    <strong>Correction : 1 d&eacute;veloppeur, 2–3 heures de travail, r&eacute;sultat visible en 60–90 jours.</strong>
+  </div>
+</div>
+
+<!-- RECOMMANDATIONS -->
+<div class="section-title">3 recommandations GEO prioritaires</div>
+<div class="recs-grid">
+<div class="rec-tile">
+  <div class="rec-tile-icon"><svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect x="4" y="4" width="40" height="11" rx="2.5" stroke="currentColor" stroke-width="1.8" fill="none"/><rect x="4" y="19" width="18" height="25" rx="2.5" stroke="currentColor" stroke-width="1.8" fill="none"/><rect x="26" y="19" width="18" height="11" rx="2.5" stroke="currentColor" stroke-width="1.8" fill="none"/><rect x="26" y="33" width="18" height="11" rx="2.5" stroke="currentColor" stroke-width="1.8" fill="none"/></svg></div>
+  <details class="rec-tile-details">
+    <summary class="rec-tile-summary">
+      <div class="rec-tile-num" style="color:#ff4444">01</div>
+      <div class="rec-tile-title">Ajouter le balisage JSON-LD à Webflow — la correction racine</div>
+      <div class="rec-tile-footer">
+        <span class="rec-tile-tag" style="color:#ff4444">STRUCTURE</span>
+        <span class="rec-tile-arrow">&#8250;</span>
+      </div>
+    </summary>
+    <div class="rec-tile-body">C’est la correction la plus rapide et la plus impactante. Un développeur ajoute un bloc JSON-LD de type Organization dans le code Webflow : nom, adresse, secteur, année de fondation, certifications (ISO 9001, CWB, ASME), partenaires (Hardox, Sumitomo, FLSMIDTH), services. Avec cette balise, les LLM peuvent parser votre identité de façon certaine — comme ils le font déjà pour Fabmec via RankMath. Durée : 2–3 heures. Effet visible : 60–90 jours.</div>
+  </details>
+</div>
+<div class="rec-tile">
+  <div class="rec-tile-icon"><svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect x="7" y="4" width="26" height="32" rx="3" stroke="currentColor" stroke-width="1.8" fill="none"/><line x1="13" y1="13" x2="27" y2="13" stroke="currentColor" stroke-width="1.8"/><line x1="13" y1="19" x2="27" y2="19" stroke="currentColor" stroke-width="1.8"/><line x1="13" y1="25" x2="20" y2="25" stroke="currentColor" stroke-width="1.8"/><path d="M30 29 L38 21 L43 26 L35 34 Z" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linejoin="round"/><line x1="30" y1="34" x2="28" y2="40" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+  <details class="rec-tile-details">
+    <summary class="rec-tile-summary">
+      <div class="rec-tile-num" style="color:#ffee88">02</div>
+      <div class="rec-tile-title">Créer des pages dédiées pour chaque certification et secteur</div>
+      <div class="rec-tile-footer">
+        <span class="rec-tile-tag" style="color:#ffee88">CONTENU</span>
+        <span class="rec-tile-arrow">&#8250;</span>
+      </div>
+    </summary>
+    <div class="rec-tile-body">ChatGPT et Perplexity ne trouvent pas Dodec sur les requêtes ASME/CWB parce qu’il n’existe pas de page dédiée à ces certifications avec les mots-clés exacts qu’un donneur d’ouvrage utilise. Créer 3–4 pages spécifiques : « Fabrication certifiée ASME », « Soudage CWB », « Équipements pour alumineries », « Références minières ». Chaque page : 400–600 mots structurés + un cas réel + les termes techniques du secteur. Objectif : que Dodec apparaisse sur les requêtes de certification dans ChatGPT en 90 jours.</div>
+  </details>
+</div>
+<div class="rec-tile">
+  <div class="rec-tile-icon"><svg width="48" height="48" viewBox="0 0 48 48" fill="none"><path d="M6 17 L6 31 L14 31 L30 40 L30 8 L14 17 Z" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linejoin="round"/><line x1="36" y1="17" x2="43" y2="17" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><line x1="34" y1="24" x2="43" y2="24" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><line x1="36" y1="31" x2="43" y2="31" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></div>
+  <details class="rec-tile-details">
+    <summary class="rec-tile-summary">
+      <div class="rec-tile-num" style="color:#88bbff">03</div>
+      <div class="rec-tile-title">Inscription dans les annuaires industriels indexés par les LLM</div>
+      <div class="rec-tile-footer">
+        <span class="rec-tile-tag" style="color:#88bbff">AUTORITÉ</span>
+        <span class="rec-tile-arrow">&#8250;</span>
+      </div>
+    </summary>
+    <div class="rec-tile-body">Les LLM construisent leurs réponses à partir de sources tierces de confiance. Dodec doit apparaître dans : BNQ (Bureau de normalisation du Québec), Kompass Canada, Thomasnet, Répertoire des fournisseurs industriels du Québec (RFSQ). Chaque inscription doit utiliser les mêmes termes que le balisage JSON-LD du site — cohérence NAP (Nom, Adresse, Téléphone) + description identique partout. Avec 3–5 sources externes cohérentes, les modèles commencent à triangulariser Dodec comme autorité régionale dans leur secteur.</div>
+  </details>
+</div>
+</div>
+
+<!-- FAQ -->
+<div class="section-title">Questions fr&eacute;quentes</div>
+
+<details class="faq-item">
+  <summary>Mon entreprise existe depuis 50&nbsp;ans. Pourquoi l&rsquo;IA ne me recommande-t-elle pas&nbsp;?</summary>
+  <div class="faq-answer">L&rsquo;IA ne &laquo;&nbsp;voit&nbsp;&raquo; pas vos ann&eacute;es d&rsquo;exp&eacute;rience. Elle voit votre trace num&eacute;rique structur&eacute;e. Sans balisage schema.org, vos certifications ISO, CWB et ASME existent sur votre site mais restent illisibles pour les LLM. L&rsquo;anciennet&eacute; ne compte pas. La structure lisible par IA compte.</div>
+</details>
+<details class="faq-item">
+  <summary>Mon site Webflow est beau et moderne. Pourquoi est-ce un probl&egrave;me pour l&rsquo;IA&nbsp;?</summary>
+  <div class="faq-answer">Webflow g&eacute;n&egrave;re un HTML propre et rapide &mdash; excellent pour les visiteurs humains. Mais contrairement &agrave; WordPress avec RankMath, Webflow ne g&eacute;n&egrave;re pas automatiquement les balises JSON-LD (schema.org) que les LLM utilisent pour identifier le type d&rsquo;entreprise, ses services et ses certifications. Ce n’est pas un défaut de design. C’est une ligne de code manquante.</div>
+</details>
+<details class="faq-item">
+  <summary>En combien de temps ChatGPT peut-il commencer &agrave; me recommander&nbsp;?</summary>
+  <div class="faq-answer">Avec les corrections structurelles (JSON-LD + pages de certification), les premiers changements se voient en 60&ndash;90&nbsp;jours sur les requ&ecirc;tes cibl&eacute;es. Les cycles de mise &agrave; jour des LLM ne sont pas instantan&eacute;s, mais ils r&eacute;compensent les signaux clairs et coh&eacute;rents.</div>
+</details>
+<details class="faq-item">
+  <summary>Les 190&nbsp;$ &mdash; concr&egrave;tement, qu&rsquo;est-ce que je re&ccedil;ois&nbsp;?</summary>
+  <div class="faq-answer">Un audit cibl&eacute; de votre visibilit&eacute; dans ChatGPT, Claude, Perplexity et Gemini, bas&eacute; sur 12&nbsp;sc&eacute;narios r&eacute;els de votre march&eacute;. Verdict simple&nbsp;: o&ugrave; vous &ecirc;tes cit&eacute;, o&ugrave; vous &ecirc;tes absent, et pourquoi. Trois plans d&rsquo;actions rapides + feuille de route 60&ndash;90&nbsp;jours.</div>
+</details>
+<details class="faq-item">
+  <summary>Pourquoi Gemini me trouve mais pas ChatGPT&nbsp;?</summary>
+  <div class="faq-answer">Gemini est d&eacute;velopp&eacute; par Google. Votre site utilise Google Analytics&nbsp;4 et Google Tag Manager &mdash; des signaux que Gemini peut recouper avec son &eacute;cosyst&egrave;me. ChatGPT et Perplexity, eux, s&rsquo;appuient exclusivement sur les signaux structur&eacute;s du web et les sources tierces. Sans schema.org, ils ne peuvent pas vous identifier de fa&ccedil;on certaine.</div>
+</details>
+
+<!-- ACTION -->
+<div class="section-title" style="margin-top:44px">PASSEZ &Agrave; L&rsquo;ACTION (SANS RISQUE)</div>
+
+<div class="action-block">
+  <div class="action-title">Ne me croyez pas sur parole.</div>
+  <div class="action-sub">V&eacute;rifiez par vous-m&ecirc;me.</div>
+  <div class="action-steps">
+    <div class="action-step">
+      <div class="step-num">1</div>
+      <div class="step-text">&Eacute;crivez-moi<br><strong>&laquo;&nbsp;AUDIT&nbsp;&raquo;</strong><br>en message priv&eacute;</div>
+    </div>
+    <div class="action-step">
+      <div class="step-num">2</div>
+      <div class="step-text">Je vous enverrai un rapport gratuit &mdash; 3&nbsp;signaux bloquants identifi&eacute;s</div>
+    </div>
+    <div class="action-step">
+      <div class="step-num">3</div>
+      <div class="step-text">Si le r&eacute;sultat vous choque, on lance l&rsquo;audit complet (190&nbsp;$)</div>
+    </div>
+  </div>
+  <a href="https://linkedin.com/in/lavrikgeo" target="_blank" class="action-btn">&rarr; Me contacter sur LinkedIn</a>
+</div>
+
+<!-- QUI -->
+<div class="section-title">QUI SUIS-JE&nbsp;?</div>
+
+<div class="qui-block">
+  <div class="qui-avatar">H</div>
+  <div class="qui-content">
+    <div class="qui-name">Halyna Lavrik</div>
+    <div class="qui-tagline">Sp&eacute;cialiste en visibilit&eacute; IA &middot; GEO Analyst &middot; Chicoutimi, Qu&eacute;bec</div>
+    <div class="qui-bio">
+      <p>Je suis Halyna Lavrik. 20&nbsp;ans d&rsquo;exp&eacute;rience comme r&eacute;dactrice en chef, analyste, experte en relations publiques et conseill&egrave;re en communication strat&eacute;gique pour des entreprises B2B.</p>
+      <p>J&rsquo;ai d&eacute;couvert la GEO (Generative Engine Optimization) en observant comment les moteurs de recherche IA recommandent &mdash; ou ignorent &mdash; les entreprises r&eacute;gionales face aux multinationales. J&rsquo;ai d&eacute;velopp&eacute; ce protocole d&rsquo;audit pour mesurer, avec des donn&eacute;es r&eacute;elles, ce que les IA disent de votre entreprise.</p>
+      <p>Je ne suis pas d&eacute;veloppeuse. Je suis traductrice&nbsp;: je traduis votre expertise dans la langue que respectent les LLM.</p>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div class="contact-plaque">
+  <div class="cp-name">Halyna Lavrik</div>
+  <div class="cp-title">Sp&eacute;cialiste en visibilit&eacute; IA pour entreprises B2B &middot; Saguenay, Qu&eacute;bec</div>
+  <div class="cp-links">
+    <a href="mailto:pr.expert4488@gmail.com" class="cp-link">
+      <span class="cp-icon">&#9993;</span> pr.expert4488@gmail.com
+    </a>
+    <a href="https://linkedin.com/in/lavrikgeo" target="_blank" class="cp-link">
+      <span class="cp-icon">&#128101;</span> linkedin.com/in/lavrikgeo
+    </a>
+  </div>
+  <div class="cp-tagline">1 PDF + 3 signaux bloquants identifi&eacute;s &middot; Audit f&eacute;vrier 2026 &middot; Lavrik GEO &middot; Chicoutimi, Qu&eacute;bec</div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-left">GEO Blitz Audit &middot; Dodec &middot; 2026-02-24</div>
+  <div class="footer-right">Lavrik GEO &middot; Chicoutimi</div>
+</div>
+
+</div>
+</body>
+</html>
