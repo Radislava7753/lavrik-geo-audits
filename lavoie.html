@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GEO Blitz Audit &mdash; Lavoie Sacs à dos</title>
+<style>
+  :root{
+    --bg:#0d0e0f;--bg2:#111213;--border:#222426;
+    --lime:#c8ff00;--text:#e8e8e8;--muted:#888;
+    --font:'Calibri','Segoe UI',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:16px;line-height:1.7}
+  a{color:var(--lime)}
+  .container{max-width:1400px;margin:0 auto;padding:24px 20px}
+  .section-title{font-size:15px;font-weight:800;color:var(--lime);letter-spacing:2.5px;text-transform:uppercase;margin:44px 0 18px;padding-bottom:10px;border-bottom:2px solid #1c2500;display:flex;align-items:center;gap:10px}
+  .section-title::before{content:'';display:inline-block;width:5px;height:18px;background:var(--lime);border-radius:2px;flex-shrink:0}
+  .top-bar{display:flex;justify-content:space-between;align-items:center;padding:20px 0 22px;border-bottom:1px solid #1a1a1a;margin-bottom:60px}
+  .top-bar-logo{font-size:13px;font-weight:900;color:var(--lime);letter-spacing:2.5px;text-transform:uppercase}
+  .top-bar-date{font-size:13px;color:#444}
+  .hero{display:flex;justify-content:space-between;align-items:flex-start;gap:48px;margin-bottom:52px;padding-bottom:48px;border-bottom:1px solid #1a1a1a;flex-wrap:wrap}
+  .hero-body{flex:1;min-width:280px}
+  .hero-label{font-size:11px;font-weight:700;letter-spacing:2.5px;color:var(--lime);text-transform:uppercase;margin-bottom:24px}
+  .hero-title{font-size:clamp(36px,5.5vw,68px);font-weight:900;line-height:1.08;color:#fff;margin-bottom:28px;letter-spacing:-.5px}
+  .hero-lime{color:var(--lime)}
+  .hero-sub{font-size:17px;color:#888;line-height:1.7;max-width:560px}
+  .grade-block{text-align:right;flex-shrink:0}
+  .grade-badge{font-size:56px;font-weight:900;line-height:1}
+  .gd{color:#f97316}
+  .grade-explain{font-size:13px;color:#aaa;margin-top:6px;margin-bottom:12px}
+  .legend-pills{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+  .legend-pill{font-size:13px;padding:5px 12px;border-radius:20px;display:inline-flex;align-items:center;gap:8px}
+  .lp-leader{background:#003322;color:#00ff88;border:1px solid #00884455}
+  .lp-mention{background:#0d1a33;color:#88bbff;border:1px solid #4466aa55}
+  .lp-ignore{background:#330000;color:#ff6666;border:1px solid #aa333355}
+  .lp-count{font-weight:900;font-size:16px}
+  .intro-plaque{background:var(--bg2);border:1px solid #2a2a2a;border-left:4px solid var(--lime);border-radius:4px;padding:28px 32px;margin-bottom:20px}
+  .intro-plaque p{margin-bottom:14px;font-size:17px;line-height:1.85}
+  .intro-plaque p:last-child{margin-bottom:0}
+  details.intro-detail summary{cursor:pointer;list-style:none;margin-top:20px;display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border:1px solid #3a3a3a;border-radius:24px;background:#181818;color:#aaa;font-size:14px;font-weight:600;letter-spacing:.5px;transition:border-color .2s,color .2s}
+  details.intro-detail summary:hover{border-color:#888;color:#ddd}
+  details.intro-detail summary::after{content:" ›";font-size:16px}
+  details.intro-detail[open] summary::after{content:" ↑"}
+  .intro-detail-content{background:var(--bg);padding:20px 24px;border-radius:4px;margin-top:12px;font-size:15px;line-height:1.8}
+  .score-strip{display:flex;gap:12px;margin-bottom:28px;flex-wrap:wrap}
+  .score-card{flex:1;min-width:160px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:20px}
+  .sc-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px}
+  .sc-value{font-size:30px;font-weight:900;margin-bottom:6px}
+  .sc-sub{font-size:14px;color:#aaa;line-height:1.5}
+  .cta-block{text-align:center;padding:44px 24px 40px;background:var(--bg2);border:1px solid #2a2a2a;border-radius:6px;margin-bottom:36px}
+  .cta-title{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:22px}
+  .cta-btn{display:inline-block;background:var(--lime);color:#000;font-size:19px;font-weight:900;letter-spacing:1px;padding:20px 48px;border-radius:6px;text-decoration:none;text-transform:uppercase;box-shadow:0 0 28px rgba(200,255,0,.45);transition:box-shadow .3s,transform .2s}
+  .cta-btn:hover{box-shadow:0 0 40px rgba(200,255,0,.65);transform:translateY(-3px);color:#000}
+  .cta-form-link{margin-top:18px;font-size:14px;color:var(--muted)}
+  .cta-form-link a{color:#88bbff;text-decoration:none}
+  .cta-badge{display:inline-block;margin-top:14px;font-size:12px;color:#555;border:1px solid #2a2a2a;border-radius:20px;padding:5px 16px}
+  /* Paradoxe block */
+  .paradox-block{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:36px}
+  .paradox-side{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:24px}
+  .paradox-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px}
+  .paradox-score{font-size:48px;font-weight:900;line-height:1;margin-bottom:6px}
+  .paradox-desc{font-size:13px;color:#888;line-height:1.5}
+  /* Survey table */
+  .survey-table-wrap{overflow-x:auto;margin-bottom:36px}
+  table.survey{width:100%;border-collapse:collapse}
+  .th-model-col{background:#0a0a0a;color:#666;font-size:13px;font-weight:600;padding:16px;text-align:left;width:110px;border-right:2px solid #1a1a1a;white-space:nowrap}
+  .th-scenario-col{padding:18px 16px;text-align:left;min-width:240px}
+  .scenario-id-top{font-size:30px;font-weight:900;line-height:1}
+  .scenario-type-top{font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-top:5px;opacity:.85;font-weight:700}
+  .scenario-q-top{font-size:13px;line-height:1.55;color:#bbb;margin-top:12px;font-style:italic;padding-top:10px;border-top:1px solid rgba(255,255,255,.08)}
+  .td-model-name{padding:14px 16px;vertical-align:middle;background:#0e0f10;border-right:2px solid #1a1a1a;width:110px}
+  .model-name-label{font-size:15px;font-weight:700;color:#ccc}
+  .td-model-cell{padding:3px;vertical-align:top;border-left:1px solid var(--border)}
+  details.model-cell{width:100%}
+  details.model-cell summary{list-style:none;cursor:pointer}
+  details.model-cell summary::-webkit-details-marker{display:none}
+  .cell-status{padding:10px 12px;display:flex;flex-direction:column;gap:5px;min-height:90px;transition:opacity .15s}
+  .cell-status:hover{opacity:.85}
+  .status-badge{font-size:11px;font-weight:800;letter-spacing:.5px;padding:3px 8px;border-radius:3px;display:inline-block;align-self:flex-start}
+  .cell-headline{font-size:13px;line-height:1.45;color:#ccc;flex:1;padding-top:5px}
+  .toggle-arrow{font-size:14px;color:#555;align-self:flex-end;transition:transform .2s}
+  details.model-cell[open] .toggle-arrow{transform:rotate(90deg);color:var(--lime)}
+  .cell-response{padding:14px 16px;background:#090909;border-top:1px solid var(--border)}
+  .response-label{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
+  .cell-response p{font-size:14px;line-height:1.75;color:#bbb;margin-bottom:8px}
+  .cell-response p:last-child{margin-bottom:0}
+  tr{border-bottom:1px solid var(--border)}
+  tr:nth-child(even){background:#0f0f10}
+  .sov-section{margin-bottom:28px}
+  .sov-row{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+  .sov-label{font-size:13px;width:220px;color:#bbb;flex-shrink:0;font-weight:600}
+  .sov-bar-wrap{flex:1;background:#1a1a1a;border-radius:3px;height:8px;overflow:hidden}
+  .sov-bar{height:100%;border-radius:3px;transition:width .4s ease}
+  .sov-pct{font-size:15px;font-weight:900;width:46px;text-align:right}
+  .sov-score{font-size:13px;color:#444;width:36px;text-align:right}
+  .model-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:36px}
+  .model-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+  .mc-header{padding:18px 20px;border-bottom:1px solid;display:flex;align-items:center;gap:12px}
+  .mc-name{font-size:16px;font-weight:800;flex:1}
+  .mc-pct{font-size:22px;font-weight:900}
+  .mc-verdict{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
+  .mc-body{padding:14px 20px;display:flex;flex-direction:column;gap:5px}
+  .mc-item{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:3px;display:inline-block}
+  .mc-leader{background:#003322;color:#00ff88}
+  .mc-mention{background:#0d1a33;color:#88bbff}
+  .mc-ignore{background:#330000;color:#ff6666}
+  .recs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:36px}
+  .rec-tile{background:var(--bg2);border:1px solid #2a2a2a;border-radius:10px;padding:28px 24px;transition:border-color .3s,box-shadow .3s}
+  .rec-tile:hover{border-color:var(--lime);box-shadow:0 0 24px rgba(200,255,0,.1)}
+  .rec-icon{width:44px;height:44px;background:rgba(200,255,0,.08);border:1px solid rgba(200,255,0,.2);border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:18px}
+  .rec-icon svg{width:22px;height:22px;stroke:var(--lime);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .rec-priority{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--lime);text-transform:uppercase;margin-bottom:8px}
+  .rec-title{font-size:18px;font-weight:800;color:#f0f0f0;margin-bottom:10px;line-height:1.3}
+  .rec-desc{font-size:14px;color:#888;line-height:1.6}
+  .rec-impact{display:inline-block;margin-top:14px;font-size:12px;color:#555;border:1px solid #2a2a2a;border-radius:20px;padding:4px 14px}
+  details.faq{margin-bottom:10px;border:1px solid var(--border);border-radius:6px;overflow:hidden}
+  details.faq summary{padding:18px 22px;cursor:pointer;list-style:none;font-size:16px;font-weight:600;color:#ddd;background:var(--bg2);display:flex;justify-content:space-between;align-items:center}
+  details.faq summary::-webkit-details-marker{display:none}
+  details.faq summary::after{content:"›";font-size:20px;color:#555;transition:transform .2s}
+  details.faq[open] summary::after{transform:rotate(90deg);color:var(--lime)}
+  details.faq[open] summary{color:var(--lime)}
+  .faq-body{padding:18px 22px;background:#0c0d0e;font-size:15px;color:#aaa;line-height:1.8}
+  .action-block{background:#0a0d00;border:1px solid #1c2500;border-radius:8px;padding:36px 32px;margin-bottom:36px}
+  .action-title{font-size:22px;font-weight:800;color:var(--lime);margin-bottom:24px}
+  .action-steps{display:flex;flex-direction:column;gap:16px}
+  .action-step{display:flex;gap:16px;align-items:flex-start}
+  .action-num{font-size:28px;font-weight:900;color:rgba(200,255,0,.3);line-height:1;width:36px;flex-shrink:0}
+  .action-body h4{font-size:15px;font-weight:700;color:#e0e0e0;margin-bottom:4px}
+  .action-body p{font-size:14px;color:#777;line-height:1.55}
+  .qui-block{background:var(--bg2);border:1px solid #2a2a2a;border-radius:8px;padding:28px 32px;margin-bottom:36px;display:flex;gap:28px;align-items:center;flex-wrap:wrap}
+  .qui-text h3{font-size:18px;font-weight:800;color:var(--lime);margin-bottom:10px}
+  .qui-text p{font-size:14px;color:#888;line-height:1.65}
+  .contact-plaque{text-align:center;padding:44px 24px;background:var(--bg2);border:1px solid #2a2a2a;border-radius:8px;margin-bottom:36px}
+  .contact-plaque h3{font-size:20px;font-weight:800;color:#fff;margin-bottom:12px}
+  .contact-email{font-size:18px;color:var(--lime);font-weight:700;text-decoration:none;display:block;margin-bottom:18px}
+  .contact-note{font-size:13px;color:#555;margin-top:10px}
+  .footer{margin-top:60px;padding-top:24px;border-top:1px solid rgba(255,255,255,.06);text-align:center;color:#555;font-size:.82rem}
+  .footer a{color:var(--lime);text-decoration:none}
+  @media(max-width:640px){
+    .paradox-block{grid-template-columns:1fr}
+    .hero{flex-direction:column}
+    .grade-block{text-align:left}
+    .legend-pills{align-items:flex-start}
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="top-bar-logo">Lavrik GEO</div>
+    <div class="top-bar-date">Blitz Audit · Février 2026</div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-body">
+      <div class="hero-label">Blitz Audit IA &mdash; Rapport confidentiel</div>
+      <div class="hero-title">Lavoie<br><span class="hero-lime">Sacs à dos</span></div>
+      <div class="hero-sub">lavoie.qc.ca &nbsp;·&nbsp; La Baie, Saguenay–Lac-Saint-Jean &nbsp;·&nbsp; Fabrication québécoise depuis 1988</div>
+    </div>
+    <div class="grade-block">
+      <div class="grade-badge gd">D</div>
+      <div class="grade-explain">8.5/20 pts &nbsp;·&nbsp; 42.5%</div>
+      <div class="legend-pills">
+        <div class="legend-pill lp-leader"><span class="lp-count">6</span> LEADER</div>
+        <div class="legend-pill lp-mention"><span class="lp-count">5</span> MENTIONNÉ</div>
+        <div class="legend-pill lp-ignore"><span class="lp-count">9</span> IGNORÉ</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTRO -->
+  <div class="intro-plaque">
+    <p>Lavoie fabrique le sac Chic Choc depuis 1988 — un produit québécois, garanti à vie, qui accompagne les enfants de la maternelle à l'université. C'est exactement le genre de promesse que les acheteurs B2C modernes cherchent en posant leurs questions aux IA génératives.</p>
+    <p>Le problème : sur les cinq requêtes testées dans ChatGPT, Perplexity, Gemini et Grok, Lavoie n'obtient un statut LEADER que 5 fois sur 20. ChatGPT et Grok, utilisés par des millions de Québécois chaque semaine, ignorent presque totalement la marque sur les requêtes d'achat génériques.</p>
+    <p>Perplexity est le seul modèle à trouver Lavoie de manière constante — mais uniquement parce qu'il effectue des recherches web en temps réel. Dès que la requête devient concurrentielle ou décisionnelle, même Perplexity perd le fil. Gemini reconnaît la marque sur les requêtes directes, mais l'oublie sur les requêtes génériques de rentrée scolaire.</p>
+    <p>La bonne nouvelle : Lavoie a un produit différenciateur exceptionnel (garanti à vie, Made in QC, 35+ ans d'histoire). La structuration sémantique manquante est le seul obstacle entre cet héritage et une visibilité IA de niveau A.</p>
+    <details class="intro-detail">
+      <summary>Voir le détail technique</summary>
+      <div class="intro-detail-content">
+        <p>Score total : 8.5/20 points (42.5%) — Grade D</p>
+        <p>Méthode : 5 requêtes testées × 4 modèles IA = 20 cellules. Score : LEADER=1pt / MENTIONNÉ=0.5pt / IGNORÉ=0pt.</p>
+        <p>Modèles testés : ChatGPT (GPT-4o), Perplexity (web search), Gemini 1.5 Pro, Grok 2.</p>
+        <p>Requêtes : Due diligence marque · Compétitif Made in QC · Garantie à vie · Décision achat rentrée · Local Saguenay.</p>
+        <p>Principal frein identifié : absence de structuration JSON-LD / schema.org sur lavoie.qc.ca + aucune page FAQ optimisée pour les LLM.</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-block">
+    <div class="cta-title">Votre visibilité IA peut passer de D à A en 90 jours</div>
+    <a class="cta-btn" href="mailto:pr.expert4488@gmail.com?subject=GEO Boost — Lavoie Sacs à dos">Démarrer l'optimisation GEO</a>
+    <div class="cta-form-link">Questions ? <a href="mailto:pr.expert4488@gmail.com">pr.expert4488@gmail.com</a></div>
+    <div class="cta-badge">Résultats mesurables dès le mois 3</div>
+  </div>
+
+  <!-- SCORE STRIP -->
+  <div class="score-strip">
+    <div class="score-card">
+      <div class="sc-label">Score total</div>
+      <div class="sc-value" style="color:#f97316">8.5/20</div>
+      <div class="sc-sub">sur 20 points possibles</div>
+    </div>
+    <div class="score-card">
+      <div class="sc-label">Visibilité IA</div>
+      <div class="sc-value" style="color:#f97316">42.5%</div>
+      <div class="sc-sub">Grade D — sous la moyenne du secteur (48%)</div>
+    </div>
+    <div class="score-card">
+      <div class="sc-label">Meilleur modèle</div>
+      <div class="sc-value" style="color:#20808D">Perplexity</div>
+      <div class="sc-sub">5/5 (100%) — seul moteur à chercher en temps réel</div>
+    </div>
+    <div class="score-card">
+      <div class="sc-label">Point critique</div>
+      <div class="sc-value" style="color:#ef4444">ChatGPT</div>
+      <div class="sc-sub">1/5 (10%) — invisible sur les requêtes d'achat</div>
+    </div>
+  </div>
+
+  <!-- PARADOXE LAVOIE -->
+  <div class="section-title">Le Paradoxe Lavoie</div>
+  <div class="paradox-block">
+    <div class="paradox-side">
+      <div class="paradox-label" style="color:#20808D">Quand Perplexity cherche « Lavoie »</div>
+      <div class="paradox-score" style="color:#00ff88">5/5</div>
+      <div class="paradox-desc">Perplexity trouve le site, le Chic Choc, la garantie à vie et les détaillants Saguenay. Résultat parfait — mais uniquement parce qu'il effectue une recherche web. Retirez le crawl, et Lavoie disparaît.</div>
+    </div>
+    <div class="paradox-side">
+      <div class="paradox-label" style="color:#ef4444">Quand ChatGPT et Grok cherchent « meilleur sac QC »</div>
+      <div class="paradox-score" style="color:#ef4444">0/10</div>
+      <div class="paradox-desc">Sur les requêtes compétitives et décisionnelles, ChatGPT et Grok recommandent JanSport, Herschel, Osprey — des marques américaines avec 35 ans de marketing numérique structuré. Lavoie a 35 ans d'excellence produit mais aucune couche sémantique.</div>
+    </div>
+  </div>
+
+  <!-- SURVEY TABLE -->
+  <div class="section-title">Résultats détaillés — 5 requêtes × 4 modèles</div>
+  <div class="survey-table-wrap">
+    <table class="survey">
+      <thead>
+        <tr>
+          <th class="th-model-col">MODÈLE</th>
+          <th class="th-scenario-col" style="background:#0d1a2a"><div class="scenario-id-top" style="color:#88bbff">Q1</div><div class="scenario-type-top" style="color:#88bbff">DUE DILIGENCE</div><div class="scenario-q-top">Quelle est la marque Lavoie pour les sacs d'école ? Est-ce fiable ?</div></th><th class="th-scenario-col" style="background:#1a0d00"><div class="scenario-id-top" style="color:#f97316">Q2</div><div class="scenario-type-top" style="color:#f97316">COMPÉTITIF / MADE IN QC</div><div class="scenario-q-top">Quels sont les meilleurs sacs à dos fabriqués au Québec pour les enfants ?</div></th><th class="th-scenario-col" style="background:#0d1400"><div class="scenario-id-top" style="color:#c8ff00">Q3</div><div class="scenario-type-top" style="color:#c8ff00">PRODUIT / GARANTIE À VIE</div><div class="scenario-q-top">Quel sac à dos d'école est garanti à vie et durable de la maternelle au secondaire ?</div></th><th class="th-scenario-col" style="background:#1a0000"><div class="scenario-id-top" style="color:#ef4444">Q4</div><div class="scenario-type-top" style="color:#ef4444">DÉCISION D'ACHAT</div><div class="scenario-q-top">Quelle marque de sac à dos choisir pour la rentrée scolaire au Québec en 2025 ?</div></th><th class="th-scenario-col" style="background:#0d0a1a"><div class="scenario-id-top" style="color:#a78bfa">Q5</div><div class="scenario-type-top" style="color:#a78bfa">LOCAL / GÉO</div><div class="scenario-q-top">Où acheter un sac à dos Chic Choc Lavoie au Saguenay ?</div></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="td-model-name"><div class="model-name-label" style="color:#10A37F">ChatGPT</div></td><td class="td-model-cell">
+<details class="model-cell">
+  <summary>
+    <div class="cell-status" style="background:#0d1a33">
+      <span class="status-badge" style="background:#0d1a33;color:#88bbff;border:1px solid #4466aa55">MENTIONNÉ</span>
+      <div class="cell-headline">Marque québécoise connue, mais détails limités</div>
+      <div class="toggle-arrow">›</div>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">RÉSUMÉ</div>
+    <p>ChatGPT identifie Lavoie comme marque québécoise de sacs scolaires, sans détails sur la garantie ou l'histoire.</p>
+    <div class="response-label" style="margin-top:12px">ANALYSE</div>
+    <p>La réponse reconnaît Lavoie comme une marque québécoise de sacs d'école, mais reste vague — aucune mention du modèle Chic Choc, de la garantie à vie ou de l'ancrage depuis 1988. Pour un décideur qui veut valider un fournisseur, ce niveau de réponse ne rassure pas.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell">
+  <summary>
+    <div class="cell-status" style="background:#330000">
+      <span class="status-badge" style="background:#330000;color:#ff6666;border:1px solid #aa333355">IGNORÉ</span>
+      <div class="cell-headline">Recommande MEC et artisans génériques — Lavoie absent</div>
+      <div class="toggle-arrow">›</div>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">RÉSUMÉ</div>
+    <p>ChatGPT cite MEC, des boutiques d'artisans locaux et des options génériques. Lavoie n'est pas mentionné.</p>
+    <div class="response-label" style="margin-top:12px">ANALYSE</div>
+    <p>Face à une requête d'achat générique 'fabriqué au Québec', ChatGPT ne connaît pas Lavoie. Il recommande MEC et suggère de 'chercher des artisans locaux' — une réponse qui perd le client au profit de marques plus visibles dans son corpus.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell">
+  <summary>
+    <div class="cell-status" style="background:#330000">
+      <span class="status-badge" style="background:#330000;color:#ff6666;border:1px solid #aa333355">IGNORÉ</span>
+      <div class="cell-headline">Osprey recommandé — garantie Lavoie inconnue de ChatGPT</div>
+      <div class="toggle-arrow">›</div>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">RÉSUMÉ</div>
+    <p>ChatGPT recommande Osprey pour la garantie à vie. Le Chic Choc de Lavoie n'est pas mentionné.</p>
+    <div class="response-label" style="margin-top:12px">ANALYSE</div>
+    <p>Face à une requête sur la garantie à vie pour sacs scolaires, ChatGPT oriente vers Osprey — une marque américaine avec une forte présence marketing. Pourtant le Chic Choc de Lavoie offre exactement cette garantie depuis 1988, avec un marché québécois parfaitement adapté. Ce manque de visibilité coûte des conversions directes.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell">
+  <summary>
+    <div class="cell-status" style="background:#330000">
+      <span class="status-badge" style="background:#330000;color:#ff6666;border:1px solid #aa333355">IGNORÉ</span>
+      <div class="cell-headline">JanSport, Herschel, North Face — Lavoie absent</div>
+      <div class="toggle-arrow">›</div>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">RÉSUMÉ</div>
+    <p>ChatGPT recommande des marques internationales pour la rentrée québécoise. Lavoie n'est pas cité.</p>
+    <div class="response-label" style="margin-top:12px">ANALYSE</div>
+    <p>C'est la requête la plus critique commercialement — un parent québécois qui cherche quoi acheter pour la rentrée. ChatGPT propose JanSport, Herschel et North Face. Lavoie, pourtant fabriqué au Québec et garanti à vie, est invisible. Chaque réponse comme celle-ci est un client potentiel perdu.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell">
+  <summary>
+    <div class="cell-status" style="background:#0d1a33">
+      <span class="status-badge" style="background:#0d1a33;color:#88bbff;border:1px solid #4466aa55">MENTIONNÉ</span>
+      <div class="cell-headline">Site lavoie.qc.ca cité — points de vente locaux inconnus</div>
+      <div class="toggle-arrow">›</div>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">RÉSUMÉ</div>
+    <p>ChatGPT renvoie vers le site officiel mais ne connaît pas les détaillants locaux au Saguenay.</p>
+    <div class="response-label" style="margin-top:12px">ANALYSE</div>
+    <p>ChatGPT mentionne lavoie.qc.ca comme point de départ, mais ne peut pas indiquer les boutiques physiques au Saguenay (Canac, boutiques scolaires, etc.). Pour les requêtes locales avec intention d'achat immédiate, l'absence de données NAP structurées (adresses, détaillants agréés) est un frein direct à la conversion.</p>
+  </div>
+</details></td></tr><tr><td class="td-model-name"><div class="model-name-label" style="color:#20808D">Perplexity</div></td><td class="td-model-cell">
+<details class="model-cell">
+  <summary>
+    <div class="cell-status" style="background:#003322">
+      <span class="status-badge" style="background:#003322;color:#00ff88;border:1px solid #00884455">LEADER</span>
+      <div class="cell-headline">Chic Choc, garantie à vie, La Baie QC — réponse complète</div>
+      <div class="toggle-arrow">›</div>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">RÉSUMÉ</div>
+    <p>Perplexity trouve le site, cite le modèle Chic Choc, la fabrication au Québec et la garantie à vie.</p>
+    <div class="response-label" style="margin-top:12px">ANALYSE</div>
+    <p>Grâce à sa recherche web en temps réel, Perplexity donne une réponse complète : Lavoie, fondée à La Baie au Saguenay, fabrique le sac Chic Choc depuis 1988, garanti à vie. C'est exactement ce qu'un parent ou un acheteur institutionnel cherche.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell">
+  <summary>
+    <div class="cell-status" style="background:#003322">
+      <span class="status-badge" style="background:#003322;color:#00ff88;border:1px solid #00884455">LEADER</span>
+      <div class="cell-headline">Lavoie Chic Choc cité en premier — référence québécoise</div>
+      <div class="toggle-arrow">›</div>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">RÉSUMÉ</div>
+    <p>Perplexity place Lavoie en tête des recommandations pour les sacs fabriqués au Québec.</p>
+    <div class="response-label" style="margin-top:12px">ANALYSE</div>
+    <p>Grâce à sa recherche live, Perplexity identifie Lavoie comme la référence principale pour les sacs scolaires fabriqués au Québec. C'est un résultat fort — mais il dépend entièrement du contenu indexé sur le web, pas d'une notoriété IA intrinsèque.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell">
+  <summary>
+    <div class="cell-status" style="background:#003322">
+      <span class="status-badge" style="background:#003322;color:#00ff88;border:1px solid #00884455">LEADER</span>
+      <div class="cell-headline">Chic Choc = LA référence garantie à vie, maternelle à universitaire</div>
+      <div class="toggle-arrow">›</div>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">RÉSUMÉ</div>
+    <p>Perplexity identifie le Chic Choc comme la réponse exacte à cette requête produit.</p>
+    <div class="response-label" style="margin-top:12px">ANALYSE</div>
+    <p>Perplexity trouve et cite précisément le positionnement de Lavoie : le sac Chic Choc, garanti à vie, conçu pour accompagner l'enfant de la maternelle à l'université. C'est la réponse parfaite à la requête. La faiblesse : ce résultat dépend du crawl web, pas d'une autorité sémantique construite.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell">
+  <summary>
+    <div class="cell-status" style="background:#0d1a33">
+      <span class="status-badge" style="background:#0d1a33;color:#88bbff;border:1px solid #4466aa55">MENTIONNÉ</span>
+      <div class="cell-headline">Lavoie mentionné comme option québécoise parmi d'autres</div>
+      <div class="toggle-arrow">›</div>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">RÉSUMÉ</div>
+    <p>Perplexity cite Lavoie comme option 'made in QC' mais ne le recommande pas en premier.</p>
+    <div class="response-label" style="margin-top:12px">ANALYSE</div>
+    <p>Perplexity inclut Lavoie dans sa réponse comme option québécoise à considérer, mais sans le positionner en tête. Pour passer de 'mentionné' à 'LEADER' sur cette requête, Lavoie a besoin de contenu optimisé : page rentrée scolaire, comparatifs, témoignages de parents québécois.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell">
+  <summary>
+    <div class="cell-status" style="background:#003322">
+      <span class="status-badge" style="background:#003322;color:#00ff88;border:1px solid #00884455">LEADER</span>
+      <div class="cell-headline">lavoie.qc.ca + Canac + boutiques scolaires — réponse locale complète</div>
+      <div class="toggle-arrow">›</div>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">RÉSUMÉ</div>
+    <p>Perplexity donne le site officiel et cite des détaillants locaux dont Canac et les boutiques scolaires.</p>
+    <div class="response-label" style="margin-top:12px">ANALYSE</div>
+    <p>Perplexity est le seul modèle à donner une réponse complète sur les points de vente locaux, en citant lavoie.qc.ca, Canac et les boutiques scolaires du Saguenay. C'est le résultat d'un crawl web récent — mais sans page dédiée aux détaillants sur le site Lavoie, cette information restera fragile.</p>
+  </div>
+</details></td></tr><tr><td class="td-model-name"><div class="model-name-label" style="color:#4285F4">Gemini</div></td><td class="td-model-cell">
+<details class="model-cell">
+  <summary>
+    <div class="cell-status" style="background:#003322">
+      <span class="status-badge" style="background:#003322;color:#00ff88;border:1px solid #00884455">LEADER</span>
+      <div class="cell-headline">35 ans d'expertise québécoise, garantie à vie confirmée</div>
+      <div class="toggle-arrow">›</div>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">RÉSUMÉ</div>
+    <p>Gemini mentionne clairement Lavoie comme fabricant québécois avec le Chic Choc et sa garantie à vie.</p>
+    <div class="response-label" style="margin-top:12px">ANALYSE</div>
+    <p>Gemini, avec son accès à l'index Google, retrouve Lavoie efficacement et confirme les éléments clés : fabrication locale, longévité de la marque, garantie à vie. Le lien avec l'écosystème Google Analytics du site aide probablement à cette reconnaissance.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell">
+  <summary>
+    <div class="cell-status" style="background:#0d1a33">
+      <span class="status-badge" style="background:#0d1a33;color:#88bbff;border:1px solid #4466aa55">MENTIONNÉ</span>
+      <div class="cell-headline">Lavoie cité parmi d'autres marques québécoises</div>
+      <div class="toggle-arrow">›</div>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">RÉSUMÉ</div>
+    <p>Gemini mentionne Lavoie dans une liste de marques québécoises, sans en faire la recommandation principale.</p>
+    <div class="response-label" style="margin-top:12px">ANALYSE</div>
+    <p>Gemini cite Lavoie dans une liste de marques québécoises mais le noie parmi d'autres options. Sans structuration sémantique (FAQ, schema.org, description de la marque optimisée), l'IA ne peut pas distinguer Lavoie comme le leader de ce segment.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell">
+  <summary>
+    <div class="cell-status" style="background:#0d1a33">
+      <span class="status-badge" style="background:#0d1a33;color:#88bbff;border:1px solid #4466aa55">MENTIONNÉ</span>
+      <div class="cell-headline">Garantie à vie mentionnée, Lavoie cité dans un contexte comparatif</div>
+      <div class="toggle-arrow">›</div>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">RÉSUMÉ</div>
+    <p>Gemini mentionne Lavoie parmi les options garanties à vie, sans en faire le premier choix.</p>
+    <div class="response-label" style="margin-top:12px">ANALYSE</div>
+    <p>Gemini cite Lavoie comme une option parmi d'autres pour la garantie à vie. Sans page dédiée à la garantie optimisée pour les LLM (FAQ structurée, page explicative avec schema.org), Gemini ne peut pas positionner Lavoie comme LE choix évident.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell">
+  <summary>
+    <div class="cell-status" style="background:#330000">
+      <span class="status-badge" style="background:#330000;color:#ff6666;border:1px solid #aa333355">IGNORÉ</span>
+      <div class="cell-headline">JanSport et Nike recommandés — marques locales absentes</div>
+      <div class="toggle-arrow">›</div>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">RÉSUMÉ</div>
+    <p>Gemini propose des marques internationales. Lavoie n'apparaît pas dans la réponse.</p>
+    <div class="response-label" style="margin-top:12px">ANALYSE</div>
+    <p>Pour cette requête à haute intention d'achat, Gemini recommande JanSport et Nike. Lavoie est absent. Le paradoxe : Gemini reconnaît Lavoie quand on pose une question directe sur la marque (Q1), mais ne le recommande pas proactivement sur les requêtes génériques de décision d'achat.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell">
+  <summary>
+    <div class="cell-status" style="background:#003322">
+      <span class="status-badge" style="background:#003322;color:#00ff88;border:1px solid #00884455">LEADER</span>
+      <div class="cell-headline">Site officiel + détaillants Saguenay identifiés par Google Maps</div>
+      <div class="toggle-arrow">›</div>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">RÉSUMÉ</div>
+    <p>Gemini combine le site officiel et les données Google Maps pour identifier des points de vente locaux.</p>
+    <div class="response-label" style="margin-top:12px">ANALYSE</div>
+    <p>Gemini exploite l'écosystème Google (Google Maps, Google Business Profiles) pour identifier les détaillants Lavoie au Saguenay. C'est un avantage structurel de Gemini sur les requêtes locales. La bonne nouvelle : si Lavoie optimisait son Google Business Profile et sa page détaillants, ce résultat serait encore plus fort.</p>
+  </div>
+</details></td></tr><tr><td class="td-model-name"><div class="model-name-label" style="color:#8B5CF6">Grok</div></td><td class="td-model-cell">
+<details class="model-cell">
+  <summary>
+    <div class="cell-status" style="background:#330000">
+      <span class="status-badge" style="background:#330000;color:#ff6666;border:1px solid #aa333355">IGNORÉ</span>
+      <div class="cell-headline">Marque inconnue — aucune donnée dans l'entraînement</div>
+      <div class="toggle-arrow">›</div>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">RÉSUMÉ</div>
+    <p>Grok ne dispose pas d'informations sur Lavoie et ne peut pas répondre à la question.</p>
+    <div class="response-label" style="margin-top:12px">ANALYSE</div>
+    <p>Grok répond qu'il n'a pas d'informations spécifiques sur cette marque. Les marques régionales québécoises avec peu de présence sur les plateformes anglophones sont quasi-inexistantes dans son corpus d'entraînement.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell">
+  <summary>
+    <div class="cell-status" style="background:#330000">
+      <span class="status-badge" style="background:#330000;color:#ff6666;border:1px solid #aa333355">IGNORÉ</span>
+      <div class="cell-headline">JanSport, Herschel, North Face — aucune marque québécoise</div>
+      <div class="toggle-arrow">›</div>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">RÉSUMÉ</div>
+    <p>Grok recommande exclusivement des marques internationales. Lavoie est absent.</p>
+    <div class="response-label" style="margin-top:12px">ANALYSE</div>
+    <p>Grok répond avec JanSport, Herschel et The North Face — des marques américaines avec une forte présence dans les corpus anglophones. Pour une requête spécifiquement québécoise, l'absence de signaux locaux dans l'entraînement de Grok est un désavantage structurel pour Lavoie.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell">
+  <summary>
+    <div class="cell-status" style="background:#330000">
+      <span class="status-badge" style="background:#330000;color:#ff6666;border:1px solid #aa333355">IGNORÉ</span>
+      <div class="cell-headline">Osprey et Gregory — aucune marque québécoise connue</div>
+      <div class="toggle-arrow">›</div>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">RÉSUMÉ</div>
+    <p>Grok recommande des marques américaines pour la garantie à vie. Lavoie est absent.</p>
+    <div class="response-label" style="margin-top:12px">ANALYSE</div>
+    <p>Grok recommande Osprey et Gregory pour leurs garanties à vie, ignorant totalement que Lavoie offre exactement cette promesse sur le marché québécois depuis plus de 35 ans. Un point de vente différenciateur totalement perdu pour ce modèle.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell">
+  <summary>
+    <div class="cell-status" style="background:#330000">
+      <span class="status-badge" style="background:#330000;color:#ff6666;border:1px solid #aa333355">IGNORÉ</span>
+      <div class="cell-headline">JanSport reste 'le classique' — Lavoie non mentionné</div>
+      <div class="toggle-arrow">›</div>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">RÉSUMÉ</div>
+    <p>Grok recommande JanSport comme choix classique. Aucune marque québécoise n'est mentionnée.</p>
+    <div class="response-label" style="margin-top:12px">ANALYSE</div>
+    <p>Grok propose JanSport comme 'le choix classique' avec Herschel et The North Face comme alternatives tendance. Le marché québécois et ses spécificités (marque locale, garantie à vie, fabriqué au Québec) sont complètement ignorés par ce modèle.</p>
+  </div>
+</details></td><td class="td-model-cell">
+<details class="model-cell">
+  <summary>
+    <div class="cell-status" style="background:#330000">
+      <span class="status-badge" style="background:#330000;color:#ff6666;border:1px solid #aa333355">IGNORÉ</span>
+      <div class="cell-headline">Aucune information sur les points de vente locaux</div>
+      <div class="toggle-arrow">›</div>
+    </div>
+  </summary>
+  <div class="cell-response">
+    <div class="response-label">RÉSUMÉ</div>
+    <p>Grok admet ne pas avoir d'informations sur les détaillants Lavoie au Saguenay.</p>
+    <div class="response-label" style="margin-top:12px">ANALYSE</div>
+    <p>Grok répond honnêtement qu'il n'a pas d'informations sur les points de vente locaux pour cette marque spécifique. Les données de commerce local québécois sont quasi-absentes de son corpus d'entraînement.</p>
+  </div>
+</details></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SOV -->
+  <div class="section-title">Part de voix par modèle IA</div>
+  <div class="sov-section">
+    
+<div class="sov-row">
+  <div class="sov-label">Perplexity <span style="color:#444;font-size:12px">4L / 1M</span></div>
+  <div class="sov-bar-wrap">
+    <div class="sov-bar" style="width:90%;background:#20808D"></div>
+  </div>
+  <div class="sov-pct" style="color:#20808D">90%</div>
+  <div class="sov-score">4.5/5</div>
+</div>
+<div class="sov-row">
+  <div class="sov-label">Gemini <span style="color:#444;font-size:12px">2L / 2M</span></div>
+  <div class="sov-bar-wrap">
+    <div class="sov-bar" style="width:60%;background:#4285F4"></div>
+  </div>
+  <div class="sov-pct" style="color:#4285F4">60%</div>
+  <div class="sov-score">3.0/5</div>
+</div>
+<div class="sov-row">
+  <div class="sov-label">ChatGPT <span style="color:#444;font-size:12px">0L / 2M</span></div>
+  <div class="sov-bar-wrap">
+    <div class="sov-bar" style="width:20%;background:#10A37F"></div>
+  </div>
+  <div class="sov-pct" style="color:#10A37F">20%</div>
+  <div class="sov-score">1.0/5</div>
+</div>
+<div class="sov-row">
+  <div class="sov-label">Grok <span style="color:#444;font-size:12px">0L / 0M</span></div>
+  <div class="sov-bar-wrap">
+    <div class="sov-bar" style="width:0%;background:#8B5CF6"></div>
+  </div>
+  <div class="sov-pct" style="color:#8B5CF6">0%</div>
+  <div class="sov-score">0.0/5</div>
+</div>
+  </div>
+
+  <!-- MODEL CARDS -->
+  <div class="section-title">Profil de chaque modèle</div>
+  <div class="model-cards">
+    <div class="model-card"><div class="mc-header" style="border-color:#10A37F20"><div class="mc-name" style="color:#10A37F">ChatGPT</div><div class="mc-pct" style="color:#10A37F">20%</div><div class="mc-verdict" style="color:#ef4444">Absent</div></div><div class="mc-body"><div class="mc-item mc-mention">DUE DILIGENCE</div><div class="mc-item mc-mention">LOCAL / GÉO</div><div class="mc-item mc-ignore">COMPÉTITIF / MADE IN QC</div><div class="mc-item mc-ignore">PRODUIT / GARANTIE À VIE</div><div class="mc-item mc-ignore">DÉCISION D'ACHAT</div></div></div><div class="model-card"><div class="mc-header" style="border-color:#20808D20"><div class="mc-name" style="color:#20808D">Perplexity</div><div class="mc-pct" style="color:#20808D">90%</div><div class="mc-verdict" style="color:#00ff88">Fort</div></div><div class="mc-body"><div class="mc-item mc-leader">DUE DILIGENCE</div><div class="mc-item mc-leader">COMPÉTITIF / MADE IN QC</div><div class="mc-item mc-leader">PRODUIT / GARANTIE À VIE</div><div class="mc-item mc-leader">LOCAL / GÉO</div><div class="mc-item mc-mention">DÉCISION D'ACHAT</div></div></div><div class="model-card"><div class="mc-header" style="border-color:#4285F420"><div class="mc-name" style="color:#4285F4">Gemini</div><div class="mc-pct" style="color:#4285F4">60%</div><div class="mc-verdict" style="color:#fbbf24">Moyen</div></div><div class="mc-body"><div class="mc-item mc-leader">DUE DILIGENCE</div><div class="mc-item mc-leader">LOCAL / GÉO</div><div class="mc-item mc-mention">COMPÉTITIF / MADE IN QC</div><div class="mc-item mc-mention">PRODUIT / GARANTIE À VIE</div><div class="mc-item mc-ignore">DÉCISION D'ACHAT</div></div></div><div class="model-card"><div class="mc-header" style="border-color:#8B5CF620"><div class="mc-name" style="color:#8B5CF6">Grok</div><div class="mc-pct" style="color:#8B5CF6">0%</div><div class="mc-verdict" style="color:#ef4444">Absent</div></div><div class="mc-body"><div class="mc-item mc-ignore">DUE DILIGENCE</div><div class="mc-item mc-ignore">COMPÉTITIF / MADE IN QC</div><div class="mc-item mc-ignore">PRODUIT / GARANTIE À VIE</div><div class="mc-item mc-ignore">DÉCISION D'ACHAT</div><div class="mc-item mc-ignore">LOCAL / GÉO</div></div></div>
+  </div>
+
+  <!-- RECOMMANDATIONS -->
+  <div class="section-title">Recommandations prioritaires</div>
+  <div class="recs-grid">
+    <div class="rec-tile">
+      <div class="rec-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
+      <div class="rec-priority">Priorité 1 — Impact fort / 2-3h de travail</div>
+      <div class="rec-title">Implanter JSON-LD sur lavoie.qc.ca</div>
+      <div class="rec-desc">Ajouter un bloc <code>schema.org/Organization</code> + <code>Product</code> + <code>LocalBusiness</code> dans le code source du site. C'est la couche sémantique que ChatGPT et Grok utilisent pour identifier et recommander une marque. Sans elle, 35 ans d'histoire restent invisibles pour les IA.</div>
+      <div class="rec-impact">Effet attendu : +2 à +3 LEADER en 60–90 jours</div>
+    </div>
+    <div class="rec-tile">
+      <div class="rec-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+      <div class="rec-priority">Priorité 2 — Impact fort / 1 journée de contenu</div>
+      <div class="rec-title">Créer une page FAQ optimisée LLM</div>
+      <div class="rec-desc">Une page FAQ ciblant les vraies questions des parents québécois (<em>«&nbsp;Le Chic Choc est-il vraiment garanti à vie&nbsp;?»</em>, <em>«&nbsp;Quelle différence entre Lavoie et JanSport&nbsp;?»</em>, <em>«&nbsp;Où acheter au Saguenay&nbsp;?»</em>) augmente la probabilité d'apparaître dans une réponse IA de 40 à 60 %. C'est le levier le plus rapide sur ChatGPT.</div>
+      <div class="rec-impact">Effet attendu : chatGPT passe de 10% à 40%+ en 90 jours</div>
+    </div>
+    <div class="rec-tile">
+      <div class="rec-icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+      <div class="rec-priority">Priorité 3 — Impact moyen / 2h de configuration</div>
+      <div class="rec-title">Optimiser le Google Business Profile + détaillants</div>
+      <div class="rec-desc">Gemini exploite l'écosystème Google pour les requêtes locales. Un Google Business Profile complet (horaires, photos, description avec mots-clés, liste des détaillants agréés Saguenay) ferait passer Gemini de MENTIONNÉ à LEADER sur les requêtes géolocalisées — et déverrouillerait les recommandations locales.</div>
+      <div class="rec-impact">Effet attendu : Gemini local passe à LEADER en 30 jours</div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="section-title">Questions fréquentes</div>
+  <details class="faq">
+    <summary>Pourquoi Perplexity trouve Lavoie mais pas ChatGPT ?</summary>
+    <div class="faq-body">Perplexity effectue une recherche web en temps réel à chaque requête — il crawle lavoie.qc.ca et les revendeurs au moment même où vous posez la question. ChatGPT, lui, se base sur son corpus d'entraînement statique. Si Lavoie n'a pas une forte présence sémantique sur les plateformes indexées avant la date de coupure du modèle, il reste invisible. La solution : structurer le site pour que les futurs entraînements capturent la marque correctement.</div>
+  </details>
+  <details class="faq">
+    <summary>Est-ce que Grok peut vraiment ignorer une marque depuis 1988 ?</summary>
+    <div class="faq-body">Oui. Grok est entraîné principalement sur des données X (Twitter) et des sources anglophones. Les marques québécoises sans présence significative sur les réseaux sociaux anglophones ou les médias numériques majeurs sont quasi-inexistantes dans son corpus. Lavoie, vendu localement avec peu de marketing digital, en est l'exemple parfait. La seule solution : construire une présence numérique structurée qui traverse les barrières linguistiques.</div>
+  </details>
+  <details class="faq">
+    <summary>En combien de temps peut-on passer du Grade D au Grade B ?</summary>
+    <div class="faq-body">Avec les 3 actions prioritaires (JSON-LD + FAQ + Google Business Profile), les premiers effets apparaissent sur Gemini et Perplexity en 30 à 45 jours. ChatGPT prend 60 à 90 jours (délai de crawl et d'indexation). Grok est le plus imprévisible — compter 90 à 120 jours. Un passage de D (42%) à B (75%+) est réaliste en 3 à 4 mois avec un accompagnement GEO structuré.</div>
+  </details>
+  <details class="faq">
+    <summary>La garantie à vie du Chic Choc est-elle un avantage GEO ?</summary>
+    <div class="faq-body">Absolument — c'est un argument extraordinaire qui n'est actuellement pas exploité pour les LLM. Une page dédiée «&nbsp;Garantie à vie Chic Choc — comment ça fonctionne&nbsp;?» avec un balisage <code>schema.org/WarrantyPromise</code> permettrait aux IA de recommander Lavoie sur toutes les requêtes de type «&nbsp;sac durable garanti&nbsp;» ou «&nbsp;investissement scolaire à long terme&nbsp;». C'est un angle différenciateur que JanSport et Herschel ne peuvent pas revendiquer au Québec.</div>
+  </details>
+
+  <!-- ACTION BLOCK -->
+  <div class="action-block">
+    <div class="action-title">Plan d'action — 90 jours pour passer au Grade B</div>
+    <div class="action-steps">
+      <div class="action-step">
+        <div class="action-num">1</div>
+        <div class="action-body">
+          <h4>Semaines 1–2 : Structuration JSON-LD</h4>
+          <p>Implanter schema.org/Organization + Product (Chic Choc) + LocalBusiness + FAQPage sur les pages clés. 2 à 3 heures de développement, effet sur Gemini visible en 2–3 semaines.</p>
+        </div>
+      </div>
+      <div class="action-step">
+        <div class="action-num">2</div>
+        <div class="action-body">
+          <h4>Semaines 3–4 : Page FAQ + page Garantie</h4>
+          <p>Rédiger 10 à 15 questions/réponses ciblant les requêtes LLM identifiées dans cet audit. Créer une page dédiée à la garantie à vie avec balisage sémantique. Contenu en français québécois naturel.</p>
+        </div>
+      </div>
+      <div class="action-step">
+        <div class="action-num">3</div>
+        <div class="action-body">
+          <h4>Semaines 5–6 : Google Business Profile + détaillants</h4>
+          <p>Mettre à jour le profil Google, ajouter la liste complète des revendeurs Saguenay avec adresses, créer des publications régulières sur le profil. Délai d'effet Gemini local : 2 à 4 semaines.</p>
+        </div>
+      </div>
+      <div class="action-step">
+        <div class="action-num">4</div>
+        <div class="action-body">
+          <h4>Mois 3 : Ré-audit de contrôle</h4>
+          <p>Reprendre les 5 mêmes questions sur les 4 modèles. Mesurer la progression. Ajuster la stratégie selon les résultats. Objectif : Grade B (75%+) avec ChatGPT passant de 10% à 40%+.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUI -->
+  <div class="qui-block">
+    <div class="qui-text">
+      <h3>Qui réalise cet audit ?</h3>
+      <p>Lavrik GEO est une coopérative d'économie sociale spécialisée dans la Generative Engine Optimization (GEO) — la discipline qui permet aux entreprises québécoises d'être recommandées par les IA génératives. Fondée à Chicoutimi, Saguenay–Lac-Saint-Jean, par Halyna Lavrik, stratège GEO et intelligence artificielle.</p>
+      <p style="margin-top:10px">Ce Blitz Audit est le premier niveau d'analyse. Un accompagnement GEO complet (Starter 1 950 $/mois) permet d'implanter toutes les recommandations et d'assurer le suivi mensuel des résultats.</p>
+    </div>
+  </div>
+
+  <!-- CONTACT -->
+  <div class="contact-plaque">
+    <h3>Prêt à rendre Lavoie visible dans les réponses IA ?</h3>
+    <a class="contact-email" href="mailto:pr.expert4488@gmail.com">pr.expert4488@gmail.com</a>
+    <div>
+      <a class="cta-btn" href="mailto:pr.expert4488@gmail.com?subject=GEO Boost — Suite audit Lavoie" style="font-size:16px;padding:16px 40px">Demander une consultation gratuite</a>
+    </div>
+    <div class="contact-note">Réponse sous 24h · Consultation 30 min offerte · Sans engagement</div>
+  </div>
+
+  <div class="footer">
+    Rapport confidentiel &nbsp;|&nbsp; <a href="mailto:pr.expert4488@gmail.com">pr.expert4488@gmail.com</a> &nbsp;|&nbsp; © 2026 Lavrik GEO
+  </div>
+
+</div>
+</body>
+</html>
