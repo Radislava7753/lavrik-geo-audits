@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GEO Rétention — Lavrik GEO · Visibilité IA mensuelle</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#0a0a0a;
+  --bg2:rgba(14,14,14,0.98);
+  --bg3:rgba(20,20,20,0.95);
+  --accent:#c8ff00;
+  --border:rgba(200,255,0,0.22);
+  --borderH:#c8ff00;
+  --text:#ffffff;
+  --muted:rgba(255,255,255,0.60);
+  --red:#ef4444;
+  --green:#10b981;
+  --orange:#f97316;
+  --ease:cubic-bezier(0.25,0.46,0.45,0.94);
+  --r:12px;
+}
+
+body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sans-serif;font-size:15px;line-height:1.65}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+
+.page{max-width:880px;margin:0 auto;padding:0 24px 120px}
+.sect{margin-top:80px}
+.rule{border:none;border-top:1px solid rgba(200,255,0,0.1);margin:64px 0 0}
+
+.mono{font-family:'Inter',monospace;font-size:.65rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+
+/* ── HERO ─────────────────────────────────────────────────── */
+.hero{padding:80px 0 60px;text-align:center}
+.hero-badge{display:inline-block;background:rgba(200,255,0,0.08);border:1px solid rgba(200,255,0,0.3);border-radius:20px;padding:6px 18px;font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:28px}
+.hero h1{font-family:'Montserrat',sans-serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:900;line-height:1.1;letter-spacing:-.02em;margin-bottom:24px}
+.hero h1 em{color:var(--accent);font-style:normal}
+.hero-sub{font-size:1.05rem;color:var(--muted);max-width:640px;margin:0 auto 40px;line-height:1.7}
+.hero-stat-row{display:flex;gap:32px;justify-content:center;flex-wrap:wrap;margin-bottom:48px}
+.stat-chip{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:18px 28px;text-align:center;min-width:160px}
+.stat-num{font-family:'Montserrat',sans-serif;font-size:2rem;font-weight:900;color:var(--accent);display:block;line-height:1}
+.stat-label{font-size:.78rem;color:var(--muted);margin-top:6px;text-transform:uppercase;letter-spacing:.06em}
+
+/* ── PROBLEM BLOCK ───────────────────────────────────────── */
+.problem-block{background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.25);border-radius:var(--r);padding:36px 40px;margin-top:60px}
+.problem-block h2{font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.4rem;margin-bottom:16px;color:#fca5a5}
+.problem-list{list-style:none;display:flex;flex-direction:column;gap:12px}
+.problem-list li{padding-left:28px;position:relative;color:rgba(255,255,255,0.82)}
+.problem-list li::before{content:"⚠";position:absolute;left:0;color:#ef4444}
+
+/* ── TIMELINE VISUAL ─────────────────────────────────────── */
+.timeline{display:flex;gap:0;margin-top:48px;align-items:stretch}
+.tl-item{flex:1;text-align:center;position:relative;padding:24px 12px}
+.tl-item::after{content:'→';position:absolute;right:-10px;top:50%;transform:translateY(-50%);color:rgba(200,255,0,0.4);font-size:1.4rem}
+.tl-item:last-child::after{display:none}
+.tl-month{font-family:'Montserrat',sans-serif;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:8px}
+.tl-score{font-family:'Montserrat',sans-serif;font-size:2rem;font-weight:900}
+.tl-label{font-size:.72rem;color:var(--muted);margin-top:4px}
+.tl-good{color:var(--accent)}
+.tl-mid{color:var(--orange)}
+.tl-bad{color:var(--red)}
+.tl-arrow-label{font-size:.68rem;color:var(--muted);margin-top:6px}
+
+/* ── BEFORE/AFTER ────────────────────────────────────────── */
+.ba-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:32px}
+@media(max-width:600px){.ba-grid{grid-template-columns:1fr}}
+.ba-card{background:var(--bg2);border:2px solid var(--border);border-radius:var(--r);padding:28px}
+.ba-card.before{border-color:rgba(239,68,68,0.35)}
+.ba-card.after{border-color:rgba(200,255,0,0.35)}
+.ba-label{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:16px}
+.ba-label.before{color:#ef4444}
+.ba-label.after{color:var(--accent)}
+.ba-company{font-family:'Montserrat',sans-serif;font-size:1rem;font-weight:700;margin-bottom:12px}
+.ba-score{font-family:'Montserrat',sans-serif;font-size:2.6rem;font-weight:900}
+.ba-score.before{color:#ef4444}
+.ba-score.after{color:var(--accent)}
+.ba-detail{margin-top:14px;display:flex;flex-direction:column;gap:6px}
+.ba-row{display:flex;justify-content:space-between;align-items:center;font-size:.82rem}
+.ba-model{color:var(--muted)}
+.ba-val.ok{color:var(--green)}
+.ba-val.bad{color:var(--red)}
+.ba-val.mid{color:var(--orange)}
+
+/* ── PACKAGES ────────────────────────────────────────────── */
+.pkg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:36px}
+@media(max-width:720px){.pkg-grid{grid-template-columns:1fr}}
+.pkg-card{background:var(--bg2);border:2px solid var(--border);border-radius:var(--r);padding:28px 24px;display:flex;flex-direction:column;gap:16px;position:relative;transition:border-color .3s,transform .3s}
+.pkg-card:hover{border-color:var(--accent);transform:translateY(-3px)}
+.pkg-card.featured{border-color:var(--accent);background:rgba(200,255,0,0.04)}
+.pkg-popular{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--accent);color:#000;font-family:'Montserrat',sans-serif;font-size:.65rem;font-weight:800;padding:4px 14px;border-radius:20px;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+.pkg-name{font-family:'Montserrat',sans-serif;font-size:1.1rem;font-weight:800;color:var(--accent)}
+.pkg-price{font-family:'Montserrat',sans-serif;font-size:2.2rem;font-weight:900;line-height:1}
+.pkg-price-unit{font-size:.8rem;color:var(--muted);font-weight:400;margin-left:4px}
+.pkg-desc{font-size:.83rem;color:var(--muted);line-height:1.5}
+.pkg-features{list-style:none;display:flex;flex-direction:column;gap:8px}
+.pkg-features li{font-size:.82rem;padding-left:22px;position:relative;color:rgba(255,255,255,0.85)}
+.pkg-features li::before{content:'✓';position:absolute;left:0;color:var(--accent);font-weight:700}
+.pkg-cta{display:block;text-align:center;background:var(--accent);color:#000;font-family:'Montserrat',sans-serif;font-weight:800;font-size:.82rem;padding:13px 20px;border-radius:8px;letter-spacing:.06em;text-transform:uppercase;margin-top:auto;transition:opacity .2s}
+.pkg-cta:hover{opacity:.85;text-decoration:none}
+.pkg-cta.outline{background:transparent;border:2px solid var(--accent);color:var(--accent)}
+.pkg-cta.outline:hover{background:rgba(200,255,0,0.08)}
+
+/* ── WHAT'S INCLUDED ─────────────────────────────────────── */
+.included-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:32px}
+@media(max-width:600px){.included-grid{grid-template-columns:1fr}}
+.included-item{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:24px}
+.included-icon{font-size:1.8rem;margin-bottom:12px}
+.included-title{font-family:'Montserrat',sans-serif;font-size:.95rem;font-weight:700;margin-bottom:8px;color:var(--accent)}
+.included-desc{font-size:.83rem;color:var(--muted);line-height:1.55}
+
+/* ── PROCESS ─────────────────────────────────────────────── */
+.process-steps{display:flex;flex-direction:column;gap:16px;margin-top:32px}
+.ps-item{display:flex;gap:20px;align-items:flex-start;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:20px 24px}
+.ps-num{font-family:'Montserrat',sans-serif;font-size:1.4rem;font-weight:900;color:var(--accent);min-width:36px;flex-shrink:0;line-height:1}
+.ps-content h3{font-family:'Montserrat',sans-serif;font-size:.95rem;font-weight:700;margin-bottom:4px}
+.ps-content p{font-size:.82rem;color:var(--muted);line-height:1.5}
+
+/* ── TESTIMONIAL-STYLE QUOTE ──────────────────────────────── */
+.insight-block{background:rgba(200,255,0,0.04);border-left:3px solid var(--accent);padding:20px 28px;border-radius:0 var(--r) var(--r) 0;margin-top:32px}
+.insight-block p{font-size:.95rem;line-height:1.65;color:rgba(255,255,255,0.88)}
+.insight-block .ins-source{margin-top:10px;font-size:.75rem;color:var(--muted);font-style:italic}
+
+/* ── FINAL CTA ───────────────────────────────────────────── */
+.final-cta{text-align:center;background:rgba(200,255,0,0.04);border:2px solid rgba(200,255,0,0.3);border-radius:var(--r);padding:56px 40px;margin-top:80px}
+.final-cta h2{font-family:'Montserrat',sans-serif;font-size:1.8rem;font-weight:900;margin-bottom:14px}
+.final-cta p{color:var(--muted);max-width:520px;margin:0 auto 32px;line-height:1.6}
+.btn-main{display:inline-block;background:var(--accent);color:#000;font-family:'Montserrat',sans-serif;font-weight:800;font-size:.95rem;padding:18px 48px;border-radius:8px;letter-spacing:.06em;text-transform:uppercase;transition:opacity .2s;box-shadow:0 0 30px rgba(200,255,0,0.2)}
+.btn-main:hover{opacity:.85;text-decoration:none}
+.btn-sub{display:block;margin-top:14px;font-size:.82rem;color:rgba(200,255,0,0.7)}
+
+/* ── FOOTER ──────────────────────────────────────────────── */
+.site-footer{margin-top:80px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.07);text-align:center;color:rgba(255,255,255,0.35);font-size:.78rem;line-height:1.8}
+.site-footer a{color:rgba(200,255,0,0.6)}
+.footer-brand{font-family:'Montserrat',sans-serif;font-weight:800;color:var(--accent);margin-bottom:6px;font-size:.9rem}
+
+/* ── SECTION HEADERS ─────────────────────────────────────── */
+.sect-label{font-family:'Montserrat',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+.sect h2{font-family:'Montserrat',sans-serif;font-size:clamp(1.5rem,3vw,2rem);font-weight:800;margin-bottom:14px;letter-spacing:-.01em}
+.sect p.lead{color:var(--muted);font-size:.95rem;line-height:1.65;max-width:640px}
+
+/* ── COMPARE TABLE ───────────────────────────────────────── */
+.compare-table{width:100%;border-collapse:collapse;margin-top:28px;font-size:.84rem}
+.compare-table th{text-align:left;padding:12px 16px;border-bottom:2px solid rgba(200,255,0,0.2);font-family:'Montserrat',sans-serif;font-weight:700;font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.compare-table td{padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.06);vertical-align:top}
+.compare-table tr:last-child td{border-bottom:none}
+.check{color:var(--green);font-size:1rem}
+.cross{color:var(--red);font-size:1rem}
+.partial{color:var(--orange);font-size:.9rem}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ── HERO ──────────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="hero-badge">GEO Rétention Mensuelle</div>
+    <h1>Les IA évoluent chaque mois.<br><em>Votre visibilité aussi.</em></h1>
+    <p class="hero-sub">
+      Un audit à 190 $ vous donne une photo. La rétention mensuelle vous assure que
+      cette photo reste flatteuse — pendant que vos concurrents dorment.
+    </p>
+    <div class="hero-stat-row">
+      <div class="stat-chip">
+        <span class="stat-num">89 %</span>
+        <div class="stat-label">des acheteurs B2B<br>utilisent les IA</div>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-num">+350 %</span>
+        <div class="stat-label">de trafic IA<br>en 12 mois</div>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-num">6 sem.</span>
+        <div class="stat-label">pour qu'un concurrent<br>vous dépasse</div>
+      </div>
+    </div>
+
+    <div class="problem-block">
+      <h2>⚠ Ce qui se passe sans suivi mensuel</h2>
+      <ul class="problem-list">
+        <li>ChatGPT et Gemini sont mis à jour — votre nom disparaît des réponses sans explication</li>
+        <li>Un concurrent publie 3 pages FAQ bien structurées — il vous devance en 45 jours</li>
+        <li>Votre score LLM de 62 % aujourd'hui peut tomber à 30 % en 2 mois sans action</li>
+        <li>Les erreurs NAP (mauvaise ville, mauvais numéro) se propagent dans les bases de données IA</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── WHAT CHANGES MONTHLY ───────────────────────────────────── -->
+  <hr class="rule">
+  <section class="sect">
+    <div class="sect-label">Pourquoi c'est urgent</div>
+    <h2>La visibilité IA n'est pas statique</h2>
+    <p class="lead">Voici ce qui arrive à une PME qui fait son audit en janvier et ne fait rien pendant 6 mois.</p>
+
+    <div class="insight-block">
+      <p>« Les grands modèles comme ChatGPT et Gemini sont entraînés ou mis à jour plusieurs fois par an.
+      Chaque mise à jour redistribue la visibilité. Les entreprises avec du contenu frais, structuré
+      et cohérent sont récompensées. Les autres reculent. »</p>
+      <div class="ins-source">— Analyse GEO, Lavrik GEO, 2026</div>
+    </div>
+
+    <div style="margin-top:36px">
+      <div class="sect-label">Projection sans suivi</div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-month">Mois 0</div>
+          <div class="tl-score tl-mid">C</div>
+          <div class="tl-label">62 %</div>
+          <div class="tl-arrow-label">Audit initial</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-month">Mois 2</div>
+          <div class="tl-score tl-mid">D</div>
+          <div class="tl-label">48 %</div>
+          <div class="tl-arrow-label">Concurrent optimise</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-month">Mois 4</div>
+          <div class="tl-score tl-bad">F</div>
+          <div class="tl-label">31 %</div>
+          <div class="tl-arrow-label">MAJ modèles IA</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-month">Mois 6</div>
+          <div class="tl-score tl-bad">F</div>
+          <div class="tl-label">22 %</div>
+          <div class="tl-arrow-label">Invisible</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── BEFORE / AFTER ─────────────────────────────────────────── -->
+  <hr class="rule">
+  <section class="sect">
+    <div class="sect-label">Résultats mesurables</div>
+    <h2>Avant → Après 90 jours de rétention</h2>
+    <p class="lead">Exemples basés sur nos audits réels au Saguenay–Lac-Saint-Jean.</p>
+
+    <div class="ba-grid">
+      <!-- FABTECHID -->
+      <div class="ba-card before">
+        <div class="ba-label before">⬅ Avant (Audit initial)</div>
+        <div class="ba-company">Fabtechid — Chicoutimi</div>
+        <div class="ba-score before">35 %</div>
+        <div style="font-size:.78rem;color:var(--muted);margin-top:2px">Grade F · 7/20 points</div>
+        <div class="ba-detail">
+          <div class="ba-row"><span class="ba-model">ChatGPT</span><span class="ba-val bad">0/5 — Invisible</span></div>
+          <div class="ba-row"><span class="ba-model">Perplexity</span><span class="ba-val bad">0/5 — Invisible</span></div>
+          <div class="ba-row"><span class="ba-model">Gemini</span><span class="ba-val mid">5/5 — Mauvaise ville</span></div>
+          <div class="ba-row"><span class="ba-model">Grok</span><span class="ba-val bad">2/5 — Partiel</span></div>
+        </div>
+      </div>
+
+      <div class="ba-card after">
+        <div class="ba-label after">✓ Après 90 jours de rétention</div>
+        <div class="ba-company">Fabtechid — Chicoutimi</div>
+        <div class="ba-score after">72 %</div>
+        <div style="font-size:.78rem;color:var(--muted);margin-top:2px">Grade B · 14.5/20 points</div>
+        <div class="ba-detail">
+          <div class="ba-row"><span class="ba-model">ChatGPT</span><span class="ba-val ok">3/5 — Mentionné</span></div>
+          <div class="ba-row"><span class="ba-model">Perplexity</span><span class="ba-val mid">3/5 — Mentionné</span></div>
+          <div class="ba-row"><span class="ba-model">Gemini</span><span class="ba-val ok">5/5 — Leader ✓</span></div>
+          <div class="ba-row"><span class="ba-model">Grok</span><span class="ba-val ok">3.5/5 — Mentionné</span></div>
+        </div>
+      </div>
+
+      <!-- LAVOIE -->
+      <div class="ba-card before">
+        <div class="ba-label before">⬅ Avant (Audit initial)</div>
+        <div class="ba-company">Lavoie Sacs à dos — La Baie</div>
+        <div class="ba-score before">42 %</div>
+        <div style="font-size:.78rem;color:var(--muted);margin-top:2px">Grade D · 8.5/20 points</div>
+        <div class="ba-detail">
+          <div class="ba-row"><span class="ba-model">ChatGPT</span><span class="ba-val bad">1/5 — Quasi invisible</span></div>
+          <div class="ba-row"><span class="ba-model">Perplexity</span><span class="ba-val ok">5/5 — Leader</span></div>
+          <div class="ba-row"><span class="ba-model">Gemini</span><span class="ba-val mid">2.5/5 — Partiel</span></div>
+          <div class="ba-row"><span class="ba-model">Grok</span><span class="ba-val bad">0/5 — Invisible</span></div>
+        </div>
+      </div>
+
+      <div class="ba-card after">
+        <div class="ba-label after">✓ Après 90 jours de rétention</div>
+        <div class="ba-company">Lavoie Sacs à dos — La Baie</div>
+        <div class="ba-score after">80 %</div>
+        <div style="font-size:.78rem;color:var(--muted);margin-top:2px">Grade A · 16/20 points</div>
+        <div class="ba-detail">
+          <div class="ba-row"><span class="ba-model">ChatGPT</span><span class="ba-val ok">4/5 — Leader ✓</span></div>
+          <div class="ba-row"><span class="ba-model">Perplexity</span><span class="ba-val ok">5/5 — Leader ✓</span></div>
+          <div class="ba-row"><span class="ba-model">Gemini</span><span class="ba-val ok">4/5 — Leader ✓</span></div>
+          <div class="ba-row"><span class="ba-model">Grok</span><span class="ba-val mid">3/5 — Mentionné</span></div>
+        </div>
+      </div>
+    </div>
+
+    <p style="margin-top:16px;font-size:.75rem;color:rgba(255,255,255,0.35);text-align:center;font-style:italic">
+      * Les résultats « Après » sont des projections basées sur les optimisations recommandées dans les rapports d'audit.
+      Les résultats réels varient selon la mise en œuvre et le secteur.
+    </p>
+  </section>
+
+  <!-- ── WHAT'S INCLUDED ────────────────────────────────────────── -->
+  <hr class="rule">
+  <section class="sect">
+    <div class="sect-label">Ce qui est inclus</div>
+    <h2>Chaque mois, on fait le travail</h2>
+    <p class="lead">Vous recevez un rapport clair. Nous faisons les optimisations.</p>
+
+    <div class="included-grid">
+      <div class="included-item">
+        <div class="included-icon">📊</div>
+        <div class="included-title">Rapport delta mensuel</div>
+        <div class="included-desc">
+          Les mêmes questions posées aux 4 IA (ou 6-7 selon le package).
+          Score actuel vs mois précédent. Ce qui a progressé, ce qui a reculé. En 2 pages, sans jargon.
+        </div>
+      </div>
+      <div class="included-item">
+        <div class="included-icon">🔧</div>
+        <div class="included-title">Optimisations implémentées</div>
+        <div class="included-desc">
+          Selon le package : on rédige et publie les FAQ, ajuste les balises Schema.org,
+          met à jour Google Business Profile, ajoute le fichier llms.txt.
+          Vous n'avez pas à toucher à votre site.
+        </div>
+      </div>
+      <div class="included-item">
+        <div class="included-icon">🔍</div>
+        <div class="included-title">Veille concurrentielle</div>
+        <div class="included-desc">
+          On surveille vos 2-3 principaux concurrents dans les réponses IA.
+          Si l'un d'eux monte, vous êtes alerté immédiatement avec un plan de contre-attaque.
+        </div>
+      </div>
+      <div class="included-item">
+        <div class="included-icon">📈</div>
+        <div class="included-title">Suivi de progression</div>
+        <div class="included-desc">
+          Tableau de bord de votre score GEO sur 6-12 mois.
+          Vous voyez l'évolution en temps réel. Chaque action est documentée avec son impact mesuré.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PROCESS ────────────────────────────────────────────────── -->
+  <hr class="rule">
+  <section class="sect">
+    <div class="sect-label">Comment ça fonctionne</div>
+    <h2>Simple. Mensuel. Mesurable.</h2>
+
+    <div class="process-steps">
+      <div class="ps-item">
+        <div class="ps-num">1</div>
+        <div class="ps-content">
+          <h3>Audit initial (190 $ — une seule fois)</h3>
+          <p>On établit votre score de départ sur 4 modèles IA et 6 dimensions techniques.
+          C'est votre photo de référence. Livré en 48h.</p>
+        </div>
+      </div>
+      <div class="ps-item">
+        <div class="ps-num">2</div>
+        <div class="ps-content">
+          <h3>Optimisations du mois 1</h3>
+          <p>On priorise les 3 actions à plus fort impact (JSON-LD, FAQ, NAP).
+          On les implémente. On mesure.</p>
+        </div>
+      </div>
+      <div class="ps-item">
+        <div class="ps-num">3</div>
+        <div class="ps-content">
+          <h3>Rapport delta — chaque 1er du mois</h3>
+          <p>Score actuel vs mois précédent. Ce qui a changé dans les réponses IA.
+          Plan d'action pour le mois suivant. 2 pages, 10 minutes à lire.</p>
+        </div>
+      </div>
+      <div class="ps-item">
+        <div class="ps-num">4</div>
+        <div class="ps-content">
+          <h3>Bilan trimestriel</h3>
+          <p>Tous les 3 mois : audit complet + mise à jour de la stratégie.
+          On adapte les questions aux nouvelles tendances de votre secteur.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PACKAGES ───────────────────────────────────────────────── -->
+  <hr class="rule">
+  <section class="sect">
+    <div class="sect-label">Tarification</div>
+    <h2>Choisissez votre niveau de protection</h2>
+    <p class="lead">Tous les packages incluent l'audit initial à 190 $ (déductible du premier mois).</p>
+
+    <div class="pkg-grid">
+
+      <!-- ESSENTIEL -->
+      <div class="pkg-card">
+        <div class="pkg-name">Essentiel</div>
+        <div>
+          <span class="pkg-price">300 $</span>
+          <span class="pkg-price-unit">/ mois CAD</span>
+        </div>
+        <div class="pkg-desc">Pour les PME qui veulent savoir où elles en sont chaque mois, sans intervention active.</div>
+        <ul class="pkg-features">
+          <li>Monitoring mensuel — 4 questions × 4 IA</li>
+          <li>Rapport delta (score + delta vs mois précédent)</li>
+          <li>1 recommandation prioritaire par mois</li>
+          <li>Alerte concurrentielle (1 concurrent)</li>
+          <li>Bilan trimestriel</li>
+        </ul>
+        <a class="pkg-cta outline" href="https://docs.google.com/forms/d/e/1FAIpQLSctf7q4fbSbNHrt_u-GAjB3KTE7M6RdJ1vNTVGLT8VbVZjuCg/viewform" target="_blank" rel="noopener">Démarrer Essentiel</a>
+      </div>
+
+      <!-- PROFESSIONNEL -->
+      <div class="pkg-card featured">
+        <div class="pkg-popular">Le plus populaire</div>
+        <div class="pkg-name">Professionnel</div>
+        <div>
+          <span class="pkg-price">500 $</span>
+          <span class="pkg-price-unit">/ mois CAD</span>
+        </div>
+        <div class="pkg-desc">Monitoring + optimisations implémentées. Votre visibilité s'améliore sans que vous ayez à toucher à quoi que ce soit.</div>
+        <ul class="pkg-features">
+          <li>Monitoring mensuel — 7 questions × 6 IA</li>
+          <li>Rapport delta complet</li>
+          <li>3 optimisations implémentées / mois</li>
+          <li>FAQ rédigées et publiées</li>
+          <li>Alerte concurrentielle (2 concurrents)</li>
+          <li>Call mensuel 30 min</li>
+          <li>Bilan trimestriel étendu</li>
+        </ul>
+        <a class="pkg-cta" href="https://docs.google.com/forms/d/e/1FAIpQLSctf7q4fbSbNHrt_u-GAjB3KTE7M6RdJ1vNTVGLT8VbVZjuCg/viewform" target="_blank" rel="noopener">Démarrer Professionnel</a>
+      </div>
+
+      <!-- PREMIUM -->
+      <div class="pkg-card">
+        <div class="pkg-name">Premium</div>
+        <div>
+          <span class="pkg-price">700 $</span>
+          <span class="pkg-price-unit">/ mois CAD</span>
+        </div>
+        <div class="pkg-desc">Pour les entreprises qui veulent être leader dans les réponses IA de leur secteur, sans exception.</div>
+        <ul class="pkg-features">
+          <li>Monitoring complet — 10 questions × 7 IA</li>
+          <li>Optimisations illimitées</li>
+          <li>Analyse concurrentielle mensuelle (3 concurrents)</li>
+          <li>Schema.org avancé + llms.txt</li>
+          <li>Call bi-mensuel stratégique</li>
+          <li>Rapport concurrent complet</li>
+          <li>Accès prioritaire (réponse 4h)</li>
+        </ul>
+        <a class="pkg-cta outline" href="https://docs.google.com/forms/d/e/1FAIpQLSctf7q4fbSbNHrt_u-GAjB3KTE7M6RdJ1vNTVGLT8VbVZjuCg/viewform" target="_blank" rel="noopener">Démarrer Premium</a>
+      </div>
+
+    </div>
+
+    <!-- Comparison table -->
+    <div style="margin-top:48px">
+      <div class="sect-label">Comparaison détaillée</div>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th style="width:40%">Fonctionnalité</th>
+            <th>Essentiel</th>
+            <th>Professionnel</th>
+            <th>Premium</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Monitoring mensuel (questions × modèles)</td><td>4 × 4</td><td>7 × 6</td><td>10 × 7</td></tr>
+          <tr><td>Rapport delta mensuel</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+          <tr><td>Optimisations implémentées / mois</td><td><span class="cross">✗</span></td><td>3</td><td>Illimitées</td></tr>
+          <tr><td>FAQ rédigées</td><td><span class="cross">✗</span></td><td class="check">✓</td><td class="check">✓</td></tr>
+          <tr><td>Veille concurrentielle</td><td>1</td><td>2</td><td>3</td></tr>
+          <tr><td>Call mensuel</td><td><span class="cross">✗</span></td><td>30 min</td><td>45 min × 2</td></tr>
+          <tr><td>Schema.org avancé + llms.txt</td><td><span class="cross">✗</span></td><td class="partial">Partiel</td><td class="check">✓</td></tr>
+          <tr><td>Bilan trimestriel</td><td class="check">✓</td><td class="check">✓ Étendu</td><td class="check">✓ Complet</td></tr>
+          <tr><td>Délai de réponse</td><td>48h</td><td>24h</td><td>4h</td></tr>
+          <tr>
+            <td><strong>Prix mensuel CAD</strong></td>
+            <td><strong>300 $</strong></td>
+            <td><strong>500 $</strong></td>
+            <td><strong>700 $</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── FINAL CTA ──────────────────────────────────────────────── -->
+  <div class="final-cta">
+    <h2>Prêt à sécuriser votre visibilité IA ?</h2>
+    <p>Commencez par l'audit initial à 190 $ — il est déductible de votre premier mois de rétention.
+    Résultats en 48h. Sans engagement pour le premier audit.</p>
+    <a class="btn-main" href="https://docs.google.com/forms/d/e/1FAIpQLSctf7q4fbSbNHrt_u-GAjB3KTE7M6RdJ1vNTVGLT8VbVZjuCg/viewform" target="_blank" rel="noopener">
+      Démarrer l'audit initial — 190 $
+    </a>
+    <a class="btn-sub" href="https://docs.google.com/forms/d/e/1FAIpQLSctf7q4fbSbNHrt_u-GAjB3KTE7M6RdJ1vNTVGLT8VbVZjuCg/viewform" target="_blank" rel="noopener">
+      → Remplir le questionnaire de pré-audit
+    </a>
+    <p style="margin-top:20px;font-size:.78rem;color:rgba(255,255,255,0.35)">
+      Réponse sous 24h · Consultation découverte 30 min offerte · Annulation possible à tout moment
+    </p>
+  </div>
+
+  <!-- ── FOOTER ─────────────────────────────────────────────────── -->
+  <footer class="site-footer">
+    <div class="footer-brand">Lavrik GEO</div>
+    <a href="mailto:pr.expert4488@gmail.com">pr.expert4488@gmail.com</a>
+    &nbsp;·&nbsp; Chicoutimi, Saguenay–Lac-Saint-Jean, Québec
+    &nbsp;·&nbsp; <a href="https://radislava7753.github.io/lavrik-geo-audits/" target="_blank" rel="noopener">Tous les rapports</a>
+    <br>
+    © 2026 Lavrik GEO &nbsp;·&nbsp; Services GEO / LLM pour PME
+  </footer>
+
+</div>
+</body>
+</html>
