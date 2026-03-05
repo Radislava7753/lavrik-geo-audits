@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Analyse GEO + IA — STC Manufacturier | Halyna Lavrik GEO</title>
+<style>
+:root{
+  --bg:#0d0e0f;--s1:#111213;--s2:#181919;--s3:#0a0a0b;
+  --acc:#c8ff00;--acc-dim:rgba(200,255,0,.1);--acc-border:rgba(200,255,0,.3);
+  --t1:#f0f0f0;--t2:#aaa;--t3:#666;--border:#1e1e1e;
+  --font:'Inter','Segoe UI',sans-serif;
+  --green:#44bb44;--orange:#ffaa00;--red:#ff4444;--blue:#58a6ff;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--t1);font-family:var(--font);line-height:1.6;font-size:15px;}
+.wrap{max-width:1060px;margin:0 auto;padding:0 1.5rem;}
+a{color:var(--acc);}
+
+/* ── NAV ── */
+nav{background:var(--s3);border-bottom:1px solid var(--border);padding:.9rem 0;position:sticky;top:0;z-index:100;}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;gap:1rem;}
+.nav-logo{font-weight:900;font-size:1.05rem;letter-spacing:.1em;text-transform:uppercase;color:var(--acc);text-decoration:none;}
+.nav-meta{font-size:.8rem;color:var(--t3);}
+
+/* ── HERO ── */
+.hero{padding:3.5rem 0 3rem;background:linear-gradient(135deg,#0d0e0f 0%,#0d1118 100%);border-bottom:1px solid var(--border);}
+.hero-tag{display:inline-block;background:var(--acc-dim);border:1px solid var(--acc-border);color:var(--acc);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;padding:.3rem .9rem;border-radius:50px;margin-bottom:1.2rem;}
+.hero h1{font-size:clamp(1.9rem,4vw,2.8rem);font-weight:900;line-height:1.12;margin-bottom:.5rem;}
+.hero h1 em{color:var(--acc);font-style:normal;}
+.hero-sub{color:var(--t2);font-size:.95rem;margin-bottom:2.2rem;max-width:680px;}
+.hero-chips{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:1.8rem;}
+.chip{font-size:.75rem;padding:.3rem .85rem;border-radius:50px;font-weight:600;letter-spacing:.04em;}
+.chip-green{background:rgba(68,187,68,.15);border:1px solid rgba(68,187,68,.4);color:#66dd66;}
+.chip-blue{background:rgba(88,166,255,.12);border:1px solid rgba(88,166,255,.3);color:var(--blue);}
+.chip-lime{background:var(--acc-dim);border:1px solid var(--acc-border);color:var(--acc);}
+.chip-orange{background:rgba(255,170,0,.12);border:1px solid rgba(255,170,0,.3);color:var(--orange);}
+
+/* ── KEY FACTS ── */
+.facts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.9rem;margin:2rem 0 0;}
+.fact-card{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:1.3rem 1.2rem;text-align:center;}
+.fact-val{font-size:1.9rem;font-weight:900;color:var(--acc);line-height:1;}
+.fact-lbl{font-size:.75rem;color:var(--t2);text-transform:uppercase;letter-spacing:.1em;margin-top:.35rem;}
+
+/* ── CONTEXT BANNER ── */
+.context-banner{background:var(--s1);border:1px solid var(--acc-border);border-left:4px solid var(--acc);border-radius:0 10px 10px 0;padding:1.4rem 1.6rem;margin:2.5rem 0 0;}
+.context-banner p{color:var(--t2);font-size:.95rem;line-height:1.75;}
+.context-banner strong{color:var(--t1);}
+
+/* ── SECTIONS ── */
+.section{padding:2.5rem 0;border-bottom:1px solid var(--border);}
+.section-label{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);font-weight:700;margin-bottom:.6rem;}
+.section-title{font-size:1.35rem;font-weight:800;color:var(--t1);margin-bottom:1.25rem;}
+
+/* ── ACCORDION ── */
+.acc-list{display:flex;flex-direction:column;gap:.6rem;}
+.acc-item{background:var(--s1);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color .2s;}
+.acc-item:hover{border-color:rgba(200,255,0,.25);}
+.acc-item[open]{border-color:var(--acc-border);}
+.acc-head{padding:1.1rem 1.4rem;cursor:pointer;list-style:none;display:flex;align-items:center;gap:1rem;}
+.acc-head::-webkit-details-marker{display:none;}
+.acc-num{background:var(--acc);color:#000;font-weight:900;font-size:.78rem;min-width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%;flex-shrink:0;}
+.acc-title{font-size:.98rem;font-weight:700;color:var(--t1);flex:1;}
+.acc-arrow{font-size:.8rem;color:var(--t3);transition:transform .2s;margin-left:auto;}
+details[open] .acc-arrow{transform:rotate(90deg);color:var(--acc);}
+.acc-body{padding:0 1.4rem 1.4rem 1.4rem;border-top:1px solid var(--border);}
+.acc-body p{color:var(--t2);font-size:.93rem;line-height:1.8;margin-top:1rem;}
+.acc-body p + p{margin-top:.75rem;}
+.acc-body strong{color:var(--t1);}
+.acc-body ul{color:var(--t2);font-size:.93rem;line-height:1.8;margin-top:.75rem;padding-left:1.4rem;}
+.acc-body li{margin-bottom:.5rem;}
+.acc-body .highlight-box{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:1rem 1.2rem;margin-top:1rem;}
+.acc-body .highlight-box p{margin-top:0;}
+.acc-body h4{color:var(--acc);font-size:.85rem;text-transform:uppercase;letter-spacing:.1em;margin:1.2rem 0 .4rem;}
+
+/* ── POSITIVE SIGNAL ── */
+.signal-box{background:rgba(68,187,68,.08);border:1px solid rgba(68,187,68,.25);border-radius:10px;padding:1.3rem 1.5rem;margin:1.5rem 0;}
+.signal-box p{color:#88dd88;font-size:.93rem;line-height:1.75;}
+.signal-box strong{color:#aaeaaa;}
+
+/* ── ALERT BOX ── */
+.alert-box{background:rgba(255,170,0,.07);border:1px solid rgba(255,170,0,.25);border-radius:10px;padding:1.3rem 1.5rem;margin:1.5rem 0;}
+.alert-box p{color:#ddbb88;font-size:.93rem;line-height:1.75;}
+.alert-box strong{color:#ffcc88;}
+
+/* ── EXAMPLES GRID ── */
+.ex-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;margin-top:1rem;}
+.ex-card{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:1.2rem 1.3rem;}
+.ex-icon{font-size:1.4rem;margin-bottom:.5rem;}
+.ex-title{font-size:.88rem;font-weight:700;color:var(--acc);margin-bottom:.5rem;}
+.ex-desc{font-size:.83rem;color:var(--t2);line-height:1.65;}
+
+/* ── CTA ── */
+.cta-section{padding:3.5rem 0;}
+.cta-box{background:linear-gradient(135deg,#0d1a0d 0%,#111213 100%);border:1px solid rgba(200,255,0,.3);border-radius:16px;padding:2.5rem;text-align:center;}
+.cta-box h2{font-size:1.7rem;font-weight:900;margin-bottom:.8rem;}
+.cta-box h2 em{color:var(--acc);font-style:normal;}
+.cta-box p{color:var(--t2);font-size:.95rem;max-width:560px;margin:0 auto 2rem;}
+.cta-btns{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;}
+.btn-primary{background:var(--acc);color:#000;font-weight:800;font-size:.9rem;padding:.85rem 2rem;border-radius:8px;text-decoration:none;transition:opacity .2s;letter-spacing:.03em;}
+.btn-primary:hover{opacity:.88;color:#000;}
+.btn-secondary{background:transparent;color:var(--acc);font-weight:700;font-size:.9rem;padding:.85rem 2rem;border-radius:8px;text-decoration:none;border:1px solid var(--acc-border);transition:background .2s;letter-spacing:.03em;}
+.btn-secondary:hover{background:var(--acc-dim);}
+
+/* ── FOOTER ── */
+footer{background:var(--s3);border-top:1px solid var(--border);padding:1.5rem 0;}
+.footer-inner{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;}
+.footer-brand{font-weight:800;font-size:.9rem;letter-spacing:.1em;text-transform:uppercase;color:var(--acc);}
+.footer-note{font-size:.78rem;color:var(--t3);}
+
+@media(max-width:640px){
+  .hero{padding:2.5rem 0 2rem;}
+  .facts-grid{grid-template-columns:repeat(2,1fr);}
+  .cta-box{padding:2rem 1.5rem;}
+  .cta-box h2{font-size:1.4rem;}
+  .footer-inner{justify-content:center;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-logo" href="https://radislava7753.github.io/lavrik-geo-audits/lavrik_geo_landing.html">LavrikGEO</a>
+    <span class="nav-meta">Analyse GEO — STC Manufacturier</span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-tag">Analyse GEO + IA · Stratégie de visibilité</div>
+    <h1>STC Manufacturier :<br><em>vos hypothèses de croissance</em></h1>
+    <p class="hero-sub">Analyse de la visibilité LLM, du positionnement dans les spécifications et des opportunités d'optimisation des processus internes — présentée par Halyna Lavrik.</p>
+    <div class="hero-chips">
+      <span class="chip chip-green">✓ Seul joueur dans la région</span>
+      <span class="chip chip-lime">Parmi les rares au Québec</span>
+      <span class="chip chip-blue">B2B Construction &amp; Industriel</span>
+      <span class="chip chip-orange">2 500+ commandes/an</span>
+    </div>
+    <div class="facts-grid">
+      <div class="fact-card">
+        <div class="fact-val">3,5 M$</div>
+        <div class="fact-lbl">Investi depuis 2020</div>
+      </div>
+      <div class="fact-card">
+        <div class="fact-val">2 500+</div>
+        <div class="fact-lbl">Commandes annuelles</div>
+      </div>
+      <div class="fact-card">
+        <div class="fact-val">#1</div>
+        <div class="fact-lbl">Position à défendre</div>
+      </div>
+      <div class="fact-card">
+        <div class="fact-val">IA</div>
+        <div class="fact-lbl">Nouveau canal de recommandation</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTEXT BANNER -->
+<div class="wrap">
+  <div class="context-banner">
+    <p>Ce document présente une analyse stratégique de la visibilité GEO (Generative Engine Optimization) et des opportunités d'optimisation interne pour STC Manufacturier. <strong>Ces observations sont des hypothèses basées sur des signaux de marché et des tendances sectorielles</strong> — non des certitudes. Votre retour est précieux pour affiner cette analyse.</p>
+  </div>
+</div>
+
+<!-- SECTION 1: ANALYSE GEO -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-label">Visibilité IA</div>
+    <div class="section-title">Ce que les LLM savent de STC Manufacturier</div>
+    <div class="acc-list">
+
+      <!-- Accordion 1 -->
+      <details class="acc-item">
+        <summary class="acc-head">
+          <span class="acc-num">1</span>
+          <span class="acc-title">STC est déjà bien comprise par l'IA comme fabricant de niche</span>
+          <span class="acc-arrow">▶</span>
+        </summary>
+        <div class="acc-body">
+          <div class="signal-box">
+            <p><strong>Signal positif :</strong> Puisque STC Manufacturier est «&nbsp;le seul joueur&nbsp;» dans la région et «&nbsp;parmi les rares au Québec&nbsp;» dans votre niche, les LLM (ChatGPT, Gemini, Perplexity, Grok) classifient probablement votre entreprise correctement et l'associent aux requêtes sectorielles pertinentes — même sans audit de visibilité préalable.</p>
+          </div>
+          <p>C'est un avantage rare : la plupart des entreprises régionales sont «&nbsp;invisibles&nbsp;» pour l'IA ou confondues avec des concurrents. Votre position de quasi-monopole régional agit comme un signal fort dans les bases de données que les LLM utilisent pour entraîner leurs modèles.</p>
+          <p>Toutefois, <strong>être «&nbsp;connu&nbsp;» de l'IA n'est pas la même chose qu'être «&nbsp;recommandé&nbsp;»</strong> par l'IA. La prochaine étape consiste à vérifier que cette reconnaissance se traduit par des recommandations actives lorsqu'un acheteur demande «&nbsp;qui fait X dans la région&nbsp;».</p>
+        </div>
+      </details>
+
+      <!-- Accordion 2 -->
+      <details class="acc-item">
+        <summary class="acc-head">
+          <span class="acc-num">2</span>
+          <span class="acc-title">Vecteur de visibilité : maintenir la position n°1 même en pleine capacité</span>
+          <span class="acc-arrow">▶</span>
+        </summary>
+        <div class="acc-body">
+          <div class="alert-box">
+            <p>Quand la production est à pleine capacité, il semble logique de <strong>mettre le marketing en pause</strong> — les commandes arrivent de toute façon. C'est une erreur tactique fréquente en B2B industriel.</p>
+          </div>
+          <p>Dans l'approvisionnement B2B en construction et industriel, il y a une nuance importante : il ne s'agit pas seulement d'avoir des commandes aujourd'hui, mais de <strong>rester l'option n°1 dans l'esprit du marché — et dans les documents</strong> — afin que dans 6 à 12 mois, le flux de projets ne migre pas vers ceux qui sont plus souvent «&nbsp;spécifiés&nbsp;» et recommandés.</p>
+          <p>Le bon vecteur pour STC n'est pas une campagne publicitaire. C'est de renforcer la présence dans les sources que l'IA et les acheteurs consultent : associations sectorielles, répertoires fournisseurs, guides de spécification, articles de blogue techniques.</p>
+        </div>
+      </details>
+
+      <!-- Accordion 3 -->
+      <details class="acc-item">
+        <summary class="acc-head">
+          <span class="acc-num">3</span>
+          <span class="acc-title">Pourquoi «&nbsp;être prioritaire dans les devis&nbsp;» décide de tout</span>
+          <span class="acc-arrow">▶</span>
+        </summary>
+        <div class="acc-body">
+          <p>Dans de nombreuses catégories de construction, le choix du fournisseur commence <strong>bien avant l'appel d'offres</strong> — au niveau des spécifications de l'architecte/concepteur et du «&nbsp;basis of design&nbsp;». Même si les spécifications permettent plusieurs fabricants, la fréquence des mentions dans les devis montre qui domine le «&nbsp;champ de bataille&nbsp;» pour les projets futurs.</p>
+          <p>Si vous êtes «&nbsp;par défaut&nbsp;» dans les spécifications d'un architecte ou dans la bibliothèque de solutions d'un entrepreneur général, vous serez invité aux soumissions plus souvent — <strong>même quand le marché ralentit</strong>.</p>
+          <div class="highlight-box">
+            <p>En pratique : un seul architecte qui vous intègre dans ses gabarits de spécification peut générer 5 à 15 projets sur 3 ans — sans que vous ayez à faire de démarchage actif pour chacun.</p>
+          </div>
+        </div>
+      </details>
+
+      <!-- Accordion 4 -->
+      <details class="acc-item">
+        <summary class="acc-head">
+          <span class="acc-num">4</span>
+          <span class="acc-title">Le rôle des distributeurs : pourquoi ne pas les perdre</span>
+          <span class="acc-arrow">▶</span>
+        </summary>
+        <div class="acc-body">
+          <p>Pour les fabricants de produits de construction, les distributeurs sont souvent le <strong>canal principal</strong> : ils font les soumissions de projet, répondent aux RFQ des entrepreneurs généraux et «&nbsp;portent&nbsp;» effectivement la marque dans les transactions.</p>
+          <div class="alert-box">
+            <p>Si un distributeur peut plus facilement vendre un concurrent — parce qu'il est plus souvent demandé, plus facile à justifier, et <strong>«&nbsp;confirmé&nbsp;» par la recherche et l'IA</strong> — le fabricant commence à perdre des contrats discrètement, sans signal clair «&nbsp;nous avons perdu&nbsp;».</p>
+          </div>
+          <p>La visibilité LLM renforce directement la position chez les distributeurs : quand un acheteur arrive en disant «&nbsp;l'IA nous a recommandé STC&nbsp;», le distributeur n'a pas à justifier le choix — il le confirme simplement.</p>
+        </div>
+      </details>
+
+      <!-- Accordion 5 -->
+      <details class="acc-item">
+        <summary class="acc-head">
+          <span class="acc-num">5</span>
+          <span class="acc-title">La visibilité LLM comme nouveau canal de recommandation</span>
+          <span class="acc-arrow">▶</span>
+        </summary>
+        <div class="acc-body">
+          <p>Les acheteurs et employés — architectes, estimateurs, responsables des achats, chargés de projet — posent de plus en plus à l'IA des questions comme :</p>
+          <ul>
+            <li>«&nbsp;Quel fournisseur choisir pour ce type de produit&nbsp;?&nbsp;»</li>
+            <li>«&nbsp;Quelles sont les alternatives dans la région&nbsp;?&nbsp;»</li>
+            <li>«&nbsp;Qui fait X au Québec&nbsp;?&nbsp;»</li>
+            <li>«&nbsp;Qui répond aux exigences de cette norme&nbsp;?&nbsp;»</li>
+          </ul>
+          <p>Les études sur le marché B2B montrent que GenAI est déjà utilisé pour la recherche et l'évaluation de fournisseurs, et <strong>chez certains acheteurs, il dépasse déjà la recherche traditionnelle</strong> (Google, annuaires sectoriels).</p>
+          <div class="signal-box">
+            <p>Si l'IA nomme régulièrement STC comme option pertinente, vous obtenez discrètement plus d'entrées en liste courte — et donc plus de demandes de soumission, plus de mentions dans les documents et un meilleur ancrage dans les spécifications futures.</p>
+          </div>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 2: PROCESSUS INTERNES -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-label">Optimisation interne</div>
+    <div class="section-title">Opportunités autour du cœur de production</div>
+    <div class="acc-list">
+
+      <!-- Accordion 6 -->
+      <details class="acc-item">
+        <summary class="acc-head">
+          <span class="acc-num">6</span>
+          <span class="acc-title">Transition numérique réussie — focus sur les micro-pertes autour du bureau</span>
+          <span class="acc-arrow">▶</span>
+        </summary>
+        <div class="acc-body">
+          <div class="signal-box">
+            <p><strong>Constat positif :</strong> STC a déjà complété sa transition numérique — investissement dans l'équipement automatisé et déploiement d'un système de gestion d'entreprise. C'est un avantage compétitif majeur dans un secteur où beaucoup de PME manufacturières fonctionnent encore avec des processus papier.</p>
+          </div>
+          <p>Cependant, avec <strong>2 500+ commandes annuelles</strong> et un grand nombre de configurations, il existe probablement des micro-pertes dans les processus de bureau qui s'accumulent de façon invisible : temps perdu sur des communications répétitives, erreurs de transfert de données, exceptions non détectées à temps.</p>
+          <p>Ces micro-pertes ne justifient pas un nouveau grand projet ERP — elles se corrigent avec des solutions légères ciblées.</p>
+        </div>
+      </details>
+
+      <!-- Accordion 7 -->
+      <details class="acc-item">
+        <summary class="acc-head">
+          <span class="acc-num">7</span>
+          <span class="acc-title">Autour du cœur, il y a toujours des améliorations rapides</span>
+          <span class="acc-arrow">▶</span>
+        </summary>
+        <div class="acc-body">
+          <p>STC a investi environ <strong>3,5 M$ depuis 2020</strong>, acquis des équipements automatisés (poinçonneuse / plieuse) et mis en place un système de gestion d'entreprise. Vous êtes déjà forts sur le «&nbsp;hardware&nbsp;» et le cœur de production.</p>
+          <p>Mais tout ce qui l'entoure — <strong>communications, documents, approbations, exceptions, gabarits, formation, support interne</strong> — reste habituellement un terrain propice aux améliorations rapides avec un ROI mesurable.</p>
+          <div class="highlight-box">
+            <p>Ces améliorations ne touchent pas à l'ERP ni à la chaîne de production. Elles s'ajoutent «&nbsp;en couche&nbsp;» — légères, réversibles, déployables en 1 à 3 semaines.</p>
+          </div>
+        </div>
+      </details>
+
+      <!-- Accordion 8 -->
+      <details class="acc-item">
+        <summary class="acc-head">
+          <span class="acc-num">8</span>
+          <span class="acc-title">Exemples concrets : ce qu'on peut améliorer sans «&nbsp;briser&nbsp;» l'ERP</span>
+          <span class="acc-arrow">▶</span>
+        </summary>
+        <div class="acc-body">
+          <div class="ex-grid">
+            <div class="ex-card">
+              <div class="ex-icon">✉️</div>
+              <div class="ex-title">Brouillons automatiques de courriels</div>
+              <div class="ex-desc">Avec 2 500+ commandes/an, vous avez beaucoup de communications répétitives avec les distributeurs. Un assistant prépare les brouillons de réponse (statut, données manquantes, confirmation, délais) — l'humain envoie.</div>
+            </div>
+            <div class="ex-card">
+              <div class="ex-icon">📋</div>
+              <div class="ex-title">Collecte automatique des fiches commande</div>
+              <div class="ex-desc">Les données entrantes arrivent souvent «&nbsp;brutes&nbsp;» — PDF, courriels, PO variables. Un assistant extrait les paramètres clés des RFQ/PO dans un formulaire unifié, pour transfert rapide et sans erreur dans l'ERP.</div>
+            </div>
+            <div class="ex-card">
+              <div class="ex-icon">⚠️</div>
+              <div class="ex-title">Surveillance des exceptions</div>
+              <div class="ex-desc">L'automatisation perd de l'argent sur les exceptions : données incomplètes, conflits de version, modifications urgentes. Un «&nbsp;agent observateur&nbsp;» signale les cas à risque et envoie une alerte interne avant que ça devienne un problème.</div>
+            </div>
+            <div class="ex-card">
+              <div class="ex-icon">📚</div>
+              <div class="ex-title">Base de connaissances pour nouveaux employés</div>
+              <div class="ex-desc">Face à la pénurie de main-d'œuvre qualifiée, vos procédures packagées en base de connaissances avec recherche et interface chat — déployée dans votre cloud — accélèrent l'intégration et réduisent la dépendance aux individus clés.</div>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- Accordion 9 -->
+      <details class="acc-item">
+        <summary class="acc-head">
+          <span class="acc-num">9</span>
+          <span class="acc-title">Ce ne sont que des hypothèses — votre retour est précieux</span>
+          <span class="acc-arrow">▶</span>
+        </summary>
+        <div class="acc-body">
+          <p>Tout ce qui précède représente mes <strong>hypothèses de travail</strong>, construites à partir de signaux publics et de tendances sectorielles. Je n'ai pas accès aux données internes de STC Manufacturier.</p>
+          <p>Ces observations peuvent être fausses, partiellement correctes, ou déjà en cours de traitement de votre côté. <strong>C'est précisément pour cette raison que votre retour est la clé.</strong></p>
+          <div class="highlight-box">
+            <p>Un simple échange de 20 minutes permettrait de valider ou d'éliminer chaque hypothèse — et de cibler les 2 ou 3 actions à impact réel pour STC. Je serai reconnaissante de vos commentaires.</p>
+          </div>
+        </div>
+      </details>
+
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="wrap">
+    <div class="cta-box">
+      <h2>Discutons de ces <em>hypothèses</em></h2>
+      <p>Un appel de 20 minutes pour valider ce qui s'applique à STC Manufacturier — et identifier les 2 ou 3 leviers à impact immédiat.</p>
+      <div class="cta-btns">
+        <a href="mailto:pr.expert4488@gmail.com" class="btn-primary">✉️ Écrivez-nous : pr.expert4488@gmail.com</a>
+        <a href="https://radislava7753.github.io/lavrik-geo-audits/lavrik_geo_landing.html" class="btn-secondary">En savoir plus →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap footer-inner">
+    <span class="footer-brand">Halyna Lavrik GEO</span>
+    <span class="footer-note">Analyse GEO · STC Manufacturier · Mars 2026 · <a href="https://radislava7753.github.io/lavrik-geo-audits/lavrik_geo_landing.html">lavrikgeo.ca</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
