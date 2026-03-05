@@ -3,189 +3,471 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Audit GEO — Coupesag.ca | Lavrik GEO</title>
+<title>Audit GEO — Coupesag.ca | Halyna Lavrik GEO</title>
 <style>
-  :root{--bg:#0d0e0f;--s1:#111213;--s2:#181919;--acc:#c8ff00;--acc-dim:rgba(200,255,0,.1);--t1:#f0f0f0;--t2:#aaa;--t3:#666;--border:#222;--font-h:'Inter',sans-serif;}
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{background:var(--bg);color:var(--t1);font-family:var(--font-h);line-height:1.6;}
-  .wrap{max-width:1100px;margin:0 auto;padding:0 1.5rem;}
-  a{color:var(--acc);text-decoration:none;}
+:root{
+  --bg:#0d0e0f;--s1:#111213;--s2:#181919;--s3:#0a0a0b;
+  --acc:#c8ff00;--acc-dim:rgba(200,255,0,.1);--acc-border:rgba(200,255,0,.3);
+  --t1:#f0f0f0;--t2:#aaa;--t3:#666;--border:#1e1e1e;
+  --font:'Inter','Segoe UI',sans-serif;
+  --green:#44bb44;--orange:#ffaa00;--red:#ff4444;--blue:#58a6ff;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--t1);font-family:var(--font);line-height:1.6;font-size:15px;}
+.wrap{max-width:1120px;margin:0 auto;padding:0 1.5rem;}
+a{color:var(--acc);}
 
-  /* HERO */
-  .hero{background:linear-gradient(135deg,#0d0e0f 0%,#111820 100%);padding:3.5rem 0 2.5rem;border-bottom:1px solid var(--border);}
-  .hero-tag{display:inline-block;background:var(--acc-dim);border:1px solid rgba(200,255,0,.3);color:var(--acc);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;padding:.3rem .9rem;border-radius:50px;margin-bottom:1.2rem;}
-  .hero h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;line-height:1.1;margin-bottom:.5rem;}
-  .hero h1 span{color:var(--acc);}
-  .hero-sub{color:var(--t2);font-size:1rem;margin-bottom:2rem;}
+/* ── NAV ── */
+nav{background:var(--s3);border-bottom:1px solid var(--border);padding:.9rem 0;position:sticky;top:0;z-index:100;}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;gap:1rem;}
+.nav-logo{font-weight:900;font-size:1.05rem;letter-spacing:.1em;text-transform:uppercase;color:var(--acc);text-decoration:none;}
+.nav-meta{font-size:.8rem;color:var(--t3);}
 
-  /* SCORE BLOCK */
-  .score-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin:1.5rem 0;}
-  .score-card{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:1.25rem;text-align:center;}
-  .score-card .val{font-size:2.2rem;font-weight:900;color:var(--acc);}
-  .score-card .lbl{font-size:.8rem;color:var(--t2);text-transform:uppercase;letter-spacing:.1em;margin-top:.2rem;}
-  .grade-badge{display:inline-block;width:72px;height:72px;line-height:72px;border-radius:50%;font-size:2rem;font-weight:900;color:#000;background:#ff6600;margin-bottom:.3rem;}
+/* ── HERO ── */
+.hero{padding:3.5rem 0 2.5rem;background:linear-gradient(135deg,#0d0e0f 0%,#0d1118 100%);border-bottom:1px solid var(--border);}
+.hero-tag{display:inline-block;background:var(--acc-dim);border:1px solid var(--acc-border);color:var(--acc);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;padding:.3rem .9rem;border-radius:50px;margin-bottom:1.2rem;}
+.hero h1{font-size:clamp(1.9rem,4vw,2.9rem);font-weight:900;line-height:1.1;margin-bottom:.4rem;}
+.hero h1 em{color:var(--acc);font-style:normal;}
+.hero-sub{color:var(--t2);font-size:.95rem;margin-bottom:2rem;}
+.score-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.9rem;margin:1.5rem 0;}
+.score-card{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:1.2rem;text-align:center;}
+.sc-val{font-size:2.2rem;font-weight:900;line-height:1;}
+.sc-lbl{font-size:.75rem;color:var(--t2);text-transform:uppercase;letter-spacing:.1em;margin-top:.35rem;}
+.grade-circle{width:68px;height:68px;border-radius:50%;background:#ff3333;display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:900;color:#000;margin:0 auto .3rem;}
+.bar-wrap{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:1.4rem;margin-top:1rem;}
+.bar-row{display:flex;justify-content:space-between;margin-bottom:.5rem;font-size:.82rem;color:var(--t2);}
+.bar-bg{background:#222;border-radius:50px;height:12px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:50px;background:linear-gradient(90deg,#ff3333,#ff333388);width:10%;}
 
-  /* SCORE BAR */
-  .bar-wrap{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:1.5rem;margin:1.5rem 0;}
-  .bar-label{display:flex;justify-content:space-between;margin-bottom:.5rem;font-size:.85rem;color:var(--t2);}
-  .bar-bg{background:#222;border-radius:50px;height:14px;overflow:hidden;}
-  .bar-fill{height:100%;border-radius:50px;background:linear-gradient(90deg,#ff6600,#ff660088);transition:width 1s;}
+/* ── SECTION ── */
+.section{padding:2.75rem 0;border-bottom:1px solid var(--border);}
+.section-label{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);font-weight:700;margin-bottom:.75rem;}
+.section-title{font-size:1.4rem;font-weight:800;color:var(--t1);margin-bottom:1.25rem;}
 
-  /* SECTIONS */
-  .section{padding:2.5rem 0;border-bottom:1px solid var(--border);}
-  .section-title{font-size:1.3rem;font-weight:700;color:var(--acc);margin-bottom:1.25rem;text-transform:uppercase;letter-spacing:.08em;}
+/* ── DIAGNOSTIC ── */
+.diag-bold{font-size:1.15rem;font-weight:700;line-height:1.6;color:var(--t1);margin-bottom:1.25rem;background:var(--s1);border-left:4px solid var(--acc);padding:1.25rem 1.5rem;border-radius:0 10px 10px 0;}
+.diag-body{font-size:.95rem;color:var(--t2);line-height:1.8;display:flex;flex-direction:column;gap:1rem;}
 
-  /* CEO TEXT */
-  .ceo-box{background:var(--s1);border-left:3px solid var(--acc);border-radius:0 10px 10px 0;padding:1.5rem 1.75rem;white-space:pre-wrap;font-size:.95rem;line-height:1.75;color:var(--t1);}
+/* ── COMPETITORS ── */
+.comp-cloud{display:flex;flex-wrap:wrap;gap:.6rem;}
+.comp-chip{background:rgba(255,68,68,.1);border:1px solid rgba(255,68,68,.3);color:#ff8888;font-size:.83rem;padding:.35rem .9rem;border-radius:50px;}
 
-  /* QUESTIONS */
-  .q-card{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:1.25rem;margin-bottom:1rem;}
-  .q-header{display:flex;align-items:center;gap:.75rem;margin-bottom:.75rem;flex-wrap:wrap;}
-  .q-num{background:var(--acc);color:#000;font-weight:900;font-size:.85rem;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%;flex-shrink:0;}
-  .q-cat{font-size:.78rem;color:var(--t2);text-transform:uppercase;letter-spacing:.08em;}
-  .badge{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .7rem;border-radius:50px;margin-left:auto;}
-  .badge-oui{background:rgba(68,187,68,.2);color:#44bb44;border:1px solid #44bb44;}
-  .badge-partiel{background:rgba(255,170,0,.15);color:#ffaa00;border:1px solid #ffaa00;}
-  .badge-non{background:rgba(255,51,51,.15);color:#ff4444;border:1px solid #ff4444;}
-  .q-question{font-size:.9rem;font-style:italic;color:var(--t2);margin-bottom:1rem;padding-bottom:.75rem;border-bottom:1px solid var(--border);}
-  .q-answers{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.75rem;}
-  @media(max-width:600px){.q-answers{grid-template-columns:1fr;}}
-  .q-ans{background:var(--s2);border-radius:6px;padding:.75rem;}
-  .model-tag{display:inline-block;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:.15rem .6rem;border-radius:4px;margin-bottom:.4rem;}
-  .model-tag.gpt{background:#10a37f22;color:#10a37f;}
-  .model-tag.perp{background:#1f6feb22;color:#58a6ff;}
-  .q-ans p{font-size:.83rem;color:var(--t2);line-height:1.5;}
-  .q-footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem;font-size:.8rem;color:var(--t3);border-top:1px solid var(--border);padding-top:.75rem;}
-  .q-resume{color:var(--t2);font-style:italic;}
+/* ── SURVEY TABLE ── */
+.survey-wrap{overflow-x:auto;margin:.5rem 0;}
+table.survey{width:100%;border-collapse:collapse;min-width:900px;}
+.tr-question td{background:#0a0a0b;padding:1rem 1.25rem;border-top:2px solid var(--border);}
+.q-header-inner{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-bottom:.5rem;}
+.q-icon{font-size:1.1rem;}
+.q-num-badge{background:var(--acc);color:#000;font-weight:900;font-size:.78rem;width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:50%;flex-shrink:0;}
+.q-cat-label{font-size:.75rem;color:var(--t2);text-transform:uppercase;letter-spacing:.1em;font-weight:700;}
+.q-text{font-size:.88rem;color:var(--t2);font-style:italic;padding-left:2rem;}
+.badge{font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:.18rem .65rem;border-radius:50px;}
+.badge-oui{background:rgba(68,187,68,.2);color:#ff3333;border:1px solid #ff3333;}
+.badge-partiel{background:rgba(255,170,0,.15);color:var(--orange);border:1px solid var(--orange);}
+.badge-non{background:rgba(255,68,68,.15);color:var(--red);border:1px solid var(--red);}
+.comp-pill{background:rgba(255,100,100,.1);border:1px solid rgba(255,100,100,.25);color:#ff9999;font-size:.7rem;padding:.15rem .55rem;border-radius:50px;}
+.tr-answers td{background:var(--s1);vertical-align:top;border-right:1px solid var(--border);border-bottom:1px solid var(--border);width:33.3%;}
+.tr-answers td:last-child{border-right:none;}
+.model-cell{width:100%;}
+.cell-summary{padding:.9rem 1rem;cursor:pointer;list-style:none;display:flex;flex-direction:column;gap:.4rem;}
+.cell-summary::-webkit-details-marker{display:none;}
+.model-tag{display:inline-block;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:.15rem .6rem;border-radius:4px;}
+.model-gpt{background:#10a37f22;color:#10a37f;border:1px solid #10a37f44;}
+.model-perp{background:#1f6feb22;color:var(--blue);border:1px solid #1f6feb44;}
+.model-gem{background:#4285f422;color:#7baaf7;border:1px solid #4285f444;}
+.cell-short{font-size:.83rem;color:var(--t2);line-height:1.5;flex:1;}
+.toggle-arrow{font-size:.75rem;color:var(--t3);align-self:flex-end;transition:transform .2s;}
+details.model-cell[open] .toggle-arrow{transform:rotate(90deg);color:var(--acc);}
+.cell-full{padding:1rem;background:#090909;border-top:1px solid var(--border);}
+.response-label{font-size:.68rem;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.6rem;}
+.cell-full p{font-size:.84rem;line-height:1.75;color:var(--t2);white-space:pre-wrap;}
 
-  /* CONCURRENTS */
-  .comp-grid{display:flex;flex-wrap:wrap;gap:.6rem;}
-  .comp-tag{background:rgba(255,68,68,.12);border:1px solid rgba(255,68,68,.3);color:#ff8888;font-size:.85rem;padding:.4rem 1rem;border-radius:50px;}
+/* ── STEPS ACCORDION ── */
+.steps-list{display:flex;flex-direction:column;gap:.85rem;}
+details.step-accordion{background:var(--s1);border:1px solid var(--acc-border);border-radius:12px;overflow:hidden;transition:border-color .25s;}
+details.step-accordion[open]{border-color:var(--acc);box-shadow:0 0 24px rgba(200,255,0,.1);}
+.step-btn{list-style:none;cursor:pointer;}
+.step-btn::-webkit-details-marker{display:none;}
+.step-btn-inner{display:flex;align-items:center;gap:1.25rem;padding:1.25rem 1.5rem;}
+.step-num{font-size:2rem;font-weight:900;color:var(--acc);opacity:.35;flex-shrink:0;line-height:1;font-variant-numeric:tabular-nums;}
+details.step-accordion[open] .step-num{opacity:1;}
+.step-text{flex:1;display:flex;flex-direction:column;gap:.2rem;}
+.step-icon{font-size:1.1rem;}
+.step-titre{font-size:1rem;font-weight:700;color:var(--t1);line-height:1.3;}
+.step-resume{font-size:.83rem;color:var(--t2);}
+.step-arrow{font-size:.85rem;color:var(--t3);flex-shrink:0;transition:transform .2s;}
+details.step-accordion[open] .step-arrow{transform:rotate(90deg);color:var(--acc);}
+.step-content{padding:1.25rem 1.5rem 1.5rem 5rem;border-top:1px solid var(--border);background:#0a0a0b;}
+.step-content p{font-size:.93rem;line-height:1.85;color:var(--t2);}
+.step-content strong{color:var(--t1);}
+.step-content em{color:var(--acc);font-style:normal;}
 
-  /* CTA */
-  .cta-box{background:linear-gradient(135deg,#111820,#0d1520);border:1px solid rgba(200,255,0,.3);border-radius:14px;padding:2.5rem;text-align:center;margin:2rem 0;}
-  .cta-box h2{font-size:1.6rem;margin-bottom:.75rem;}
-  .btn-primary{display:inline-block;background:var(--acc);color:#000;font-weight:700;font-size:.95rem;letter-spacing:.06em;text-transform:uppercase;padding:.85rem 2.25rem;border-radius:8px;margin-top:1rem;}
+/* ── CLOSING ── */
+.closing-box{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:1.5rem 1.75rem;font-size:.95rem;color:var(--t2);line-height:1.8;border-left:3px solid var(--acc);}
 
-  /* FOOTER */
-  footer{padding:2rem 0;text-align:center;color:var(--t3);font-size:.82rem;border-top:1px solid var(--border);}
+/* ── CTA ── */
+.cta-section{padding:3rem 0 4rem;}
+.cta-box{background:linear-gradient(135deg,#0d1118,#0d0e0f);border:1px solid var(--acc-border);border-radius:16px;padding:3rem;text-align:center;}
+.cta-box h2{font-size:1.7rem;font-weight:900;margin-bottom:.75rem;}
+.cta-box p{color:var(--t2);max-width:520px;margin:0 auto 1.5rem;}
+.cta-btn{display:inline-block;background:var(--acc);color:#000;font-weight:700;font-size:.95rem;letter-spacing:.06em;text-transform:uppercase;padding:.9rem 2.5rem;border-radius:8px;text-decoration:none;}
+.cta-note{color:var(--t3);font-size:.8rem;margin-top:.75rem;}
+
+/* ── FOOTER ── */
+footer{padding:1.5rem 0;border-top:1px solid var(--border);text-align:center;color:var(--t3);font-size:.8rem;}
+
+@media(max-width:700px){
+  .score-grid{grid-template-columns:1fr 1fr;}
+  .step-content{padding-left:1.5rem;}
+  .step-num{font-size:1.5rem;}
+}
 </style>
 </head>
 <body>
 
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-logo" href="https://lavrikgeo.ca">Lavrik <span style="color:#fff">GEO</span></a>
+    <span class="nav-meta">Audit confidentiel · Coupesag.ca · 04 March 2026</span>
+  </div>
+</nav>
+
 <!-- HERO -->
 <div class="hero">
   <div class="wrap">
-    <div class="hero-tag">⚡ Audit GEO Express — 2026-03-04</div>
-    <h1>Coupesag.ca<br><span>Visible par les humains.</span><br>Invisible pour l'IA.</h1>
-    <p class="hero-sub">Transformation des métaux en feuille · Découpe laser & jet d'eau · Chicoutimi, Saguenay</p>
+    <div class="hero-tag">⚡ Audit GEO Express · Transformation des métaux en feuille</div>
+    <h1>Coupesag.ca —<br><em>Solide en production.</em><br>Invisible dans l'IA.</h1>
+    <p class="hero-sub">Découpe laser · Jet d'eau · Soudure aluminium · Pliage numérique · Chicoutimi, Saguenay</p>
 
     <div class="score-grid">
       <div class="score-card">
-        <div class="grade-badge">D</div>
-        <div class="lbl">Grade GEO</div>
+        <div class="grade-circle">F</div>
+        <div class="sc-lbl">Grade GEO</div>
       </div>
       <div class="score-card">
-        <div class="val">20%</div>
-        <div class="lbl">Score de visibilité IA</div>
+        <div class="sc-val" style="color:#ff3333;">10%</div>
+        <div class="sc-lbl">Score visibilité IA</div>
       </div>
       <div class="score-card">
-        <div class="val">2/10</div>
-        <div class="lbl">Questions où Coupesag est cité</div>
+        <div class="sc-val">1<span style="font-size:1.2rem;color:var(--t2);">/10</span></div>
+        <div class="sc-lbl">Questions où vous êtes cité</div>
       </div>
       <div class="score-card">
-        <div class="val">8</div>
-        <div class="lbl">Concurrents cités à votre place</div>
+        <div class="sc-val" style="color:var(--red);">0</div>
+        <div class="sc-lbl">Concurrents cités à votre place</div>
       </div>
     </div>
 
     <div class="bar-wrap">
-      <div class="bar-label">
-        <span>Visibilité IA actuelle</span>
-        <span style="color:var(--acc);font-weight:700;">20% — Grade D</span>
+      <div class="bar-row">
+        <span>Visibilité IA actuelle — Coupesag.ca</span>
+        <span style="color:#ff3333;font-weight:700;">10% · Grade F</span>
       </div>
-      <div class="bar-bg"><div class="bar-fill" style="width:20%;"></div></div>
+      <div class="bar-bg"><div class="bar-fill"></div></div>
     </div>
   </div>
 </div>
 
-<!-- DIAGNOSTIC CEO -->
+<!-- DIAGNOSTIC -->
 <div class="section">
   <div class="wrap">
-    <div class="section-title">📊 Diagnostic — Ce que ça signifie pour vous</div>
-    <div class="ceo-box">Absolument! Voici mon analyse et mes recommandations pour Coupesag, conçues pour un PDG du Québec :
-
-**1. DIAGNOSTIC**
-
-Le score de visibilité de Coupesag est préoccupant. Un grade D indique que l'intelligence artificielle a du mal à faire le lien entre les besoins des clients et l'expertise de Coupesag. Cela signifie concrètement que l'entreprise risque de passer à côté de contrats importants, les clients potentiels étant dirigés vers vos concurrents par l'IA. Il faut agir rapidement pour rectifier le tir, sinon, la situation risque de s'aggraver.
-
-**2. LE PARADOXE**
-
-Il est évident que Coupesag possède une expertise réelle et une capacité de production solide, particulièrement en matière de sous-traitance complète du métal en feuille. Le paradoxe est que cette force, reconnue dans le cadre d'appels d'offres (Q1 et Q10), ne se traduit pas par une visibilité générale auprès de l'IA, ce qui limite vos chances de décrocher de nouveaux clients.
-
-**3. OPPORTUNITÉ CONCRÈTE**
-
-L'IA a le potentiel d'être un allié puissant pour la croissance de Coupesag. En améliorant votre visibilité, vous pourriez devenir le choix numéro un pour les entreprises québécoises à la recherche d'un partenaire fiable dans la transformation des métaux. Le coût de l'inaction est élevé : perte de parts de marché, stagnation du chiffre d'affaires et difficulté à attirer de nouveaux talents.
-
-**4. LES 3 ACTIONS PRIORITAIRES**
-
-Voici les actions clés à mettre en œuvre immédiatement :
-
-*   **Mettre l'accent sur la rapidité et l'urgence :** L'IA favorise les entreprises qui mettent l'accent sur la rapidité d'exécution. Assurez-vous d'intégrer ce message dans vos communications, en promettant des délais de livraison rapides et une capacité à gérer les projets urgents. _Impact estimé : +10% de demandes de soumission_.
-
-*   **Mettre en valeur vos compétences spécifiques :** L'IA peine à distinguer Coupesag des ateliers de soudure généralistes. Concentrez-vous sur la mise en avant de vos certifications, de vos équipements spécialisés (comme le laser fibre pour l'aluminium) et de votre expertise en pliage de précision. _Impact estimé : +15% de contrats à plus forte valeur ajoutée_.
-
-*   **Créer des références et des études de cas :** L'IA recommande des entreprises ayant des réalisations prouvées. Documentez vos projets les plus réussis, en mettant en évidence les défis relevés, les solutions apportées et les résultats obtenus. _Impact estimé : +20% de crédibilité auprès des grands comptes_.
-
-En mettant en œuvre ces actions, Coupesag peut transformer sa visibilité IA et se positionner comme un leader incontournable dans le secteur de la transformation des métaux au Québec.</div>
+    <div class="section-label">📊 Diagnostic</div>
+    <div class="diag-bold">COUPESAG est solide dans la production réelle, mais dans les réponses de l'IA, elle ne s'impose pas encore comme le sous-traitant évident — ce qui fait que certaines demandes entrantes et recommandations partent chez d'autres, avant même que le client ait visité votre site.</div>
+    <div class="diag-body">
+      <p>Les acheteurs commencent de plus en plus leur recherche non pas sur Google, mais en posant une question directement dans ChatGPT, Perplexity ou Gemini : <em>« Qui peut faire de la découpe, du pliage ou de la soudure rapidement, avec les bonnes exigences ? »</em></p><p>À partir des résultats de mon sondage auprès des LLM — sur les questions commerciales typiques : prix et devis, délais urgents, certifications qualité, compétences aluminium et inox, secteur électrique, pliage CNC précis, service clé en main, références et comparaison avec les concurrents — <strong>COUPESAG n'est pas encore ancrée comme « première réponse par défaut »</strong>, même là où votre profil correspond exactement.</p><p>Cela ne signifie pas que votre entreprise est faible — bien au contraire&nbsp;: le potentiel est élevé. L'IA ne sait simplement pas encore « assembler » votre expertise en un ensemble de signaux lisibles. Mon service consiste à structurer votre présence numérique de manière à ce que l'IA commence à relier avec confiance les demandes des clients à COUPESAG — et à vous recommander plus souvent dans ses réponses, sans changer votre activité et sans bruit marketing superflu.</p>
+    </div>
   </div>
 </div>
 
 <!-- CONCURRENTS -->
 <div class="section">
   <div class="wrap">
-    <div class="section-title">🏢 Entreprises que l'IA recommande à votre place</div>
-    <div class="comp-grid">
-      <span class="comp-tag">⚠ Mercier Industries</span><span class="comp-tag">⚠ Les Ateliers Michel Potvin</span><span class="comp-tag">⚠ uMake</span><span class="comp-tag">⚠ Taylor Steel & Stainless</span><span class="comp-tag">⚠ Synertek</span><span class="comp-tag">⚠ Chronox Lasertech</span><span class="comp-tag">⚠ Métal-Art Soudure</span><span class="comp-tag">⚠ EPIQ Machinery</span>
+    <div class="section-label">🏢 Entreprises recommandées à votre place</div>
+    <div class="section-title">Ce que l'IA cite quand vous ne l'êtes pas</div>
+    <div class="comp-cloud">
+      <span style="color:var(--t2)">Données insuffisantes pour identifier les concurrents précis</span>
     </div>
-    <p style="color:var(--t2);font-size:.88rem;margin-top:1rem;">Quand un acheteur pose une question professionnelle à l'IA, ces entreprises apparaissent dans la réponse — Coupesag non.</p>
+    <p style="color:var(--t2);font-size:.88rem;margin-top:1rem;line-height:1.6;">Quand un acheteur pose une question professionnelle à l'IA, ces entreprises apparaissent dans la réponse — COUPESAG, non. Chaque recommandation manquée est une opportunité d'affaires transférée.</p>
   </div>
 </div>
 
-<!-- QUESTIONS DETAIL -->
+<!-- SURVEY TABLE -->
 <div class="section">
   <div class="wrap">
-    <div class="section-title">🔍 Résultats détaillés — 10 questions d'acheteurs professionnels</div>
-    
-    <div class="q-card">
-      <div class="q-header">
-        <span class="q-num">Q1</span>
-        <span class="q-cat">Prix & Soumission</span>
-        <span class="badge badge-oui">CITE</span>
-      </div>
-      <div class="q-question">Quel sous-traitant en decoupe laser de tole au Saguenay offre le meilleur rapport qualite-prix pour des commandes de 50 a 500 pieces ?</div>
-      <div class="q-answers">
-        <div class="q-ans"><span class="model-tag gpt">ChatGPT</span><p>Votre volume 50 à 500 pièces en découpe laser de tôle correspond typiquement à petites et moyennes séries, où le meilleur rapport qualité-prix dépend de :
+    <div class="section-label">🔍 Résultats détaillés</div>
+    <div class="section-title">10 questions d'acheteurs professionnels · 3 modèles d'IA</div>
+    <p style="color:var(--t2);font-size:.88rem;margin-bottom:1.25rem;">Cliquez sur chaque réponse pour afficher le texte complet. Les réponses sont reproduites intégralement, sans modification.</p>
+    <div class="survey-wrap">
+      <table class="survey">
+        <colgroup>
+          <col style="width:33.3%">
+          <col style="width:33.3%">
+          <col style="width:33.4%">
+        </colgroup>
+        <thead>
+          <tr>
+            <th style="background:#0a0a0b;padding:.75rem 1rem;text-align:left;font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;color:#555;border-bottom:2px solid var(--border);">
+              <span class="model-tag model-gpt">ChatGPT</span>
+            </th>
+            <th style="background:#0a0a0b;padding:.75rem 1rem;text-align:left;font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;color:#555;border-bottom:2px solid var(--border);border-left:1px solid var(--border);">
+              <span class="model-tag model-perp">Perplexity</span>
+            </th>
+            <th style="background:#0a0a0b;padding:.75rem 1rem;text-align:left;font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;color:#555;border-bottom:2px solid var(--border);border-left:1px solid var(--border);">
+              <span class="model-tag model-gem">Gemini</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          
+    <tr class="tr-question">
+      <td class="td-q-header" colspan="4">
+        <div class="q-header-inner">
+          <span class="q-icon">💰</span>
+          <span class="q-num-badge">Q1</span>
+          <span class="q-cat-label">Prix & Soumission</span>
+          <span class="badge badge-non">ABSENT</span>
+          
+        </div>
+        <div class="q-text">Quel sous-traitant en decoupe laser de tole au Saguenay offre le meilleur rapport qualite-prix pour des commandes de 50 a 500 pieces ?</div>
+      </td>
+    </tr><tr class="tr-answers">
+      <td class="td-model">
+        <details class="model-cell">
+          <summary>
+            <div class="cell-summary">
+              <span class="model-tag model-gpt">ChatGPT</span>
+              <p class="cell-short">Votre volume 50 à 500 pièces en découpe laser de tôle correspond typiquement à petites et moyennes séries, où le meilleur rapport qualité-prix dépend de :
+
+la puissance du laser fi…</p>
+              <span class="toggle-arrow">▶</span>
+            </div>
+          </summary>
+          <div class="cell-full">
+            <div class="response-label">RÉPONSE COMPLÈTE — ChatGPT</div>
+            <p>Votre volume 50 à 500 pièces en découpe laser de tôle correspond typiquement à petites et moyennes séries, où le meilleur rapport qualité-prix dépend de :
 
 la puissance du laser fibre
 
-l’automatisatio…</p></div>
-        <div class="q-ans"><span class="model-tag perp">Perplexity</span><p>À l’échelle du Saguenay même, il n’y a quasiment pas de sous‑traitants clairement positionnés “découpe laser de tôle” avec fiche publique détaillée, mais trois joueurs locaux ressortent comme candidat…</p></div>
-      </div>
-      <div class="q-footer">
-        <span>🏢 Concurrents cités : <strong>Mercier Industries, Les Ateliers Michel Potvin</strong></span>
-        <span class="q-resume">Coupesag est identifié comme ayant le meilleur équilibre industriel pour le volume de pièces demandé.</span>
-      </div>
-    </div>
-    <div class="q-card">
-      <div class="q-header">
-        <span class="q-num">Q2</span>
-        <span class="q-cat">Delais & Urgence</span>
-        <span class="badge badge-non">ABSENT</span>
-      </div>
-      <div class="q-question">J'ai besoin de pieces en acier inoxydable decoupees au jet d'eau en moins de 5 jours ouvrables au Quebec. Qui peut livrer dans ces delais ?</div>
-      <div class="q-answers">
-        <div class="q-ans"><span class="model-tag gpt">ChatGPT</span><p>Fournisseurs capables de livrer rapidement (≤ 5 jours)
+l’automatisation (nesting, chargement automatique)
+
+la capacité de pliage / finition interne.
+
+Voici les options les plus réalistes au Saguenay.
+
+1️⃣ COUPESAG — meilleur équilibre industriel
+
+Entreprise spécialisée dans la transformation de métal en feuille pour équipementiers et fabricants industriels.
+
+Pourquoi c’est souvent le meilleur choix
+
+machines AMADA FO-3015 laser fibre industrielles
+
+découpe laser + jet d’eau + pliage + soudure
+
+sous-traitance complète de la commande à la livraison
+
+certifications industrielles ISO 9001 et CWB
+
+Impact sur le prix
+
+coût modéré à élevé, mais
+
+très peu de sous-traitance externe
+
+bonne répétabilité en série.
+
+➡️ Idéal pour :
+
+100–500 pièces
+
+pièces techniques
+
+clients OEM.
+
+2️⃣ Industrie PHD — souvent le plus compétitif
+
+Atelier de transformation de métal offrant découpe laser, plasma HD, pliage et conception technique.
+
+Équipement
+
+laser fibre 6 kW
+
+table 6 × 12 ft
+
+découpe acier jusqu’à ¾″ et inox jusqu’à ½″
+
+Pourquoi le prix est souvent bon
+
+structure plus légère
+
+moins de coûts administratifs
+
+bon pour production flexible.
+
+➡️ Idéal pour :
+
+50–300 pièces
+
+pièces simples ou semi-complexes
+
+budgets serrés.
+
+3️⃣ Équipement Capital — bon pour pièces mécaniques
+
+Entreprise industrielle offrant découpe laser de tôle et de tubes, avec service de pliage.
+
+Positionnement
+
+fournisseur pour machines et équipements industriels
+
+capacité de fabrication mécanique plus large.
+
+➡️ Idéal pour :
+
+pièces intégrées dans équipements
+
+sous-ensembles mécaniques.
+
+Comparaison pratique (Saguenay)
+Atelier	Qualité	Prix	Série 50-500
+Coupesag	⭐⭐⭐⭐	$$	⭐⭐⭐⭐
+Industrie PHD	⭐⭐⭐	$	⭐⭐⭐⭐
+Équipement Capital	⭐⭐⭐	$$	⭐⭐⭐
+Conclusion (rapport qualité-prix)
+
+Pour 50 à 500 pièces en découpe laser de tôle au Saguenay :
+
+🏆 Industrie PHD
+→ souvent le prix le plus compétitif
+
+⚖️ Coupesag
+→ meilleur équilibre qualité / fiabilité / service
+
+🔧 Équipement Capital
+→ intéressant pour projets mécaniques ou assemblages.
+
+💡 Conseil industriel important
+
+Pour réduire le coût de 10–25 % sur une série de 100-500 pièces :
+
+fournir DXF propre avec nesting optimisé
+
+choisir épaisseur standard de plaque
+
+éviter les trous &lt; épaisseur du métal
+
+regrouper les commandes.</p>
+          </div>
+        </details>
+      </td>
+      <td class="td-model">
+        <details class="model-cell">
+          <summary>
+            <div class="cell-summary">
+              <span class="model-tag model-perp">Perplexity</span>
+              <p class="cell-short">À l’échelle du Saguenay même, il n’y a quasiment pas de sous‑traitants clairement positionnés “découpe laser de tôle” avec fiche publique détaillée, mais trois joueurs locaux resso…</p>
+              <span class="toggle-arrow">▶</span>
+            </div>
+          </summary>
+          <div class="cell-full">
+            <div class="response-label">RÉPONSE COMPLÈTE — Perplexity</div>
+            <p>À l’échelle du Saguenay même, il n’y a quasiment pas de sous‑traitants clairement positionnés “découpe laser de tôle” avec fiche publique détaillée, mais trois joueurs locaux ressortent comme candidats naturels, et les meilleurs rapports qualité‑prix probables pour des séries 50–500 pièces sont à tester en parallèle via soumission: Coupesag, Mercier Industries et Les Ateliers Michel Potvin.
+
+Acteurs pertinents au Saguenay
+Coupesag Laser Jet d’Eau (Chicoutimi) – Atelier spécialisé en découpe (laser et jet d’eau), ouvert 24/7, ce qui est intéressant pour les délais et les urgences. Très orienté découpe, donc bon candidat pour des séries récurrentes de 50–500 pièces où tu fournis les fichiers DXF/STEP.
+​
+
+Mercier Industries (Jonquière) – Fabricant/atelier de métal avec services de découpe, soudage, outillage, etc., positionné industrie locale; utile si tu veux découpe + pliage + petites soudures dans le même flux.
+​
+
+Les Ateliers Michel Potvin (Jonquière) – Atelier de mécanique/fabrication avec services métal, soudure et machinerie, intéressant pour projets plus “sur mesure” avec un peu d’ingénierie.
+​
+
+En dehors du Saguenay, des shops comme uMake.ca (usine en ligne, découpe laser / jet d’eau) et LB Laser (Lévis) peuvent être compétitifs si tu acceptes le transport; ils sont structurés pour la sous‑traitance de pièces en série.
+
+Comment comparer le rapport qualité‑prix (50–500 pièces)
+Pour tes volumes, ce qui fait vraiment la différence entre ces fournisseurs, ce n’est pas seulement le taux horaire, mais:
+
+Capacité à nester les pièces efficacement dans la tôle (optimisation matière).
+
+Frais fixes (programmation, mise en route) amortis sur 50 vs 500 pièces.
+
+Possibilité d’intégrer pliage, taraudage, soudure simple.
+
+Délais standards vs rush, et stabilité de la qualité d’un lot à l’autre.
+
+Je te recommande de:
+
+Préparer un même petit dossier (DXF/STEP, épaisseur, nuance d’acier/aluminium, tolérances critiques, quantité 50–500, récurrence prévue).
+
+Demander une soumission à Coupesag + Mercier + Ateliers Michel Potvin, en leur posant explicitement la question “quel pricing si je passe de 50 à 500 pièces, et si je répète aux 3 mois ?”.
+
+Regarder: prix total, prix unitaire à 50 / 200 / 500, délais, conditions de reprise en cas de non‑conformité, capacité à garder tes programmes en bibliothèque.
+
+Tableau rapide des options
+Fournisseur	Localisation	Spécialité mise de l’avant	Intérêt pour 50–500 pièces
+Coupesag Laser Jet d’Eau	Saguenay (Chicoutimi)	Découpe laser / jet d’eau, 24/7	Très bon pour sous‑traitance de découpe récurrente.
+​
+Mercier Industries	Saguenay (Jonquière)	Fabrication métal, soudure, outillage	Bon si tu veux découpe + opérations secondaires.
+​
+Les Ateliers Michel Potvin	Saguenay (Jonquière)	Mécanique/fabrication, soudure	Bon pour projets plus techniques/assemblages.
+​
+uMake.ca – Online Factory	Montréal	Usine en ligne, découpe/machining	Intéressant si tu veux commande en ligne, transport.
+​
+LB Laser inc	Lévis	Découpe laser + fabrication métal	Option si tu acceptes hors région pour meilleurs tarifs.
+​
+Pour pouvoir te donner une recommandation plus tranchée (par ex. “priorise Coupesag sauf si tu as besoin de pliage complexe, alors va chez Mercier”), peux‑tu préciser le matériau principal (acier doux, inox, alu) et l’épaisseur typique de tes tôles ?</p>
+          </div>
+        </details>
+      </td>
+      <td class="td-model">
+        <details class="model-cell">
+          <summary>
+            <div class="cell-summary">
+              <span class="model-tag model-gem">Gemini</span>
+              <p class="cell-short">Pour des volumes intermédiaires de 50 à 500 pièces, le rapport qualité-prix au Saguenay est dicté par la capacité de l'atelier à équilibrer les frais de mise en course (setup) et l…</p>
+              <span class="toggle-arrow">▶</span>
+            </div>
+          </summary>
+          <div class="cell-full">
+            <div class="response-label">RÉPONSE COMPLÈTE — Gemini</div>
+            <p>Pour des volumes intermédiaires de 50 à 500 pièces, le rapport qualité-prix au Saguenay est dicté par la capacité de l'atelier à équilibrer les frais de mise en course (setup) et la vitesse de coupe.Voici les trois options les plus stratégiques pour ce créneau spécifique :1. Industrie PHD (Chicoutimi) — Le meilleur rapport "Qualité-Prix" IndustrielC’est souvent l’option la plus équilibrée pour les séries de taille moyenne. Situé sur la rue des Actionnaires, ils disposent d'une agilité que les très grands joueurs n'ont pas toujours pour des lots de 50 pièces.Pourquoi pour 50-500 pièces : Ils sont équipés pour la découpe laser de haute définition et le pliage, offrant un flux de production optimisé pour les volumes où l'automatisation commence à être rentable sans les lourdeurs administratives des multinationales.Atout : Capacité de dessin technique intégrée pour ajuster vos fichiers avant la série.2. uMake.ca (Service en ligne / Production locale) — Le plus agileBien que présents physiquement à Saguenay, ils se distinguent par leur modèle "Online Factory".Pourquoi pour 50-500 pièces : Leur plateforme permet d'obtenir des devis instantanés. Pour des séries de 50 à 500, cela vous permet de tester immédiatement l'impact du volume sur le prix unitaire.Atout : Idéal si vos fichiers (DXF/STEP) sont déjà prêts. Ils gèrent très bien la répétitivité des petites et moyennes séries avec des délais souvent plus courts.3. Coupesag (Chicoutimi) — Le choix de la "Tranquillité d'Esprit"Si vos 500 pièces exigent une précision chirurgicale ($\pm$ 0,1 mm) et une finition impeccable pour du B2B haut de gamme.Pourquoi pour 50-500 pièces : Leur programme de sous-traitance est conçu pour les équipementiers. Pour 500 pièces, ils peuvent mettre en place des gabarits de pliage dédiés, garantissant que la 500ème pièce est identique à la première.Atout : Certification ISO et rigueur dans le contrôle qualité, ce qui réduit vos coûts de non-qualité à long terme.Analyse Comparative pour 50-500 piècesCritèreIndustrie PHDuMake.caCoupesagFrais de SetupModérésFaibles (automatisation)Plus élevésPrix UnitaireTrès compétitifDégressif selon volumePremiumVitesse de Soumission24-48hInstantanée (via portail)48h+ (plus détaillée)Secteur IdéalIndustriel / ConstructionPrototypage &amp; Séries AgilesÉlectrique / Médical / High-techConseil Stratégique "GEO" (Visibility)Pour une série de 500 pièces, demandez toujours un "imbrication" (nesting) optimisé. Un sous-traitant qui maximise l'utilisation de la feuille de métal peut réduire votre prix unitaire de 15 à 20 %.</p>
+          </div>
+        </details>
+      </td></tr>
+    <tr class="tr-question">
+      <td class="td-q-header" colspan="4">
+        <div class="q-header-inner">
+          <span class="q-icon">⚡</span>
+          <span class="q-num-badge">Q2</span>
+          <span class="q-cat-label">Delais & Urgence</span>
+          <span class="badge badge-non">ABSENT</span>
+          
+        </div>
+        <div class="q-text">J'ai besoin de pieces en acier inoxydable decoupees au jet d'eau en moins de 5 jours ouvrables au Quebec. Qui peut livrer dans ces delais ?</div>
+      </td>
+    </tr><tr class="tr-answers">
+      <td class="td-model">
+        <details class="model-cell">
+          <summary>
+            <div class="cell-summary">
+              <span class="model-tag model-gpt">ChatGPT</span>
+              <p class="cell-short">Fournisseurs capables de livrer rapidement (≤ 5 jours)
+1. uMake (Montréal / Laval)
+
+Très intéressant pour délais rapides et commandes en ligne.
+
+Services :
+
+découpe jet d’eau CNC
+
+…</p>
+              <span class="toggle-arrow">▶</span>
+            </div>
+          </summary>
+          <div class="cell-full">
+            <div class="response-label">RÉPONSE COMPLÈTE — ChatGPT</div>
+            <p>Fournisseurs capables de livrer rapidement (≤ 5 jours)
 1. uMake (Montréal / Laval)
 
 Très intéressant pour délais rapides et commandes en ligne.
@@ -196,47 +478,407 @@ découpe jet d’eau CNC
 
 découpe laser
 
-usina…</p></div>
-        <div class="q-ans"><span class="model-tag perp">Perplexity</span><p>
-De préciser noir sur blanc : “délai max souhaité : X jours ouvrables à partir de l’approbation du devis et de la réception/validation des fichiers”, et de demander une réponse claire “oui / non, avec…</p></div>
-      </div>
-      <div class="q-footer">
-        <span>🏢 Concurrents cités : <strong>uMake, Taylor Steel & Stainless</strong></span>
-        <span class="q-resume">L'IA suggère des fournisseurs capables de livrer rapidement, en particulier uMake, et mentionne Taylor Steel & Stainless</span>
-      </div>
-    </div>
-    <div class="q-card">
-      <div class="q-header">
-        <span class="q-num">Q3</span>
-        <span class="q-cat">Certifications Qualite</span>
-        <span class="badge badge-non">ABSENT</span>
-      </div>
-      <div class="q-question">Quels fournisseurs de transformation de metaux en feuille au Quebec sont certifies ISO 9001 ou ont des certifications reconnues dans le secteur manufacturier ?</div>
-      <div class="q-answers">
-        <div class="q-ans"><span class="model-tag gpt">ChatGPT</span><p>Fournisseurs au Québec certifiés (sheet metal / tôlerie)
+usinage CNC
+
+pliage métal
+
+Leur plateforme permet de téléverser un fichier et obtenir un devis instantané, avec expédition rapide au Québec.
+
+➡ délai typique annoncé
+1–3 jours ouvrables pour plusieurs projets de découpe jet d’eau.
+
+✔ Idéal pour
+
+prototypes
+
+petites séries
+
+livraison rapide partout au Québec
+
+2. Hydro BLD (Québec)
+
+Atelier spécialisé en découpe jet d’eau haute pression.
+
+Points techniques :
+
+pompe 60 000 PSI
+
+coupe de nombreux matériaux industriels
+
+capacité jusqu’à 3 po d’épaisseur.
+
+➡ avantage
+
+équipements modernes
+
+bon pour pièces industrielles inox
+
+3. Usibec (Québec)
+
+Entreprise de fabrication métallique avec station de découpe jet d’eau industrielle.
+
+Capacités :
+
+table 8 × 20 ft
+
+coupe de matériaux :
+
+acier inox
+
+aluminium
+
+titane
+
+alliages divers.
+
+➡ intéressant pour
+
+plaques plus grandes
+
+production industrielle.
+
+4. Taylor Steel &amp; Stainless (Québec)
+
+Service spécialisé dans les métaux.
+
+Capacités :
+
+coupe jet d’eau jusqu’à 8 po d’épaisseur
+
+plaques jusqu’à 72 × 144 po.
+
+➡ très adapté pour
+
+acier inox
+
+pièces industrielles lourdes.
+
+5. Bear Claw Machining (région Montréal)
+
+Atelier de fabrication offrant :
+
+découpe jet d’eau
+
+usinage CNC
+
+fabrication métallique.
+
+➡ bon pour
+
+prototypes industriels
+
+petites séries rapides.
+
+Comparaison rapide pour délai &lt; 5 jours
+Fournisseur	Délai typique	Type de projet
+uMake	⭐ 1–3 jours	prototypes / petites séries
+Hydro BLD	⭐ 2–5 jours	pièces techniques
+Usibec	⭐ 3–5 jours	plaques industrielles
+Taylor Steel	⭐ 3–5 jours	inox épais
+Bear Claw	⭐ 3–5 jours	fabrication sur mesure
+Conseil important (pour respecter 5 jours)
+
+Les ateliers peuvent respecter ce délai si vous fournissez :
+
+1️⃣ fichier DXF / STEP propre
+2️⃣ épaisseur exacte inox (ex : 304 / 316)
+3️⃣ quantité
+4️⃣ tolérances
+5️⃣ format plaque
+
+Sinon, l’ingénierie peut ajouter 1-2 jours.
+
+✅ Conclusion
+
+Pour une livraison rapide au Québec, les plus efficaces sont généralement :
+
+uMake → le plus rapide pour prototypes
+
+Hydro BLD → bon pour pièces techniques
+
+Usibec ou Taylor Steel → bon pour pièces industrielles inox</p>
+          </div>
+        </details>
+      </td>
+      <td class="td-model">
+        <details class="model-cell">
+          <summary>
+            <div class="cell-summary">
+              <span class="model-tag model-perp">Perplexity</span>
+              <p class="cell-short">
+De préciser noir sur blanc : “délai max souhaité : X jours ouvrables à partir de l’approbation du devis et de la réception/validation des fichiers”, et de demander une réponse cla…</p>
+              <span class="toggle-arrow">▶</span>
+            </div>
+          </summary>
+          <div class="cell-full">
+            <div class="response-label">RÉPONSE COMPLÈTE — Perplexity</div>
+            <p>
+De préciser noir sur blanc : “délai max souhaité : X jours ouvrables à partir de l’approbation du devis et de la réception/validation des fichiers”, et de demander une réponse claire “oui / non, avec surcharge éventuelle”.
+
+De laisser le fournisseur gérer la matière quand c’est possible : par exemple Taylor Steel &amp; Stainless indique avoir son propre entrepôt de matériaux, ce qui réduit le lead time par rapport à un scénario où tu fournis toi‑même les tôles.
+​</p>
+          </div>
+        </details>
+      </td>
+      <td class="td-model">
+        <details class="model-cell">
+          <summary>
+            <div class="cell-summary">
+              <span class="model-tag model-gem">Gemini</span>
+              <p class="cell-short">Pour obtenir de l'acier inoxydable découpé au jet d'eau en moins de 5 jours ouvrables au Québec, vous devez cibler des ateliers qui possèdent la machine sur place (pour éviter l'in…</p>
+              <span class="toggle-arrow">▶</span>
+            </div>
+          </summary>
+          <div class="cell-full">
+            <div class="response-label">RÉPONSE COMPLÈTE — Gemini</div>
+            <p>Pour obtenir de l'acier inoxydable découpé au jet d'eau en moins de 5 jours ouvrables au Québec, vous devez cibler des ateliers qui possèdent la machine sur place (pour éviter l'intermédiation) et qui offrent des services de production rapide.Voici vos meilleures options pour respecter ce délai serré :1. uMake.ca (Production à Saguenay / Montréal) — L'option la plus rapideC'est le choix le plus agile pour vos délais. Ils se spécialisent dans la production rapide pour les ingénieurs et les designers.Délai : Ils expédient généralement en 2 à 3 jours ouvrables pour les matériaux en stock (l'acier inoxydable est un standard chez eux).Le plus : Vous pouvez téléverser vos fichiers DXF directement sur leur plateforme pour obtenir une soumission instantanée, ce qui sauve 24h de va-et-vient administratif.Localisation : Ils ont une forte présence au Saguenay (Chicoutimi).2. Coupesag (Chicoutimi) — Le géant localIls possèdent l'une des infrastructures de découpe au jet d'eau les plus importantes de la région.Délai : Bien que leurs délais standards varient, ils sont réputés pour leur capacité à insérer des commandes prioritaires dans leur flux de production grâce à leurs multiples tables de découpe.Contact : Appelez directement leur département des ventes à Chicoutimi au (418) 698-3993 pour confirmer la disponibilité immédiate de la machine.3. Hydro BLD (Trois-Rivières) — Spécialiste pur jet d'eauSi les ateliers locaux sont surchargés, Hydro BLD est une référence provinciale qui ne fait que du jet d'eau.Délai : Leur spécialisation leur permet d'être très réactifs sur l'inox, même pour des pièces complexes (tête 5 axes pour les chanfreins).Logistique : Ils livrent partout au Québec, et le trajet Trois-Rivières vers Saguenay se fait en moins de 24h par transporteur.Résumé pour votre décisionEntrepriseLocalisationRapidité de SoumissionNote TechniqueuMake.caSaguenay / MtlInstantanée (Web)Parfait pour les pièces mécaniques rapides.CoupesagChicoutimi&lt; 24hCapacité de production massive sur place.Hydro BLDTrois-RivièresRapideExperts en géométries 3D / 5 axes.Conseil "Stratégie B2B" pour garantir les 5 jours :Fichiers prêts : Envoyez vos fichiers en format .DXF ou .STEP dès le premier contact.Matière en stock : Précisez que vous acceptez les grades standards (ex: Inox 304 ou 316) qu'ils ont déjà sur le plancher pour éviter les délais d'approvisionnement de 48h.Appel direct : Ne vous fiez pas uniquement aux formulaires web ; un appel au directeur de production après l'envoi du courriel sécurise souvent votre place dans l'horaire.</p>
+          </div>
+        </details>
+      </td></tr>
+    <tr class="tr-question">
+      <td class="td-q-header" colspan="4">
+        <div class="q-header-inner">
+          <span class="q-icon">🏅</span>
+          <span class="q-num-badge">Q3</span>
+          <span class="q-cat-label">Certifications Qualite</span>
+          <span class="badge badge-non">ABSENT</span>
+          
+        </div>
+        <div class="q-text">Quels fournisseurs de transformation de metaux en feuille au Quebec sont certifies ISO 9001 ou ont des certifications reconnues dans le secteur manufacturier ?</div>
+      </td>
+    </tr><tr class="tr-answers">
+      <td class="td-model">
+        <details class="model-cell">
+          <summary>
+            <div class="cell-summary">
+              <span class="model-tag model-gpt">ChatGPT</span>
+              <p class="cell-short">Fournisseurs au Québec certifiés (sheet metal / tôlerie)
+1. Synertek (Québec / Lévis)
+
+Transformation de métal en feuille, usinage et assemblage.
+
+Services : conception, fabricatio…</p>
+              <span class="toggle-arrow">▶</span>
+            </div>
+          </summary>
+          <div class="cell-full">
+            <div class="response-label">RÉPONSE COMPLÈTE — ChatGPT</div>
+            <p>Fournisseurs au Québec certifiés (sheet metal / tôlerie)
 1. Synertek (Québec / Lévis)
 
 Transformation de métal en feuille, usinage et assemblage.
 
 Services : conception, fabrication, finition.
 
-Certif…</p></div>
-        <div class="q-ans"><span class="model-tag perp">Perplexity</span><p>Plusieurs transformateurs de métal en feuille au Québec affichent clairement des certifications ISO 9001 ou équivalentes reconnues dans le manufacturier, mais la liste ci‑dessous n’est pas exhaustive …</p></div>
-      </div>
-      <div class="q-footer">
-        <span>🏢 Concurrents cités : <strong>Synertek, Chronox Lasertech</strong></span>
-        <span class="q-resume">L'IA mentionne Synertek et Chronox Lasertech comme des entreprises certifiées au Québec pour la transformation de métal </span>
-      </div>
-    </div>
-    <div class="q-card">
-      <div class="q-header">
-        <span class="q-num">Q4</span>
-        <span class="q-cat">Capacite Technique</span>
-        <span class="badge badge-non">ABSENT</span>
-      </div>
-      <div class="q-question">Comparaison des services de decoupe laser fibre vs CO2 pour l'aluminium 3 mm au Saguenay-Lac-Saint-Jean. Qui a les meilleurs equipements en 2025 ?</div>
-      <div class="q-answers">
-        <div class="q-ans"><span class="model-tag gpt">ChatGPT</span><p>1. Fibre vs CO₂ pour aluminium 3 mm
+Certification : ISO 9001 couvrant l’ensemble du processus de production.
+
+➡️ Positionnement
+
+pièces métalliques complexes
+
+sous-ensembles industriels
+
+projets OEM
+
+2. Chronox Lasertech (Québec)
+
+Spécialiste de la découpe laser et fabrication de métal en feuille.
+
+Certification : ISO 9001 depuis 2015.
+
+➡️ Secteurs typiques
+
+équipement industriel
+
+transport
+
+pièces métalliques sur mesure
+
+3. GMW Group (Montréal – Baie-d’Urfé)
+
+Services : découpe laser, pliage, fabrication métallique complète.
+
+Certifications :
+
+ISO 9001:2015
+
+certification CWB (Canadian Welding Bureau).
+
+➡️ Intéressant pour
+
+projets industriels
+
+sous-traitance OEM
+
+4. Vohl Inc. (Saint-Marc-des-Carrières)
+
+Fabrication métallique, découpe et soudure industrielle.
+
+Certifications :
+
+ISO 9001
+
+CWB W47.1 pour soudage industriel.
+
+➡️ Bon choix pour
+
+pièces lourdes
+
+assemblages mécano-soudés
+
+5. ISE Metal (Groupe ISE)
+
+Fabrication complète : estampage, découpe laser, pliage, soudage, peinture et assemblage.
+
+Certifications :
+
+ISO 9001:2015
+
+ISO 14001 (environnement).
+
+➡️ Atout
+
+production industrielle à grande échelle
+
+6. Avior Produits Intégrés (Québec)
+
+Fabrication de tôlerie, usinage et assemblage.
+
+Certifications importantes :
+
+ISO 9001:2015
+
+AS9100 (aéronautique)
+
+Nadcap.
+
+➡️ Très haut niveau industriel
+
+aéronautique
+
+transport
+
+haute précision
+
+Certifications importantes dans ce secteur
+
+Dans la transformation de métal en feuille, les certifications les plus reconnues sont :
+
+Certification	Importance
+ISO 9001	système qualité manufacturier
+CWB W47.1 / W47.2	soudage acier / aluminium
+AS9100	aéronautique
+ISO 14001	gestion environnementale
+Nadcap	procédés spéciaux (aérospatial)
+
+Ces normes sont souvent exigées par :
+
+OEM industriels
+
+fabricants de machines
+
+transport et énergie.
+
+Synthèse — fournisseurs solides au Québec
+Entreprise	Certification principale	Niveau industriel
+Synertek	ISO 9001	⭐⭐⭐⭐
+Chronox Lasertech	ISO 9001	⭐⭐⭐
+GMW Group	ISO 9001 + CWB	⭐⭐⭐⭐
+Vohl	ISO 9001 + CWB W47.1	⭐⭐⭐⭐
+ISE Metal	ISO 9001 + ISO 14001	⭐⭐⭐⭐
+Avior	ISO 9001 + AS9100	⭐⭐⭐⭐⭐
+
+✅ Conclusion
+
+Les fournisseurs québécois les plus crédibles pour la tôlerie industrielle certifiée incluent :
+
+Synertek
+
+ISE Metal
+
+GMW Group
+
+Vohl
+
+Chronox Lasertech
+
+Et pour des standards très élevés (aéronautique) :
+➡️ Avior Produits Intégrés.</p>
+          </div>
+        </details>
+      </td>
+      <td class="td-model">
+        <details class="model-cell">
+          <summary>
+            <div class="cell-summary">
+              <span class="model-tag model-perp">Perplexity</span>
+              <p class="cell-short">Plusieurs transformateurs de métal en feuille au Québec affichent clairement des certifications ISO 9001 ou équivalentes reconnues dans le manufacturier, mais la liste ci‑dessous n…</p>
+              <span class="toggle-arrow">▶</span>
+            </div>
+          </summary>
+          <div class="cell-full">
+            <div class="response-label">RÉPONSE COMPLÈTE — Perplexity</div>
+            <p>Plusieurs transformateurs de métal en feuille au Québec affichent clairement des certifications ISO 9001 ou équivalentes reconnues dans le manufacturier, mais la liste ci‑dessous n’est pas exhaustive et doit toujours être validée directement sur leurs certificats ou via les registres officiels.
+
+Exemples de transformateurs de métal en feuille certifiés
+Synertek (Lévis) – Spécialisé en transformation de métal en feuille (découpe laser, poinçonnage, pliage, assemblage), certifié ISO 9001:2015 et engagé dans des démarches environnementales (attestation ICI on recycle +).
+
+GFI (région de Québec) – Manufacturier de métal en feuille, parmi les premiers au Canada à être certifiés ISO (service qualité certifié ISO depuis 1994, mention ISO 9001:2008 pour ses procédés de transformation).
+​
+
+Métalus / Métal Grenier (Drummondville / Victoriaville) – Chef de file en transformation du métal en feuille et mécano‑soudé, positionné pour servir des donneurs d’ordres de classe mondiale; même si la page ne liste pas la norme dans l’extrait, ce type de profil est généralement associé à ISO 9001, à confirmer sur leur documentation qualité.
+
+EPP Métal – Fabrication de pièces et assemblages à partir de métal en feuille; affiche explicitement les certifications ISO 9001:2015, CSA W47.1 et W47.2, et une attestation Recyc‑Québec.
+​
+
+Produits de Métal Vulcain – Producteur de produits métalliques (dont composantes en métal en feuille pour l’automobile et autres secteurs), certifié ISO 9001:2008 et détenteur de l’accréditation IATF 16949 pour l’industrie automobile.
+​
+
+D’autres ateliers de transformation (Métaluno, StyroPlyo, Métal GP, etc.) proposent découpe/pliage/soudage de métal en feuille mais ne mettent pas toujours leurs certifications en avant sur la page de service; il est donc crucial de demander la copie de certificat ou le numéro d’enregistrement ISO au moment de la qualification fournisseur.
+
+Où vérifier et comment filtrer
+Registre ISO 9001 de Services publics et Approvisionnement Canada : le gouvernement maintient une liste d’entreprises enregistrées ISO 9001:2015 avec coordonnées; tu peux filtrer par province (Québec) et ensuite isoler celles qui sont dans la transformation de métal en feuille.
+
+Procure‑toi systématiquement : certificat à jour (avec portée détaillée : découpe, pliage, assemblage métal en feuille, etc.), date d’expiration, organisme certificateur, et demande le scope exact pour t’assurer que la certification couvre bien les opérations qui t’intéressent.
+​
+
+Si tu me précises ton secteur (ex. alimentaire, pharmaceutique, transport, énergie) et le type de pièces (épaisseur, inox/alu/acier, volumes annuels), je peux t’aider à prioriser 3–4 fournisseurs parmi ce type d’acteurs certifiés.</p>
+          </div>
+        </details>
+      </td>
+      <td class="td-model">
+        <details class="model-cell">
+          <summary>
+            <div class="cell-summary">
+              <span class="model-tag model-gem">Gemini</span>
+              <p class="cell-short">Au Québec, et particulièrement dans la région du Saguenay, plusieurs chefs de file de la transformation métallique détiennent des certifications rigoureuses (ISO 9001, CWB, AS9100)…</p>
+              <span class="toggle-arrow">▶</span>
+            </div>
+          </summary>
+          <div class="cell-full">
+            <div class="response-label">RÉPONSE COMPLÈTE — Gemini</div>
+            <p>Au Québec, et particulièrement dans la région du Saguenay, plusieurs chefs de file de la transformation métallique détiennent des certifications rigoureuses (ISO 9001, CWB, AS9100) qui garantissent la traçabilité et la répétitivité nécessaires pour vos projets de série.Voici les fournisseurs certifiés les plus pertinents pour votre secteur :1. Au Saguenay (Local)Coupesag (Chicoutimi) : C'est la référence régionale pour la tôlerie de précision.Certifications : ISO 9001 (Qualité), CSA W47.1 &amp; W47.2 Division 2 (Soudure acier et aluminium), et CSA Type 12.Usage : Idéal pour vos besoins de pliage à tolérance serrée et de découpe laser/jet d'eau.EPIQ Machinerie (Chicoutimi/Jonquière) :Certifications : Détient une triple certification ISO (incluant ISO 9001). Ils opèrent selon des standards de classe mondiale pour les équipements lourds.Usage : Fabrication d'équipements manufacturiers lourds et systèmes automatisés (AGV).Pro-Métal Plus (Chicoutimi/Saguenay) :Certifications : Accrédité CWB (CSA W47.1) Division 1, ce qui est le plus haut niveau en soudage, avec un ingénieur en soudage sur place.Usage : Transformation de métaux lourds et structures complexes.2. Ailleurs au Québec (Spécialisés)Laser AMP (Terrebonne / Rive-Nord) :Certifications : ISO 9001 et ISO 14001 (Environnement).Usage : Un leader en découpe laser et pliage avec un focus sur l'assurance qualité à chaque étape.Groupe GMW (Montréal/Baie-d'Urfé) :Certifications : ISO 9001:2015 et CWB.Usage : Tôlerie de précision et pliage automatisé pour le marché commercial et industriel.OSI Précision (Saint-Georges) :Certifications : ISO 9001:2015. Ils disposent d'un laboratoire de métrologie à température contrôlée avec CMM (Machine de mesure tridimensionnelle).Usage : Usinage et transformation où la validation dimensionnelle est critique.Résumé des certifications clés à exiger :CertificationCe qu'elle garantit pour vousISO 9001:2015Gestion de la qualité, traçabilité des lots de métal et processus documentés.CWB (W47.1 / W47.2)Conformité des soudures (Acier/Inox/Alu). La Division 1 ou 2 implique la présence d'un ingénieur.AS9100Standard aéronautique (plus strict qu'ISO). Essentiel si vous visez le secteur de l'aviation.ISO 14001Engagement environnemental, souvent requis dans les appels d'offres des grandes alumineries.Conseil pour vos audits "GEO"Si vous effectuez un audit de visibilité ou de qualité pour ces entreprises, vérifiez si elles possèdent un CMM ou un bras de mesure Faro. Pour vos tolérances de $\pm$ 0,1 mm, la certification ISO 9001 n'est qu'une base ; c'est l'équipement de métrologie qui confirmera la conformité réelle en série.</p>
+          </div>
+        </details>
+      </td></tr>
+    <tr class="tr-question">
+      <td class="td-q-header" colspan="4">
+        <div class="q-header-inner">
+          <span class="q-icon">🔬</span>
+          <span class="q-num-badge">Q4</span>
+          <span class="q-cat-label">Capacite Technique</span>
+          <span class="badge badge-non">ABSENT</span>
+          
+        </div>
+        <div class="q-text">Comparaison des services de decoupe laser fibre vs CO2 pour l'aluminium 3 mm au Saguenay-Lac-Saint-Jean. Qui a les meilleurs equipements en 2025 ?</div>
+      </td>
+    </tr><tr class="tr-answers">
+      <td class="td-model">
+        <details class="model-cell">
+          <summary>
+            <div class="cell-summary">
+              <span class="model-tag model-gpt">ChatGPT</span>
+              <p class="cell-short">1. Fibre vs CO₂ pour aluminium 3 mm
 
 Pour de l’aluminium mince (≈1–5 mm), l’industrie considère aujourd’hui que le laser fibre est clairement supérieur.
 
@@ -244,107 +886,1196 @@ Laser fibre
 
 Avantages :
 
-vitesse de coupe 3 à…</p></div>
-        <div class="q-ans"><span class="model-tag perp">Perplexity</span><p>Pour de l’aluminium 3 mm, la technologie fibre est nettement plus performante que le CO₂ (vitesse, qualité de coupe sur métal mince, stabilité sur matériaux réfléchissants et consommation énergétique)…</p></div>
-      </div>
-      <div class="q-footer">
-        <span>🏢 Concurrents cités : <strong>—</strong></span>
-        <span class="q-resume">L'IA explique que le laser fibre est supérieur au laser CO₂ pour la découpe de l'aluminium mince.</span>
-      </div>
-    </div>
-    <div class="q-card">
-      <div class="q-header">
-        <span class="q-num">Q5</span>
-        <span class="q-cat">Soudure & Assemblage</span>
-        <span class="badge badge-non">ABSENT</span>
-      </div>
-      <div class="q-question">Fournisseur de soudure aluminium TIG certifie pour equipement industriel lourd au Saguenay — qui recommandes-tu et pourquoi ?</div>
-      <div class="q-answers">
-        <div class="q-ans"><span class="model-tag gpt">ChatGPT</span><p>1. Métal-Art Soudure — recommandation principale
+…</p>
+              <span class="toggle-arrow">▶</span>
+            </div>
+          </summary>
+          <div class="cell-full">
+            <div class="response-label">RÉPONSE COMPLÈTE — ChatGPT</div>
+            <p>1. Fibre vs CO₂ pour aluminium 3 mm
+
+Pour de l’aluminium mince (≈1–5 mm), l’industrie considère aujourd’hui que le laser fibre est clairement supérieur.
+
+Laser fibre
+
+Avantages :
+
+vitesse de coupe 3 à 5× plus rapide sur tôles minces
+
+meilleure absorption de l’énergie par l’aluminium
+
+meilleure qualité de coupe
+
+coûts d’exploitation plus faibles
+
+Les lasers fibre sont spécifiquement optimisés pour les métaux, notamment aluminium, cuivre et laiton.
+
+Ils sont particulièrement performants pour les épaisseurs inférieures à 5 mm, ce qui correspond exactement à votre cas (3 mm).
+
+➡️ En pratique pour aluminium 3 mm :
+
+coupe très rapide
+
+bord très propre
+
+moins de bavures
+
+meilleure précision
+
+Laser CO₂
+
+Technologie plus ancienne.
+
+Limitations principales :
+
+vitesse plus lente
+
+maintenance plus coûteuse
+
+moins efficace pour métaux réfléchissants comme l’aluminium.
+
+➡️ Aujourd’hui le CO₂ est surtout utilisé pour :
+
+acier épais
+
+matériaux non métalliques
+
+Résumé technique
+Critère	Laser fibre	Laser CO₂
+Aluminium 3 mm	⭐⭐⭐⭐⭐	⭐⭐
+Vitesse	très rapide	lente
+Qualité bord	excellente	bonne
+Coût production	bas	élevé
+Technologie	moderne	ancienne
+
+👉 Conclusion : tous les ateliers modernes utilisent désormais le laser fibre pour l’aluminium mince.
+
+2. Qui a les meilleurs équipements au Saguenay (2025)
+
+Dans la région Saguenay–Lac-Saint-Jean, quelques entreprises se distinguent.
+
+1️⃣ COUPESAG — probablement l’équipement le plus avancé
+
+Spécialiste régional de la transformation de métal en feuille.
+
+Services :
+
+découpe laser
+
+jet d’eau
+
+pliage numérique
+
+soudure aluminium
+
+fabrication complète pour équipementiers.
+
+Pourquoi ils sont souvent considérés parmi les meilleurs :
+
+forte spécialisation en tôlerie industrielle
+
+équipements modernes
+
+capacité série pour OEM
+
+➡️ Très utilisé pour :
+
+boîtiers électriques
+
+pièces d’équipement industriel
+
+structures aluminium
+
+2️⃣ Industrie PHD
+
+Fabricant de métal avec :
+
+découpe laser
+
+pliage
+
+conception technique.
+
+Points forts :
+
+atelier polyvalent
+
+projets industriels variés
+
+➡️ souvent utilisé pour :
+
+pièces industrielles
+
+structures mécano-soudées.
+
+3️⃣ Équipement Capital
+
+Entreprise régionale offrant :
+
+découpe laser feuille et tube
+
+pliage et fabrication.
+
+➡️ intéressant pour :
+
+pièces mécaniques
+
+fabrication industrielle
+
+4️⃣ Apex Industries (Chicoutimi)
+
+Offre :
+
+découpe laser aluminium et acier
+
+technologies de dernière génération pour la précision.
+
+➡️ adapté pour :
+
+pièces industrielles
+
+prototypes
+
+Classement probable (équipements laser 2025)
+Atelier	Niveau équipement
+COUPESAG	⭐⭐⭐⭐
+Industrie PHD	⭐⭐⭐
+Apex Industries	⭐⭐⭐
+Équipement Capital	⭐⭐⭐
+Conclusion
+
+Pour aluminium 3 mm, la meilleure technologie est clairement :
+
+➡️ laser fibre
+
+Et dans la région Saguenay–Lac-Saint-Jean, les ateliers les plus crédibles pour ce type de travail sont :
+
+1️⃣ COUPESAG
+2️⃣ Industrie PHD
+3️⃣ Apex Industries
+4️⃣ Équipement Capital
+
+✅ Si vous voulez, je peux aussi vous montrer :
+
+les machines exactes (Bystronic, Amada, Trumpf) utilisées par les ateliers du Saguenay
+
+qui possède les lasers fibre les plus puissants (6 kW–12 kW)
+
+quel atelier coupe l’aluminium le moins cher dans la région (c’est très intéressant pour les OEM).</p>
+          </div>
+        </details>
+      </td>
+      <td class="td-model">
+        <details class="model-cell">
+          <summary>
+            <div class="cell-summary">
+              <span class="model-tag model-perp">Perplexity</span>
+              <p class="cell-short">Pour de l’aluminium 3 mm, la technologie fibre est nettement plus performante que le CO₂ (vitesse, qualité de coupe sur métal mince, stabilité sur matériaux réfléchissants et conso…</p>
+              <span class="toggle-arrow">▶</span>
+            </div>
+          </summary>
+          <div class="cell-full">
+            <div class="response-label">RÉPONSE COMPLÈTE — Perplexity</div>
+            <p>Pour de l’aluminium 3 mm, la technologie fibre est nettement plus performante que le CO₂ (vitesse, qualité de coupe sur métal mince, stabilité sur matériaux réfléchissants et consommation énergétique).
+
+Fibre vs CO₂ pour alu 3 mm
+Performance sur alu mince (3 mm) : les lasers fibre coupent l’alu plus vite et plus proprement que la majorité des CO₂, avec des vitesses souvent 2–3× supérieures à puissance équivalente.
+
+Qualité / stabilité : la longueur d’onde du fibre (environ 1,06 µm) est mieux absorbée par les métaux, en particulier les alliages réfléchissants comme l’aluminium, donc moins de problèmes de retour de faisceau et de stabilité de coupe.
+
+Coût d’exploitation : le rendement énergétique d’une source fibre tourne typiquement autour de 30–40% contre environ 10% pour un CO₂, ce qui donne un coût horaire plus bas à productivité égale.
+​
+
+Polyvalence matériaux : le CO₂ reste intéressant pour l’acrylique, le bois, etc., mais pour ton cas précis (alu 3 mm) la priorité est clairement à un atelier équipé en fibre moderne.
+
+En pratique, pour des pièces de tôle alu 3 mm au Saguenay–Lac‑Saint‑Jean ou servies dans cette région, les transformateurs ou sous‑traitants qui ont investi dans des lignes de découpe fibre récentes (tables autour de 3×1,5 m, sources de plusieurs kW, chargement/ déchargement automatisé) seront ceux qui offrent le meilleur combo qualité/prix/capacité en 2025.
+
+Situation au Saguenay–Lac‑Saint‑Jean (2025)
+Les données publiques dont je dispose donnent une bonne vue de la technologie en général, mais restent très limitées sur le parc machines exact, par atelier, dans la région Saguenay–Lac‑Saint‑Jean en 2025; il n’y a pas de registre ouvert qui liste “qui possède fibre vs CO₂” pour chaque sous‑traitant. On sait cependant que plusieurs acteurs desservent Saguenay en découpe laser via des plateformes “usine en ligne” ou de la sous‑traitance centralisée, et que la tendance marché depuis quelques années est un basculement massif du CO₂ vers le fibre pour la tôle mince en métal.
+
+Concrètement, pour répondre à “qui a les meilleurs équipements en 2025 ?” dans ta région, il faut :
+
+Identifier les ateliers locaux ou ceux qui livrent régulièrement au Saguenay (sous‑traitance métal en feuille, découpe laser).
+
+Leur demander explicitement :
+
+type de source (fibre ou CO₂), puissance (kW),
+
+format de table (idéalement 3×1,5 m ou plus),
+
+année d’installation / génération de machine (un fibre 2022–2025 n’a rien à voir avec un CO₂ de 2010),
+
+capacité spécifique sur alu (gaz d’assistance, paramètres optimisés, exemples de pièces).
+
+Les “meilleurs équipements 2025” pour ton besoin seront ceux combinant : fibre ≥ 4 kW, table plein format, automation (changeur de palettes) et expérience démontrée sur alu 3 mm.
+
+Souhaites‑tu que je t’aide à rédiger une petite grille de questions techniques à envoyer par courriel ou à poser au téléphone aux ateliers de la région pour qualifier rapidement leur parc fibre/CO₂ sur l’alu 3 mm ?</p>
+          </div>
+        </details>
+      </td>
+      <td class="td-model">
+        <details class="model-cell">
+          <summary>
+            <div class="cell-summary">
+              <span class="model-tag model-gem">Gemini</span>
+              <p class="cell-short">Pour l'aluminium de 3 mm, le laser fibre est devenu le standard industriel en 2025-2026, supplantant le CO2 pour presque tous les critères de performance.Voici la comparaison techn…</p>
+              <span class="toggle-arrow">▶</span>
+            </div>
+          </summary>
+          <div class="cell-full">
+            <div class="response-label">RÉPONSE COMPLÈTE — Gemini</div>
+            <p>Pour l'aluminium de 3 mm, le laser fibre est devenu le standard industriel en 2025-2026, supplantant le CO2 pour presque tous les critères de performance.Voici la comparaison technique et les meilleures adresses au Saguenay-Lac-Saint-Jean pour bénéficier des derniers équipements.1. Fibre vs CO2 : Le verdict technique (Aluminium 3 mm)CaractéristiqueLaser Fibre (Standard 2025)Laser CO2 (Ancienne génération)Vitesse (3 mm)Jusqu'à 3x plus rapide que le CO2.Plus lent, temps de perçage supérieur.Qualité de coupeExcellente, bords nets avec azote.Risque de reflets (l'aluminium est réfléchissant).Consommation-70% d'énergie par rapport au CO2.Très énergivore (refroidissement massif).PrécisionLongueur d'onde de 1 µm (faisceau fin).Longueur d'onde de 10 µm (faisceau large).MaintenanceAucun miroir à aligner (fibre optique).Entretien fréquent des optiques et gaz.Note stratégique : L'aluminium est un métal réfléchissant. Le laser fibre est beaucoup plus sécuritaire pour la machine, car sa longueur d'onde est mieux absorbée par le métal, évitant ainsi les retours de faisceau qui endommagent les sources CO2.2. Qui a les meilleurs équipements au Saguenay en 2025 ?Plusieurs ateliers régionaux ont massivement investi dans la technologie fibre pour rester compétitifs.SKL Aluminium (Jonquière) – Le spécialiste de l'aluIls sont équipés d'un Laser Phoenix LVD de 6000 watts à fibre optique.Pourquoi eux : Comme leur nom l'indique, ils vivent et respirent l'aluminium. Leur machine est parfaitement calibrée pour ce matériau, offrant des capacités de table de 5' x 10'.Industrie PHD (Chicoutimi) – Puissance et polyvalenceIls disposent d'une table laser de 6' x 12' de 6 kW.Pourquoi eux : Leur équipement permet de couper jusqu'à 3/4 po d'acier, ce qui signifie que sur du 3 mm d'aluminium, la machine "vole" littéralement, assurant des délais très courts pour les séries de 50 à 500 pièces.uMake.ca (Chicoutimi) – L'agilité numériqueÉquipés de lasers fibre capables de couper jusqu'à 3/4 po, ils offrent l'avantage d'une interface numérique moderne.Pourquoi eux : Idéal pour passer d'un fichier CAO à une pièce finie en quelques jours, avec une précision constante grâce à leur parc machine récent.3. Recommandation pour votre production sériePour des pièces complexes en série, je vous recommande de privilégier SKL Aluminium ou Industrie PHD. Leurs sources laser de 6 kW sont le "sweet spot" en 2025 : elles offrent une puissance suffisante pour que la découpe soit vaporisée instantanément, ce qui minimise la zone affectée thermiquement (ZAT) et garantit que vos tolérances de $\pm$ 0,1 mm soient respectées après le pliage.</p>
+          </div>
+        </details>
+      </td></tr>
+    <tr class="tr-question">
+      <td class="td-q-header" colspan="4">
+        <div class="q-header-inner">
+          <span class="q-icon">🔧</span>
+          <span class="q-num-badge">Q5</span>
+          <span class="q-cat-label">Soudure & Assemblage</span>
+          <span class="badge badge-non">ABSENT</span>
+          
+        </div>
+        <div class="q-text">Fournisseur de soudure aluminium TIG certifie pour equipement industriel lourd au Saguenay — qui recommandes-tu et pourquoi ?</div>
+      </td>
+    </tr><tr class="tr-answers">
+      <td class="td-model">
+        <details class="model-cell">
+          <summary>
+            <div class="cell-summary">
+              <span class="model-tag model-gpt">ChatGPT</span>
+              <p class="cell-short">1. Métal-Art Soudure — recommandation principale
 
 Pourquoi je le recommande
 
 Plus de 30 ans d’expérience en soudure et fabrication industrielle.
 
-Spécialisation dans machinerie forestière, minière et …</p></div>
-        <div class="q-ans"><span class="model-tag perp">Perplexity</span><p>Pour de la soudure TIG sur aluminium destinée à de l’équipement industriel lourd au Saguenay, je privilégierais une approche “duo” : un atelier spécialisé aluminium/inox pour les cordons critiques, co…</p></div>
-      </div>
-      <div class="q-footer">
-        <span>🏢 Concurrents cités : <strong>Métal-Art Soudure</strong></span>
-        <span class="q-resume">L'IA recommande Métal-Art Soudure pour la soudure TIG d'aluminium sur des équipements industriels lourds.</span>
-      </div>
-    </div>
-    <div class="q-card">
-      <div class="q-header">
-        <span class="q-num">Q6</span>
-        <span class="q-cat">Secteur Electrique</span>
-        <span class="badge badge-non">ABSENT</span>
-      </div>
-      <div class="q-question">Je cherche un fabricant de boitiers electriques et armoires de controle sur mesure en acier au Quebec. Qui a de l'experience dans ce secteur ?</div>
-      <div class="q-answers">
-        <div class="q-ans"><span class="model-tag gpt">ChatGPT</span><p>Réponse structurée
+Spécialisation dans machinerie for…</p>
+              <span class="toggle-arrow">▶</span>
+            </div>
+          </summary>
+          <div class="cell-full">
+            <div class="response-label">RÉPONSE COMPLÈTE — ChatGPT</div>
+            <p>1. Métal-Art Soudure — recommandation principale
+
+Pourquoi je le recommande
+
+Plus de 30 ans d’expérience en soudure et fabrication industrielle.
+
+Spécialisation dans machinerie forestière, minière et excavatrices.
+
+Travaille sur équipements industriels lourds et réparations complexes.
+
+Capacité atelier + intervention sur site.
+
+Points forts techniques
+
+expérience réelle en structures industrielles
+
+bonne capacité de réparation d’aluminium épais
+
+habitué aux contraintes de terrain
+
+➡️ Idéal pour :
+
+pièces aluminium pour équipements miniers
+
+châssis ou composants mécaniques
+
+réparations ou renforcement d’équipements lourds
+
+2. AFS — Ateliers de fabrication du Saguenay
+
+Pourquoi c’est solide
+
+Spécialisé dans la fabrication de pièces mécano-soudées industrielles.
+
+Travaille pour secteurs :
+
+aluminium
+
+mines
+
+pâte et papier.
+
+Points forts
+
+fabrication d’équipements complets
+
+capacité d’usinage + soudure
+
+bonne infrastructure industrielle
+
+➡️ Idéal pour :
+
+fabrication d’assemblages industriels
+
+projets d’équipement complet
+
+3. RG Soudure
+
+Pourquoi intéressant
+
+atelier utilisant plusieurs procédés dont TIG, MIG et arc.
+
+soude aluminium, acier, inox et fonte.
+
+unité mobile pour interventions industrielles.
+
+➡️ Idéal pour :
+
+projets plus rapides
+
+réparations sur site
+
+4. Groupe Métal-Baie / CMB
+
+Pourquoi crédible pour équipement lourd
+
+projets industriels majeurs avec ingénierie et inspection qualité.
+
+gestion de projets métalliques complexes.
+
+➡️ Intéressant pour :
+
+structures mécano-soudées importantes
+
+équipements industriels
+
+Comparaison rapide
+Entreprise	Niveau équipement lourd	TIG aluminium	Pourquoi choisir
+Métal-Art Soudure	⭐⭐⭐⭐	oui	machines minières et forestières
+AFS	⭐⭐⭐⭐	oui	fabrication industrielle complète
+RG Soudure	⭐⭐⭐	oui	polyvalence et mobilité
+Groupe Métal-Baie	⭐⭐⭐⭐	possible	grands projets industriels
+Mon conseil industriel (important)
+
+Pour soudure aluminium TIG sur équipement lourd, choisissez un atelier qui :
+
+1️⃣ possède certification CWB ou procédure qualifiée
+2️⃣ a déjà travaillé sur structures épaisses (&gt;6-8 mm)
+3️⃣ a de l’expérience avec :
+
+mines
+
+alumineries
+
+machinerie forestière
+
+Dans le Saguenay, Métal-Art Soudure et AFS sont généralement les plus crédibles dans ce type de projets.
+
+✅ Conclusion
+
+Si je devais choisir deux fournisseurs fiables pour TIG aluminium industriel lourd au Saguenay :
+
+1️⃣ Métal-Art Soudure — meilleur pour réparation et fabrication d’équipements lourds
+2️⃣ AFS (Ateliers de fabrication du Saguenay) — meilleur pour projets industriels structurés</p>
+          </div>
+        </details>
+      </td>
+      <td class="td-model">
+        <details class="model-cell">
+          <summary>
+            <div class="cell-summary">
+              <span class="model-tag model-perp">Perplexity</span>
+              <p class="cell-short">Pour de la soudure TIG sur aluminium destinée à de l’équipement industriel lourd au Saguenay, je privilégierais une approche “duo” : un atelier spécialisé aluminium/inox pour les c…</p>
+              <span class="toggle-arrow">▶</span>
+            </div>
+          </summary>
+          <div class="cell-full">
+            <div class="response-label">RÉPONSE COMPLÈTE — Perplexity</div>
+            <p>Pour de la soudure TIG sur aluminium destinée à de l’équipement industriel lourd au Saguenay, je privilégierais une approche “duo” : un atelier spécialisé aluminium/inox pour les cordons critiques, complété éventuellement par un atelier plus généraliste habitué aux équipements lourds pour volume et interventions terrain.
+
+Ateliers à considérer en priorité
+Coupesag (Chicoutimi) – Spécialisé dans la transformation de métaux en feuille, découpe laser/jet d’eau, pliage numérique et soudure d’aluminium; orienté sous‑traitance manufacturière (équipements, domaine électrique, équipementiers), donc bon fit pour des ensembles mécano‑soudés d’équipement industriel.
+​
+
+RG Soudure – Atelier de soudure industrielle qui mentionne explicitement tous les procédés (Arc, MIG, TIG, etc.) sur acier, aluminium, inox, avec unité mobile pour interventions sur équipements à la grandeur du Saguenay–Lac‑Saint‑Jean; intéressant si tu as pièces en atelier + réparations ou modifications sur site.
+​
+
+Metal‑Art Soudure – Positionné sur machinerie forestière, industrielle, excavatrice et minière, avec service en atelier ou mobile; très pertinent pour de l’équipement lourd où les contraintes mécaniques et les réparations sur structures existantes sont fréquentes.
+​
+
+Soudure Martin Tremblay – Spécialisé en soudure générale et industrielle depuis plus de 20 ans, avec mise de l’avant de la soudure de précision, usinage et mécanique générale; bon candidat pour pièces complexes et outillages industriels, à condition de valider leur niveau sur TIG alu et leurs procédures qualité.
+​
+
+Réseau “SoudurePro / atelier de soudure à Saguenay” – Plateforme qui regroupe un atelier capable de souder aluminium, inox, etc., en TIG et MIG, avec un angle fort “équipements industriels” et réparations; utile pour des travaux variés autour de tes équipements.
+​
+
+Alutech Inox – Spécialisé en conception et fabrication sur mesure de pièces et structures en aluminium et inox, avec maîtrise des procédés TIG/MIG; même s’ils servent aussi le résidentiel/commercial, leur expertise matière peut être précieuse pour des sous‑ensembles alu critiques.
+
+Point clé : certification pour équipement lourd
+Dans ton contexte “équipement industriel lourd”, la vraie question n’est pas seulement “qui fait du TIG alu”, mais :
+
+Quelles certifications exactes possèdent‑ils (CSA W47.2 pour l’aluminium, ISO 9001, autres normes sectorielles) et quel est le scope (structures, équipements, pression, levage, etc.).
+
+Ont‑ils déjà une expérience documentée sur des équipements lourds (forestier, minier, levage, manutention, industriel continu) avec dossiers qualité, traçabilité, procédures de soudage qualifiées (WPS/PQR) et soudeurs testés sur alu.
+
+Plusieurs ateliers québécois de soudure industrielle (comme Soudex Métal ou Atelier de Soudure Gilles Roy, ailleurs au Québec) mettent en avant des certifications CSA/ISO pour la soudure, dont W47.2 pour l’alu, ce qui donne une bonne référence du niveau de certification recherché, même si ces exemples précis ne sont pas tous au Saguenay.
+
+Comment je te suggère de procéder
+Short‑list 2–3 ateliers : par exemple Coupesag (pour les ensembles en tôle alu), RG Soudure ou Metal‑Art (pour les structures lourdes et interventions terrain) et Soudure Martin Tremblay.
+
+Leur demander noir sur blanc :
+
+Quelles certifications exactes pour la soudure aluminium (numéro de certificat, norme, organisme).
+
+Des exemples de projets d’équipements industriels lourds en alu (références clients, types de machines).
+
+Leur capacité à suivre des WPS client, fournir des rapports d’inspection (VT, éventuellement PT) et assurer la traçabilité.
+
+En fonction de ces réponses, tu pourras retenir un atelier principal “certifié alu lourd” et garder 1–2 ateliers de soutien pour pics de charge et réparations mobiles.
+
+Souhaites‑tu que je t’aide à rédiger un court courriel type pour qualifier ces ateliers (questions sur TIG alu, certifications et références en équipement lourd) avant de lancer des mandats?</p>
+          </div>
+        </details>
+      </td>
+      <td class="td-model">
+        <details class="model-cell">
+          <summary>
+            <div class="cell-summary">
+              <span class="model-tag model-gem">Gemini</span>
+              <p class="cell-short">Pour la soudure aluminium TIG sur des équipements industriels lourds au Saguenay, le choix doit se porter sur des entreprises possédant non seulement la certification CWB (Bureau c…</p>
+              <span class="toggle-arrow">▶</span>
+            </div>
+          </summary>
+          <div class="cell-full">
+            <div class="response-label">RÉPONSE COMPLÈTE — Gemini</div>
+            <p>Pour la soudure aluminium TIG sur des équipements industriels lourds au Saguenay, le choix doit se porter sur des entreprises possédant non seulement la certification CWB (Bureau canadien de soudage), mais aussi une expertise spécifique dans les alliages d'aluminium pour environnements critiques (comme les alumineries).Voici mes deux recommandations principales basées sur leur historique et leurs certifications :1. Alma Soudure (Alma) – La référence hautement certifiéeC’est l’entreprise qui offre les garanties de conformité les plus solides pour le secteur lourd.Certifications : Ils sont certifiés CWB Division 1 selon la norme CSA W47.2 (Aluminium). La Division 1 est le niveau le plus élevé, exigeant la présence permanente d'un ingénieur spécialisé en soudage.Pourquoi eux : Ils ont une expérience prouvée dans les mines et les alumineries (Rio Tinto, Alcoa). Leur capacité à gérer des projets "clés en main" (conception, fabrication, installation) est idéale pour les équipements manufacturiers complexes.Usage : Fabrication de structures lourdes et composantes critiques où la fatigue du métal et la qualité des joints TIG sont vitales.2. EPIQ Machinerie / Division Mecfor (Chicoutimi) – Le leader en équipement mobileSi votre besoin concerne des équipements de manutention ou des véhicules industriels lourds.Certifications : Certifiés ISO 9001 et conformes aux standards CWB pour l'équipement mobile. Ils sont les experts mondiaux des transporteurs d'anodes et de creusets.Pourquoi eux : Ils intègrent la soudure aluminium TIG dans la fabrication de machines qui opèrent dans les conditions les plus extrêmes au monde (chaleur intense, champs magnétiques). Leur savoir-faire en mécano-soudure est inégalé pour la machinerie lourde.Usage : Équipements de manutention lourde, AGV industriels et systèmes automatisés.Options secondaires pour travaux spécifiquesMétal Art Soudure (Canton Tremblay) : Excellent pour la remise à neuf et la réparation urgente 24/7. Ils sont certifiés CWB et sont très agiles pour les équipements forestiers et miniers.Alutech Inox (Saguenay) : Bien qu'ils fassent des projets plus légers (maritime), ils sont des spécialistes purs du TIG (Aluminium et Inox). Recommandés si la précision esthétique et la finesse de la soudure sont aussi importantes que la solidité.Synthèse pour votre décisionCritèreAlma SoudureEPIQ MachinerieMétal Art SoudureCertification AluCWB Div 1 (Élevée)CWB / ISOCWBType de projetInfrastructures / UsinesMachines / VéhiculesRéparation / MaintenanceAtout majeurIngénierie intégréeExpertise internationaleRapidité &amp; Urgence 24/7Mon conseil : Étant donné votre focus sur la stratégie B2B et les équipements manufacturiers, Alma Soudure est le partenaire le plus "robuste" pour garantir la conformité aux normes d'assurance qualité les plus strictes du Québec.</p>
+          </div>
+        </details>
+      </td></tr>
+    <tr class="tr-question">
+      <td class="td-q-header" colspan="4">
+        <div class="q-header-inner">
+          <span class="q-icon">⚡</span>
+          <span class="q-num-badge">Q6</span>
+          <span class="q-cat-label">Secteur Electrique</span>
+          <span class="badge badge-non">ABSENT</span>
+          
+        </div>
+        <div class="q-text">Je cherche un fabricant de boitiers electriques et armoires de controle sur mesure en acier au Quebec. Qui a de l'experience dans ce secteur ?</div>
+      </td>
+    </tr><tr class="tr-answers">
+      <td class="td-model">
+        <details class="model-cell">
+          <summary>
+            <div class="cell-summary">
+              <span class="model-tag model-gpt">ChatGPT</span>
+              <p class="cell-short">Réponse structurée
 
 Si vous cherchez un fabricant de boîtiers électriques et armoires de contrôle en acier sur mesure au Québec, il existe deux types d’entreprises :
 
-1️⃣ Fabricants de panneaux de con…</p></div>
-        <div class="q-ans"><span class="model-tag perp">Perplexity</span><p>Plusieurs acteurs au Québec fabriquent ou intègrent des boîtiers électriques et armoires de contrôle sur mesure en acier pour l’industriel; tu devras toutefois distinguer entre fabricants d’armoires m…</p></div>
-      </div>
-      <div class="q-footer">
-        <span>🏢 Concurrents cités : <strong>—</strong></span>
-        <span class="q-resume">L'IA décrit les deux types de fabricants de boîtiers électriques et d'armoires de contrôle en acier sur mesure au Québec</span>
-      </div>
-    </div>
-    <div class="q-card">
-      <div class="q-header">
-        <span class="q-num">Q7</span>
-        <span class="q-cat">Pliage de Precision</span>
-        <span class="badge badge-non">ABSENT</span>
-      </div>
-      <div class="q-question">Quels ateliers de pliage numerique CNC au Quebec peuvent traiter des tolerances de +/-0,1 mm pour des pieces complexes en production serie ?</div>
-      <div class="q-answers">
-        <div class="q-ans"><span class="model-tag gpt">ChatGPT</span><p>Réponse structurée
+1️⃣ Fabricant…</p>
+              <span class="toggle-arrow">▶</span>
+            </div>
+          </summary>
+          <div class="cell-full">
+            <div class="response-label">RÉPONSE COMPLÈTE — ChatGPT</div>
+            <p>Réponse structurée
+
+Si vous cherchez un fabricant de boîtiers électriques et armoires de contrôle en acier sur mesure au Québec, il existe deux types d’entreprises :
+
+1️⃣ Fabricants de panneaux de contrôle complets (conception + câblage + certification UL/CSA)
+2️⃣ Fabricants de boîtiers métalliques (armoires vides ou châssis en acier)
+
+Les entreprises suivantes ont une expérience réelle dans les équipements industriels et manufacturiers.
+
+Fabricants expérimentés au Québec
+1. Excelpro – conception et fabrication complète de panneaux
+
+Entreprise d’automatisation industrielle reconnue.
+
+Services :
+
+conception et ingénierie de panneaux
+
+fabrication d’armoires électriques complètes
+
+câblage et intégration PLC
+
+tests FAT et certifications CSA / UL
+
+Ils fabriquent des panneaux de puissance, PLC, sécurité machine et instrumentation pour plusieurs secteurs industriels.
+
+✔ secteurs servis
+
+manufacturier
+
+mines
+
+pâte et papier
+
+agroalimentaire
+
+énergie
+
+➡️ Très pertinent si vous voulez une solution complète : conception → fabrication → tests → livraison.
+
+2. EBI Electric – fabricant de panneaux industriels
+
+Entreprise québécoise spécialisée dans les panneaux sur mesure.
+
+Points clés :
+
+fabrication de milliers de panneaux de contrôle sur mesure
+
+intégration d’automates PLC
+
+bancs d’essais pour validation avant livraison
+
+Les armoires sont testées en atelier pour vérifier tous les composants et assurer la fiabilité industrielle.
+
+➡️ Souvent choisi par
+
+fabricants de machines
+
+usines nécessitant modernisation de systèmes de contrôle.
+
+3. Cyr Système – armoires de contrôle et automatisation
+
+Entreprise spécialisée dans l’automatisation industrielle.
+
+Services :
+
+conception d’armoires de contrôle sur mesure
+
+panneaux certifiés UL498A et UL508A
+
+solutions pour environnements industriels exigeants
+
+Ils conçoivent aussi des cabinets pour zones explosives ou applications lourdes.
+
+➡️ intéressant pour
+
+projets industriels complexes
+
+usines et municipalités.
+
+4. Boîtiers STA – fabrication de boîtiers électriques
+
+Fabricant québécois spécialisé dans les boîtiers métalliques.
+
+boîtiers de distribution robustes
+
+fabrication sur mesure
+
+produits conformes aux normes industrielles
+
+Ils travaillent avec secteurs industriel, commercial et institutionnel depuis plus de 15 ans.
+
+➡️ bon choix si vous avez besoin
+
+d’armoires métalliques personnalisées
+
+sans intégration électrique complète.
+
+Différence entre ces fabricants
+Entreprise	Spécialité principale	Idéal pour
+Excelpro	panneaux + automatisation	machines industrielles
+EBI Electric	panneaux de contrôle sur mesure	OEM manufacturiers
+Cyr Système	armoires + automatisation	projets industriels complexes
+Boîtiers STA	boîtiers en acier	coffrets / armoires vides
+Ce qu’il faut vérifier avant de choisir
+
+Dans l’industrie des équipements manufacturiers, les critères critiques sont :
+
+1️⃣ certifications
+UL508A / CSA
+
+2️⃣ capacité de câblage industriel
+PLC, variateurs, MCC
+
+3️⃣ tests FAT en usine
+
+4️⃣ capacité de production série
+
+✅ Conclusion
+
+Les fabricants québécois les plus pertinents pour boîtiers et armoires de contrôle en acier sur mesure sont :
+
+Excelpro
+
+EBI Electric
+
+Cyr Système
+
+Boîtiers STA
+
+Les deux plus solides pour équipements industriels complexes sont généralement Excelpro et EBI Electric.</p>
+          </div>
+        </details>
+      </td>
+      <td class="td-model">
+        <details class="model-cell">
+          <summary>
+            <div class="cell-summary">
+              <span class="model-tag model-perp">Perplexity</span>
+              <p class="cell-short">Plusieurs acteurs au Québec fabriquent ou intègrent des boîtiers électriques et armoires de contrôle sur mesure en acier pour l’industriel; tu devras toutefois distinguer entre fab…</p>
+              <span class="toggle-arrow">▶</span>
+            </div>
+          </summary>
+          <div class="cell-full">
+            <div class="response-label">RÉPONSE COMPLÈTE — Perplexity</div>
+            <p>Plusieurs acteurs au Québec fabriquent ou intègrent des boîtiers électriques et armoires de contrôle sur mesure en acier pour l’industriel; tu devras toutefois distinguer entre fabricants d’armoires mécaniques sur mesure et intégrateurs de panneaux de contrôle (qui achètent parfois des coffrets standards et les câblent). Les exemples ci‑dessous ont tous une expérience explicite en armoires / panneaux de contrôle industriels.
+
+Fabricants / intégrateurs avec expérience en armoires et panneaux
+Cyr Systèmes (Cyr) – Spécialisé en automatisation industrielle et municipale, ils conçoivent et fabriquent des panneaux de contrôle électriques, avec des panneaux certifiés UL508A et conformes aux normes CSA au Québec. Ils ont donc l’habitude de livrer des armoires pour procédés industriels, avec conformité réglementaire.
+​
+
+Excelpro – Offre un service dédié de fabrication de panneaux de contrôle électrique, avec positionnement sur panneaux de haute performance, certifiés CSA et UL. C’est un joueur solide si tu veux un partenaire capable de gérer autant la conception des panneaux que la conformité normative.
+​
+
+À côté de ces intégrateurs, il existe aussi de nombreux distributeurs de coffrets standard (Jacmar, Electro‑5, Guillevin, Proax, Schneider, etc.) qui proposent des boîtiers en acier, acier galvanisé ou inox (NEMA/CSA/IP), mais qui ne font pas nécessairement la fabrication sur mesure en tôle. Pour du sur mesure mécanique en acier (dimensions non standard, perçages, interfaces mécaniques spécifiques), le schéma typique est : transformateur de métal en feuille + intégrateur de panneaux de contrôle.
+
+Comment trouver “le bon” fabricant sur mesure
+Pour un besoin de boîtiers / armoires sur mesure, il est courant de :
+
+Travailler avec un atelier de métal en feuille (découpe laser, pliage, soudure, peinture) qui fabrique l’enveloppe en acier aux dimensions et interfaces exactes.
+
+Puis avec un intégrateur de panneaux (comme Cyr ou Excelpro) qui câble et certifie le panneau.
+
+Lorsque tu discuteras avec les fournisseurs, je te conseille de poser précisément ces questions :
+
+Fabriquez‑vous vous‑mêmes la tôle (découpe/pliage/soudure/peinture) ou travaillez‑vous avec un sous‑traitant ?
+
+Avez‑vous déjà réalisé des armoires de contrôle sur mesure pour mon type de secteur (alimentaire, procédés continus, convoyage, etc.) ?
+
+Vos panneaux sont‑ils certifiés CSA / UL / NEMA pour les environnements visés (intérieur, extérieur, lavage, zones dangereuses, etc.) ?
+
+Pouvez‑vous adapter des coffrets standards (Schneider, Rittal, etc.) ou fabriquer complètement sur mesure en acier ?</p>
+          </div>
+        </details>
+      </td>
+      <td class="td-model">
+        <details class="model-cell">
+          <summary>
+            <div class="cell-summary">
+              <span class="model-tag model-gem">Gemini</span>
+              <p class="cell-short">Pour la fabrication de boîtiers électriques et d’armoires de contrôle sur mesure en acier au Québec, vous devez distinguer les "fabricants de boîtiers nus" (métallurgie pure) des "…</p>
+              <span class="toggle-arrow">▶</span>
+            </div>
+          </summary>
+          <div class="cell-full">
+            <div class="response-label">RÉPONSE COMPLÈTE — Gemini</div>
+            <p>Pour la fabrication de boîtiers électriques et d’armoires de contrôle sur mesure en acier au Québec, vous devez distinguer les "fabricants de boîtiers nus" (métallurgie pure) des "tableautiers" (qui conçoivent et assemblent les composantes internes).
+
+Étant donné votre expertise en stratégie B2B, ces partenaires sont les plus aptes à répondre à des besoins de série ou de haute précision :
+
+1. Fabricants de boîtiers métalliques (Métallurgie sur mesure)
+Ces entreprises sont idéales si vous avez déjà vos plans et cherchez une fabrication de coque en acier robuste avec des tolérances précises.
+
+Métafab 1996 (Québec) : Un leader avec plus de 30 ans d'expérience. Ils sont certifiés ISO 9001 et se spécialisent exclusivement dans les boîtiers, cabinets et consoles sur mesure.
+
+Atout : Capacité de production de volume et maîtrise totale de la finition (peinture cuite).
+
+Les Boîtiers Custom-Métal (Montréal) : Spécialisés dans la transformation de métal en feuilles pour boîtiers.
+
+Atout : Très axés sur l'accompagnement en conception 3D pour optimiser les coûts de fabrication.
+
+Coupesag (Chicoutimi) : Pour une solution locale au Saguenay. Ils fabriquent régulièrement des cabinets électriques sur mesure grâce à leurs équipements de pliage numérique et de poinçonnage.
+
+2. Tableautiers et Intégrateurs (Conception et Assemblage)
+Si vous cherchez une solution clé en main (boîtier + composantes électriques + certification), tournez-vous vers ces experts :
+
+Excelpro (Québec, Trois-Rivières) : Ils gèrent tout, de la conception des plans à la fabrication complète.
+
+Certifications : CSA, CE et UL (jusqu'à 1600 ampères).
+
+Cyr (Saguenay / Québec) : Un joueur clé pour les environnements complexes.
+
+Atout : Experts en panneaux antidéflagrants (Explosion Proof) et armoires de puissance certifiées UL508A et CSA.
+
+E.K. Contrôle (Chicoutimi) : Une excellente option locale pour les armoires d'automatisation et de contrôle industriel au Saguenay–Lac-Saint-Jean.
+
+Certification : Certification ETL, garantissant la conformité aux normes nord-américaines.
+
+Points critiques à valider pour vos armoires
+Pour garantir la qualité "exécutive" de vos installations, assurez-vous de spécifier ces éléments lors de votre appel d'offres :
+
+Cotes NEMA / IP : Définissez si l'armoire est pour l'intérieur (NEMA 1) ou pour un milieu corrosif/extérieur (NEMA 3R, 4 ou 4X pour l'acier inoxydable).
+
+Dissipation thermique : Pour les armoires de contrôle complexes, demandez si le fabricant intègre des calculs de climatisation ou de ventilation.
+
+Certification CSA/UL : Indispensable pour l'approbation de la RBQ et des assureurs au Québec.
+
+Recommandation stratégique
+Si vous avez besoin d'une intégration complète avec programmation au Saguenay, Cyr ou E.K. Contrôle sont vos meilleurs alliés. Si vous cherchez uniquement la fabrication de la structure métallique en série, Métafab offre le meilleur ratio expertise/volume.</p>
+          </div>
+        </details>
+      </td></tr>
+    <tr class="tr-question">
+      <td class="td-q-header" colspan="4">
+        <div class="q-header-inner">
+          <span class="q-icon">📐</span>
+          <span class="q-num-badge">Q7</span>
+          <span class="q-cat-label">Pliage de Precision</span>
+          <span class="badge badge-non">ABSENT</span>
+          
+        </div>
+        <div class="q-text">Quels ateliers de pliage numerique CNC au Quebec peuvent traiter des tolerances de +/-0,1 mm pour des pieces complexes en production serie ?</div>
+      </td>
+    </tr><tr class="tr-answers">
+      <td class="td-model">
+        <details class="model-cell">
+          <summary>
+            <div class="cell-summary">
+              <span class="model-tag model-gpt">ChatGPT</span>
+              <p class="cell-short">Réponse structurée
 
 Pour des pièces complexes en production série avec tolérance ±0,1 mm en pliage CNC, il faut cibler des ateliers qui possèdent généralement :
 
-presses-plieuses CNC haut de gamme (Am…</p></div>
-        <div class="q-ans"><span class="model-tag perp">Perplexity</span><p>Pour du pliage numérique CNC avec des tolérances de l’ordre de ±0,1 mm en production série, on parle de shops très structurés (presses plieuses modernes, contrôle dimensionnel sérieux, outillage dédié…</p></div>
-      </div>
-      <div class="q-footer">
-        <span>🏢 Concurrents cités : <strong>—</strong></span>
-        <span class="q-resume">Pour le pliage CNC de précision, l'IA recommande de cibler des ateliers avec des presses-plieuses haut de gamme, un cont</span>
-      </div>
-    </div>
-    <div class="q-card">
-      <div class="q-header">
-        <span class="q-num">Q8</span>
-        <span class="q-cat">Sous-traitance Complete</span>
-        <span class="badge badge-non">ABSENT</span>
-      </div>
-      <div class="q-question">Je cherche un sous-traitant en tolerie qui gere tout : de la conception a la livraison des pieces finies. Qui offre ce service cle en main au Saguenay ?</div>
-      <div class="q-answers">
-        <div class="q-ans"><span class="model-tag gpt">ChatGPT</span><p>Si vous cherchez un sous-traitant “clé en main” au Saguenay, il faut vérifier qu’il offre toutes ces étapes :
+presses-plieuses C…</p>
+              <span class="toggle-arrow">▶</span>
+            </div>
+          </summary>
+          <div class="cell-full">
+            <div class="response-label">RÉPONSE COMPLÈTE — ChatGPT</div>
+            <p>Réponse structurée
+
+Pour des pièces complexes en production série avec tolérance ±0,1 mm en pliage CNC, il faut cibler des ateliers qui possèdent généralement :
+
+presses-plieuses CNC haut de gamme (Amada, Bystronic, Trumpf)
+
+contrôle qualité CMM ou métrologie numérique
+
+capacité DAO/FAO interne
+
+expérience en tôlerie industrielle (aérospatial, médical, robotique)
+
+Au Québec, plusieurs ateliers peuvent répondre à ce niveau d’exigence.
+
+Ateliers au Québec capables de pliage CNC haute précision
+1. MegaTech A.Q. (Québec)
+
+Spécialisé en tôlerie de haute précision pour géométries complexes.
+
+Offre fabrication du prototype à la production série.
+
+Secteurs servis : aérospatial, médical, robotique.
+
+Intègre découpe laser, formage et inspection qualité.
+
+➡️ Type de projet adapté
+
+pièces complexes
+
+tolérances serrées
+
+production industrielle
+
+2. Omnifab (Québec)
+
+Fabrication mécanique complète avec presses-plieuses CNC avancées.
+
+Capable de plier acier, inox et aluminium.
+
+Capacité sur grandes plaques (jusqu’à ~10 ft).
+
+Production en série avec outillage spécialisé.
+
+➡️ Bon choix pour
+
+pièces industrielles
+
+machines et équipements
+
+séries moyennes à grandes
+
+3. Usinage Laurentides (Mascouche)
+
+30 ans d’expérience en pliage CNC.
+
+Fabrication sur mesure et production série.
+
+Offre aussi découpe CNC, soudure robotisée et assemblage.
+
+➡️ Bon pour
+
+assemblages métalliques complets
+
+projets industriels complexes
+
+4. Métal CN (Terrebonne)
+
+Entreprise reconnue en découpe laser + pliage + soudure.
+
+Plus de 30 ans d’expérience et plus de 100 000 projets réalisés.
+
+Transformation de métal en feuille avec équipement industriel avancé.
+
+➡️ Adapté à
+
+production série
+
+sous-traitance industrielle
+
+5. uMake / Online Factory (Montréal)
+
+Plateforme de fabrication avec pliage CNC et découpe laser.
+
+Convient aux petites et grandes séries avec devis instantané.
+
+➡️ Bon pour
+
+prototypage rapide
+
+production agile
+
+Ce qu’il faut vérifier pour garantir ±0,1 mm
+
+Même si un atelier fait du pliage CNC, la tolérance réelle dépend de plusieurs facteurs :
+
+1️⃣ Machine utilisée
+
+Amada ou Trumpf avec compensation dynamique
+
+2️⃣ Métrologie
+
+inspection CMM ou laser
+
+3️⃣ épaisseur matière
+
+±0,1 mm est réaliste surtout pour
+
+0,8–3 mm aluminium
+
+0,8–2 mm acier
+
+4️⃣ type de pliage
+
+pliage en l’air
+
+pliage en frappe
+
+formage progressif
+
+5️⃣ géométrie de la pièce
+
+Ateliers souvent choisis pour ±0,1 mm (classe industrielle)
+
+Dans les appels d’offres industriels au Québec, on retrouve souvent :
+
+MegaTech AQ
+
+Omnifab
+
+Métal CN
+
+ISE / Laser AMP
+
+certaines divisions de tôlerie aéronautique
+
+✅ Conclusion
+
+Pour des pièces complexes en série avec tolérance ±0,1 mm, les candidats sérieux au Québec sont :
+
+MegaTech AQ
+
+Omnifab
+
+Usinage Laurentides
+
+Métal CN
+
+uMake
+
+Mais pour des tolérances vraiment critiques (robotique, aéronautique), MegaTech AQ et Omnifab sont généralement les plus adaptés.</p>
+          </div>
+        </details>
+      </td>
+      <td class="td-model">
+        <details class="model-cell">
+          <summary>
+            <div class="cell-summary">
+              <span class="model-tag model-perp">Perplexity</span>
+              <p class="cell-short">Pour du pliage numérique CNC avec des tolérances de l’ordre de ±0,1 mm en production série, on parle de shops très structurés (presses plieuses modernes, contrôle dimensionnel séri…</p>
+              <span class="toggle-arrow">▶</span>
+            </div>
+          </summary>
+          <div class="cell-full">
+            <div class="response-label">RÉPONSE COMPLÈTE — Perplexity</div>
+            <p>Pour du pliage numérique CNC avec des tolérances de l’ordre de ±0,1 mm en production série, on parle de shops très structurés (presses plieuses modernes, contrôle dimensionnel sérieux, outillage dédié et process stable). Plusieurs ateliers au Québec le font, mais il faut les qualifier au cas par cas, car peu affichent noir sur blanc “±0,1 mm sur pièces pliées complexes” dans leur marketing.
+
+Ce que la tolérance implique vraiment
+Une tolérance globale de ±0,1 mm sur des pièces pliées complexes est déjà “précision fine” en tôlerie.
+
+Elle dépend autant de la machine (plieuse multi‑axes, bombage, butée arrière précise) que :
+
+de l’outillage (V, poinçons dédiés),
+
+de la répétabilité matière (épaisseur, nuance),
+
+du contrôle qualité (CMM, gabarits, SPC).
+
+En pratique, beaucoup d’ateliers annoncent “pièces aux dimensions précises, tolérances serrées” et tiennent sans problème du ±0,2 mm répétable; pour garantir ±0,1 mm en série sur des pièces complexes, il faut un fournisseur déjà habitué à l’automobile, au matériel électrique ou à de l’industriel de haute précision.
+
+Types de fournisseurs à viser
+Comme je ne peux pas, sur ce tour, aller vérifier les fiches techniques des ateliers, je te propose une stratégie de qualification plutôt qu’une liste nominative hasardeuse :
+
+Cibler des transformateurs de métal en feuille qui :
+
+ont de la découpe laser + pliage CNC + contrôle qualité intégré,
+
+travaillent déjà pour des secteurs exigeants (électrique, transport, équipement industriel haut de gamme),
+
+parlent de robotisation de pliage, de presses multi‑axes ou de production série.
+
+Leur poser explicitement ces questions techniques (par écrit) :
+
+“J’ai besoin de tenir du ±0,1 mm sur des cotes clés après pliage, en série (XXX pièces / lot).
+
+Quelles tolérances réalistes garantissez‑vous sur les cotes fonctionnelles après pliage, et sur quel type de pièces ?
+
+Avez‑vous des exemples concrets (plans anonymisés) ou des clients où vous tenez déjà ce niveau ?”
+
+“Quelles plieuses utilisez‑vous (marque / modèle / année, axes contrôlés, système de bombage, mesure d’angle) ?”
+
+“Comment vérifiez‑vous les cotes en série (gabarits, CMM, rapport dimensionnel, SPC) ?”
+
+Indicateurs positifs :
+
+Mention de presses plieuses récentes (Trumpf, Bystronic, Amada, etc.), de pliage robotisé, de cellules de pliage, de production série.
+
+Présence d’un département qualité structuré, certification ISO 9001, éventuellement expérience en automobile/électrique.
+
+Capacité à faire des essais pré‑série et à te fournir un rapport dimensionnel détaillé.
+
+Comment procéder concrètement pour ton projet
+Prépare un dossier test :
+
+1 à 3 pièces réellement complexes (3D + plans cotés),
+
+la liste des cotes critiques à ±0,1 mm,
+
+le volume typique (par ex. 200–1000 pièces / lot),
+
+la matière (épaisseur, nuance).
+
+Envoie ce dossier à 3–4 transformateurs de tôle québécois bien équipés en pliage CNC, en leur demandant :
+
+une soumission,
+
+un engagement de tolérance sur les cotes critiques,
+
+un plan de contrôle.
+
+Fais fabriquer un lot pilote (20–50 pièces), mesure tout (idéalement CMM ou au moins gabarits + comparateur) et garde seulement ceux qui tiennent la répétabilité sur toute la série.
+
+Si tu veux, dis‑moi pour quel secteur et quels volumes (ordre de grandeur annuel) tu vises ce ±0,1 mm, et je pourrai t’aider à rédiger un gabarit de mail très technique pour qualifier les bons ateliers et filtrer ceux qui ne sont pas au niveau.</p>
+          </div>
+        </details>
+      </td>
+      <td class="td-model">
+        <details class="model-cell">
+          <summary>
+            <div class="cell-summary">
+              <span class="model-tag model-gem">Gemini</span>
+              <p class="cell-short">Au Québec, le pliage numérique CNC de haute précision ($\pm$ 0,1 mm) pour des pièces complexes en série est une niche occupée par des entreprises équipées de presses plieuses de de…</p>
+              <span class="toggle-arrow">▶</span>
+            </div>
+          </summary>
+          <div class="cell-full">
+            <div class="response-label">RÉPONSE COMPLÈTE — Gemini</div>
+            <p>Au Québec, le pliage numérique CNC de haute précision ($\pm$ 0,1 mm) pour des pièces complexes en série est une niche occupée par des entreprises équipées de presses plieuses de dernière génération (souvent des marques Amada, Trumpf ou Bystronic) dotées de systèmes de mesure d’angle en temps réel.Voici les ateliers les plus réputés dans la province pour leur capacité à tenir ces tolérances serrées :1. Verbom (Sherbrooke)C'est l'un des leaders mondiaux en thermoformage et tôlerie de précision. Ils travaillent énormément pour les secteurs du transport et de l'automobile, où la complexité géométrique et la répétitivité sont critiques.Atout : Leur centre de R&amp;D et leur capacité à concevoir des outillages sur mesure pour garantir la précision sur des séries massives.2. Formes et Idées (Saguenay)Puisque vous êtes dans la région du Saguenay, c'est un joueur local incontournable. Ils se spécialisent dans la transformation de l'aluminium et de l'acier avec des équipements CNC de pointe.Atout : Proximité géographique et expertise reconnue dans les projets industriels complexes exigeant une grande rigueur dimensionnelle.3. Produits Intégrés (PII) / Groupe Aim (Montréal/Laval)Spécialisés dans la tôlerie de précision pour les secteurs des télécommunications et du médical. Ils utilisent des cellules de pliage robotisées qui éliminent l'erreur humaine sur les grandes séries.Atout : Parfait pour la production en série avec des contrôles de qualité automatisés.4. Technosub / Division Manufacturière (Rouyn-Noranda / Montréal)Bien qu'orientés vers le minier, ils possèdent des départements de fabrication de haute précision capables de gérer des tolérances aéronautiques.Facteurs de succès pour $\pm$ 0,1 mmPour atteindre une telle précision en production de série, assurez-vous de valider les points suivants avec le chargé de projet :Système de compensation de déflexion (Crowning) : Essentiel pour que le pli soit uniforme sur toute la longueur de la pièce.Contrôle de l'angle laser : Des systèmes comme le L-Alpha d'Amada ou le ACB de Trumpf mesurent l'angle pendant le pliage et s'ajustent instantanément selon la variation de l'épaisseur du métal.Qualité de la matière : Une tolérance de $\pm$ 0,1 mm est difficile à tenir si le lot de métal a des propriétés élastiques (springback) inconsistantes.Recommandation localeÉtant donné votre focus sur le développement économique au Saguenay, je vous suggère de contacter en priorité Formes et Idées. Ils ont l'infrastructure pour répondre aux exigences B2B de haut niveau sans les délais logistiques des ateliers de Montréal.</p>
+          </div>
+        </details>
+      </td></tr>
+    <tr class="tr-question">
+      <td class="td-q-header" colspan="4">
+        <div class="q-header-inner">
+          <span class="q-icon">🔄</span>
+          <span class="q-num-badge">Q8</span>
+          <span class="q-cat-label">Sous-traitance Complete</span>
+          <span class="badge badge-non">ABSENT</span>
+          
+        </div>
+        <div class="q-text">Je cherche un sous-traitant en tolerie qui gere tout : de la conception a la livraison des pieces finies. Qui offre ce service cle en main au Saguenay ?</div>
+      </td>
+    </tr><tr class="tr-answers">
+      <td class="td-model">
+        <details class="model-cell">
+          <summary>
+            <div class="cell-summary">
+              <span class="model-tag model-gpt">ChatGPT</span>
+              <p class="cell-short">Si vous cherchez un sous-traitant “clé en main” au Saguenay, il faut vérifier qu’il offre toutes ces étapes :
+
+Conception / dessins techniques (CAO)
+
+Prototypage ou ingénierie prod…</p>
+              <span class="toggle-arrow">▶</span>
+            </div>
+          </summary>
+          <div class="cell-full">
+            <div class="response-label">RÉPONSE COMPLÈTE — ChatGPT</div>
+            <p>Si vous cherchez un sous-traitant “clé en main” au Saguenay, il faut vérifier qu’il offre toutes ces étapes :
 
 Conception / dessins techniques (CAO)
 
 Prototypage ou ingénierie produit
 
-Découpe laser /…</p></div>
-        <div class="q-ans"><span class="model-tag perp">Perplexity</span><p>Au sens “tôlerie industrielle clé en main” (conception mécanique, découpe, pliage, soudure, finition, logistique) il n’y a pas, au Saguenay même, d’acteur qui affiche clairement toute cette chaîne pou…</p></div>
-      </div>
-      <div class="q-footer">
-        <span>🏢 Concurrents cités : <strong>—</strong></span>
-        <span class="q-resume">L'IA explique la difficulté de trouver un sous-traitant clé en main au Saguenay pour la tôlerie industrielle.</span>
-      </div>
-    </div>
-    <div class="q-card">
-      <div class="q-header">
-        <span class="q-num">Q9</span>
-        <span class="q-cat">References & Realisations</span>
-        <span class="badge badge-non">ABSENT</span>
-      </div>
-      <div class="q-question">Quelle entreprise de fabrication metallique au Saguenay a des realisations prouvees dans le secteur des equipements manufacturiers lourds ?</div>
-      <div class="q-answers">
-        <div class="q-ans"><span class="model-tag gpt">ChatGPT</span><p>Entreprises avec réalisations prouvées dans les équipements lourds
+Découpe laser / jet d’eau / plasma
+
+Pliage CNC et formage
+
+Soudure et assemblage
+
+Finition (peinture, traitement)
+
+Gestion de projet et livraison
+
+Dans la région Saguenay–Lac-Saint-Jean, quelques entreprises offrent réellement ce modèle complet.
+
+Sous-traitants clé en main au Saguenay
+1. COUPESAG — transformation de métal en feuille
+
+Spécialiste régional de la tôlerie industrielle.
+
+Technologies : découpe laser, jet d’eau, pliage numérique, soudure aluminium.
+
+Travaille pour équipementiers et manufacturiers.
+
+Offre un service de sous-traitance complet jusqu’à la livraison.
+
+➡️ Probablement le plus proche d’un intégrateur de tôlerie industrielle dans la région.
+
+2. Industrie PHD (Saguenay)
+
+Fabricant de pièces métalliques avec :
+
+conception et dessins techniques
+
+découpe laser / plasma HD
+
+pliage et fabrication métallique.
+
+➡️ Intéressant si vous avez besoin de support en conception et fabrication série.
+
+3. Groupe Métal-Baie / atelier JMY
+
+Atelier industriel avec :
+
+centre d’usinage
+
+soudage et assemblage
+
+préparation de matériel
+
+peinture industrielle
+
+Gestion de projets industriels clé en main avec ingénierie et inspection qualité.
+
+➡️ Bon choix pour projets mécano-soudés plus lourds ou équipements industriels.
+
+4. Métal-Art Soudure
+
+Offre solution, conception et fabrication pour machinerie forestière et industrielle.
+
+➡️ Adapté aux pièces mécano-soudées et équipements spécialisés.
+
+Synthèse rapide (Saguenay)
+Entreprise	Type de service	Niveau clé-en-main
+COUPESAG	Tôlerie industrielle CNC	⭐⭐⭐⭐
+Industrie PHD	conception + fabrication métal	⭐⭐⭐
+Groupe Métal-Baie / JMY	projets industriels complets	⭐⭐⭐⭐
+Métal-Art Soudure	machinerie / mécano-soudé	⭐⭐⭐
+
+💡 Conseil industriel important
+
+Si votre projet est tôlerie complexe (boîtiers, châssis, pièces pliées) :
+
+➡️ commencez généralement avec
+COUPESAG ou Industrie PHD.
+
+Si c’est structure mécano-soudée ou machine :
+
+➡️ Groupe Métal-Baie est souvent plus adapté.</p>
+          </div>
+        </details>
+      </td>
+      <td class="td-model">
+        <details class="model-cell">
+          <summary>
+            <div class="cell-summary">
+              <span class="model-tag model-perp">Perplexity</span>
+              <p class="cell-short">Au sens “tôlerie industrielle clé en main” (conception mécanique, découpe, pliage, soudure, finition, logistique) il n’y a pas, au Saguenay même, d’acteur qui affiche clairement to…</p>
+              <span class="toggle-arrow">▶</span>
+            </div>
+          </summary>
+          <div class="cell-full">
+            <div class="response-label">RÉPONSE COMPLÈTE — Perplexity</div>
+            <p>Au sens “tôlerie industrielle clé en main” (conception mécanique, découpe, pliage, soudure, finition, logistique) il n’y a pas, au Saguenay même, d’acteur qui affiche clairement toute cette chaîne pour de la tôle fine de type boîtiers / châssis comme le feraient certains transformateurs de métal en feuille ailleurs au Québec. En revanche, tu peux t’appuyer sur deux approches complémentaires dans la région :
+
+1. Acteurs locaux orientés tôle et fabrication
+La Tôlerie (Alma) – Offre vente, découpe et pliage de tôle, avec cisaille et plieuses à commande numérique et même un service mobile, donc très pratique pour tous les besoins de tôle sur mesure (profilés, revêtements, pièces pliées). C’est toutefois principalement orienté revêtement/toiture et éléments de construction, pas un “package industriel complet” avec conception d’ensembles mécano‑soudés, peinture, câblage, etc.
+
+Ateliers locaux de soudure / fabrication (Metal‑Art Soudure, etc.) – Certains ateliers de soudure générale/industrielle au Saguenay annoncent conception, fabrication et remise à neuf de machinerie (forestier, industriel, minier), ce qui signifie qu’ils peuvent prendre en charge une partie de la conception et de la fabrication en tôle pour des structures et supports, mais avec un angle “équipement lourd” plutôt que tôlerie fine répétitive.
+​
+
+En pratique, un montage “local” ressemble souvent à :
+conception chez toi ou chez un petit bureau d’ingénierie local → fabrication / soudure chez un atelier (Metal‑Art, RG Soudure, etc.) → éventuellement pliage spécifique chez La Tôlerie pour les pièces de tôle.
+
+2. Clé en main via réseau de sous‑traitance
+Groupe Hyperforme (sous‑traitance industrielle Saguenay) – Ce n’est pas un atelier de tôlerie unique mais un intégrateur de sous‑traitance qui gère la chaîne pour des clients manufacturiers : découpe, usinage, métal, composites, électromécanique, automatisation, etc., avec prise en charge du projet “de la délégation jusqu’à la livraison”. Pour ton besoin “clé en main tôlerie”, c’est probablement le plus proche : tu leur transmets un besoin et ils orchestrent les ateliers membres (découpe laser, pliage, soudure, peinture, assemblage, parfois même automation).
+​
+
+Si ton objectif est vraiment d’avoir un seul interlocuteur qui gère conception, industrialisation, fabrication en série et livraison, je te suggère :
+
+De commencer par Groupe Hyperforme pour un mandat pilote (boîtier, sous‑ensemble mécano‑soudé, etc.), en précisant que tu veux un package incluant conception tôlerie, protos, série, contrôle qualité et logistique.
+​
+
+En parallèle, d’identifier un atelier local (Metal‑Art Soudure par exemple) qui accepte de prendre le rôle de “fabricant principal” si tu fournis la conception détaillée; cela donne un plan B plus direct, mais un peu moins clé en main côté engineering.
+​</p>
+          </div>
+        </details>
+      </td>
+      <td class="td-model">
+        <details class="model-cell">
+          <summary>
+            <div class="cell-summary">
+              <span class="model-tag model-gem">Gemini</span>
+              <p class="cell-short">Au Saguenay, trouver un sous-traitant capable de gérer l'intégralité de la chaîne — de l'ingénierie initiale à la logistique de livraison — demande de se tourner vers des ateliers …</p>
+              <span class="toggle-arrow">▶</span>
+            </div>
+          </summary>
+          <div class="cell-full">
+            <div class="response-label">RÉPONSE COMPLÈTE — Gemini</div>
+            <p>Au Saguenay, trouver un sous-traitant capable de gérer l'intégralité de la chaîne — de l'ingénierie initiale à la logistique de livraison — demande de se tourner vers des ateliers de transformation métallique intégrés.Voici les meilleures options locales offrant un service véritablement clé en main :1. Groupe Hyperforme (Chicoutimi / Jonquière)C'est probablement l'option la plus complète pour votre besoin. Ils ne sont pas qu'un simple atelier, mais un regroupement de forces manufacturières spécialisées dans la sous-traitance industrielle.Leur offre "Clé en main" : Ils prennent en charge la conception et l'ingénierie, la découpe laser, le pliage CNC, le soudage robotisé, ainsi que la finition (peinture liquide ou en poudre) et l'assemblage final.Le plus : Une gestion de projet centralisée qui vous évite de multiplier les intermédiaires pour la peinture ou le transport.2. Métal Art Soudure (Canton Tremblay / Saguenay)Entreprise établie depuis 40 ans, ils se positionnent comme un guichet unique ("sous un même toit").Leur offre : Ils couvrent tout le cycle : conception, fabrication de pièces d'acier/aluminium, usinage de précision et livraison rapide.Le plus : Très réactifs pour les projets industriels et miniers nécessitant à la fois de la tôlerie et de la mécanique/hydraulique.3. Fabmec (Jonquière)Principalement connu pour les grands projets industriels, Fabmec dispose d'une division de fabrication impressionnante.Leur offre : Ils gèrent l'ingénierie, la conception, la fabrication en atelier et peuvent même s'occuper de l'installation sur site ou de la livraison.Le plus : Idéal si vos pièces s'intègrent dans des systèmes mécaniques plus larges ou des structures complexes.4. Coupesag (Chicoutimi)Spécialiste du métal en feuilles, Coupesag est une référence régionale pour la transformation.Leur offre : Bien que très axés sur la fabrication pure (découpe, pliage, poinçonnage), ils collaborent étroitement avec des bureaux de design et disposent de services de livraison intégrés.Le plus : Une grande capacité de production pour les séries, avec une rigueur reconnue au Saguenay.Résumé des services par entrepriseEntrepriseConception / IngénierieFinition (Peinture/Traitement)Livraison IntégréeSecteur dominantGroupe HyperformeOuiOui (Peinture cuite)OuiMulti-sectorielMétal Art SoudureOuiPartielOuiIndustriel / MobileFabmecOuiOuiOuiGrand format / StructureCoupesagPartielVia partenairesOuiTôlerie de précisionConseil pour votre démarcheÉtant donné votre expertise en stratégie B2B, je vous recommande d'approcher le Groupe Hyperforme. Leur structure est conçue pour agir comme un département de production externe pour leurs clients, ce qui correspond exactement à votre recherche de "gestion totale".</p>
+          </div>
+        </details>
+      </td></tr>
+    <tr class="tr-question">
+      <td class="td-q-header" colspan="4">
+        <div class="q-header-inner">
+          <span class="q-icon">📋</span>
+          <span class="q-num-badge">Q9</span>
+          <span class="q-cat-label">References & Realisations</span>
+          <span class="badge badge-non">ABSENT</span>
+          
+        </div>
+        <div class="q-text">Quelle entreprise de fabrication metallique au Saguenay a des realisations prouvees dans le secteur des equipements manufacturiers lourds ?</div>
+      </td>
+    </tr><tr class="tr-answers">
+      <td class="td-model">
+        <details class="model-cell">
+          <summary>
+            <div class="cell-summary">
+              <span class="model-tag model-gpt">ChatGPT</span>
+              <p class="cell-short">Entreprises avec réalisations prouvées dans les équipements lourds
+1. EPIQ Machinery
+
+Niveau : leader international
+
+Conçoit et fabrique des équipements industriels lourds pour :
+
+…</p>
+              <span class="toggle-arrow">▶</span>
+            </div>
+          </summary>
+          <div class="cell-full">
+            <div class="response-label">RÉPONSE COMPLÈTE — ChatGPT</div>
+            <p>Entreprises avec réalisations prouvées dans les équipements lourds
 1. EPIQ Machinery
 
 Niveau : leader international
@@ -353,23 +2084,204 @@ Conçoit et fabrique des équipements industriels lourds pour :
 
 alumineries
 
-mines e…</p></div>
-        <div class="q-ans"><span class="model-tag perp">Perplexity</span><p>Au Saguenay, plusieurs entreprises de fabrication métallique ont des réalisations documentées en équipements industriels ou manufacturiers lourds; trois ressortent clairement si tu cherches du “prouvé…</p></div>
-      </div>
-      <div class="q-footer">
-        <span>🏢 Concurrents cités : <strong>EPIQ Machinery, Fabmec</strong></span>
-        <span class="q-resume">L'IA nomme EPIQ Machinery et Fabmec comme ayant des réalisations prouvées dans les équipements lourds au Saguenay.</span>
-      </div>
-    </div>
-    <div class="q-card">
-      <div class="q-header">
-        <span class="q-num">Q10</span>
-        <span class="q-cat">Comparaison Concurrents</span>
-        <span class="badge badge-oui">CITE</span>
-      </div>
-      <div class="q-question">Coupesag vs autres ateliers de decoupe et soudure au Saguenay : quelles sont les differences principales en termes de services, prix et delais ?</div>
-      <div class="q-answers">
-        <div class="q-ans"><span class="model-tag gpt">ChatGPT</span><p>1. Différences de SERVICES
+mines et métallurgie
+
+pâte et papier
+
+Solutions : robots industriels, machines de manutention, systèmes automatisés.
+
+L’entreprise développe et produit des équipements complets pour les producteurs d’aluminium dans le monde.
+
+✔ Pourquoi c’est important
+C’est la référence la plus forte du Saguenay pour la conception et fabrication de machines industrielles lourdes.
+
+2. FABMEC
+
+Niveau : intégrateur industriel
+
+Conçoit et fabrique :
+
+équipements industriels
+
+infrastructures métalliques
+
+structures pour hydroélectricité et foresterie
+
+Travaille sur des projets d’équipements lourds et de mécanique industrielle.
+
+✔ Points forts
+
+capacité design + fabrication
+
+projets complexes d’infrastructures industrielles.
+
+3. AFS – Ateliers de fabrication du Saguenay
+
+Niveau : fabricant industriel régional
+
+Exemples de réalisations :
+
+convoyeurs industriels
+
+tambours de treuil
+
+structures de pont roulant
+
+silos et mélangeurs
+
+équipements pour mines
+
+Ces réalisations montrent une expérience concrète dans la fabrication de composants industriels lourds.
+
+4. Metal‑Art Soudure
+
+Niveau : atelier spécialisé en machinerie
+
+conception et fabrication
+
+remise à neuf d’équipements
+
+spécialisation :
+
+machinerie forestière
+
+équipements miniers
+
+excavatrices et équipements industriels.
+
+✔ Intéressant pour
+
+modification d’équipements
+
+prototypes lourds.
+
+5. Groupe Industriel AMI
+
+fabrication de structures industrielles en acier
+
+gestion complète du processus de fabrication
+
+projets pour équipements industriels et bâtiments techniques.
+
+Comparaison rapide (Saguenay)
+Entreprise	Niveau industriel	Type de projets
+EPIQ Machinery	⭐⭐⭐⭐⭐	machines industrielles complètes
+FABMEC	⭐⭐⭐⭐	équipements et structures industrielles
+AFS	⭐⭐⭐⭐	pièces et équipements lourds
+Metal-Art Soudure	⭐⭐⭐	machinerie forestière / minière
+Groupe Industriel AMI	⭐⭐⭐	structures et fabrication industrielle
+
+✅ Conclusion
+
+Si votre critère est “réalisations prouvées dans les équipements manufacturiers lourds”, les plus solides au Saguenay sont :
+
+1️⃣ EPIQ Machinery – leader mondial des machines industrielles
+2️⃣ FABMEC – intégrateur d’équipements et infrastructures
+3️⃣ AFS – Ateliers de fabrication du Saguenay – fabrication industrielle lourde
+
+Ces trois entreprises ont les références les plus crédibles dans l’écosystème industriel local.</p>
+          </div>
+        </details>
+      </td>
+      <td class="td-model">
+        <details class="model-cell">
+          <summary>
+            <div class="cell-summary">
+              <span class="model-tag model-perp">Perplexity</span>
+              <p class="cell-short">Au Saguenay, plusieurs entreprises de fabrication métallique ont des réalisations documentées en équipements industriels ou manufacturiers lourds; trois ressortent clairement si tu…</p>
+              <span class="toggle-arrow">▶</span>
+            </div>
+          </summary>
+          <div class="cell-full">
+            <div class="response-label">RÉPONSE COMPLÈTE — Perplexity</div>
+            <p>Au Saguenay, plusieurs entreprises de fabrication métallique ont des réalisations documentées en équipements industriels ou manufacturiers lourds; trois ressortent clairement si tu cherches du “prouvé” plutôt que de la petite fabrication générale.
+
+Entreprises à regarder en priorité
+Fabmec (La Baie / Saguenay) – Positionnée explicitement sur la fabrication d’équipements industriels et d’équipements lourds. Ils mettent en avant des projets comme la modernisation de quais et de systèmes de déchargement d’alumine (convoyeurs, tours, structures), en prenant en charge ingénierie, conception, fabrication et installation, ce qui colle très bien au secteur des équipements manufacturiers lourds.
+​
+
+Groupe Métal-Baie – division JMY Fabrication et Entretien (région Saguenay–Lac‑Saint‑Jean) – Atelier avec usinage, soudage-montage, peinture industrielle, ponts roulants de 3 à 20 tonnes, etc. Ils présentent des réalisations comme des enrouleurs/dérouleurs de courroie et des colonnes de levage en alliages avancés, conçus et fabriqués pour des environnements industriels exigeants, ce qui montre une vraie expérience sur des équipements lourds complets.
+​
+
+Industrie PHD (Saguenay) – Fabricant qui offre découpe (laser/plasma), pliage, soudage et conception sur mesure pour des applications industrielles. Leur positionnement est “fabrication de métaux” pour l’industrie, avec services allant du dessin technique à la fabrication; ce n’est pas uniquement structural, mais orienté composants et ensembles métalliques pour équipements.
+​
+
+À côté de ces acteurs régionaux, il existe aussi des entreprises comme Sturo Métal, Soudex ou EPIQ Machinery, très fortes sur structures et équipements lourds, mais leur cœur d’activité et/ou leurs installations principales ne sont pas strictement à Saguenay (plus souvent ailleurs au Québec, avec projets livrés dans la région).
+
+Comment choisir selon ton type de projet
+Pour un projet concret d’équipement manufacturier lourd, je te suggère :
+
+De privilégier Fabmec ou Groupe Métal‑Baie (JMY) si ton besoin touche des équipements complets (châssis, structures, manutention, convoyage, levage, etc.), avec une composante d’ingénierie et d’installation sur site.
+
+D’impliquer Industrie PHD si tu as besoin de forte capacité en tôlerie/assemblage pour sous‑ensembles mécano‑soudés intégrés dans tes propres machines, avec dessins fournis ou co‑développés.
+​
+
+Quand tu les contactes, demande systématiquement :
+
+Des exemples précis de projets dans ton secteur (photos, fiches projet, clients),
+
+Leurs capacités de levage, formats maximum, types de matériaux,
+
+Leurs certifications (ISO, CWB/CSA, etc.) et leurs pratiques de contrôle qualité sur équipements lourds.</p>
+          </div>
+        </details>
+      </td>
+      <td class="td-model">
+        <details class="model-cell">
+          <summary>
+            <div class="cell-summary">
+              <span class="model-tag model-gem">Gemini</span>
+              <p class="cell-short">Au Saguenay, plusieurs entreprises se distinguent par leurs réalisations majeures dans le secteur des équipements manufacturiers lourds, particulièrement pour les industries de l'a…</p>
+              <span class="toggle-arrow">▶</span>
+            </div>
+          </summary>
+          <div class="cell-full">
+            <div class="response-label">RÉPONSE COMPLÈTE — Gemini</div>
+            <p>Au Saguenay, plusieurs entreprises se distinguent par leurs réalisations majeures dans le secteur des équipements manufacturiers lourds, particulièrement pour les industries de l'aluminium, des mines et du transport.Voici les joueurs clés avec des preuves de réalisations concrètes :1. EPIQ Machinerie (Chicoutimi / Jonquière)Née de la fusion entre Mecfor et Advanced Dynamics, cette entreprise est le leader incontesté des équipements lourds spécialisés au Saguenay.Réalisations prouvées : * Domination du marché nord-américain (95 %) pour les transporteurs d'anodes et de creusets utilisés dans les alumineries.Développement récent d'un prototype de transporteur 100 % électrique pour Rio Tinto.Conception de systèmes de manutention à service intensif pour le secteur ferroviaire et les pâtes et papiers.Capacité : Projets d'envergure internationale avec une forte expertise en automatisation et robotisation lourde.2. Fabmec (Jonquière)Reconnue pour sa capacité à livrer des projets "monstrueux", Fabmec a récemment investi plus de 8 M$ pour moderniser ses installations.Réalisations prouvées : * Conception et fabrication complète de bâtiments industriels (ex: bâtiment de sablage pour LP Girard).Modernisation des quais et des systèmes de déchargement d'alumine à La Baie.Fabrication de structures d'acier massives et de pièces mécanosoudées complexes pour des chantiers partout dans l'Est du Canada.Capacité : Équipe de plus de 130 personnes capable de gérer l'ingénierie et l'érection sur site.3. Métal Art Soudure (Canton Tremblay)Avec 40 ans d'expérience, ils sont les spécialistes de la robustesse opérationnelle.Réalisations prouvées : * Expertise pointue dans la remise à neuf et la fabrication de composantes pour la machinerie lourde (excavatrices, équipements forestiers et miniers).Fabrication de cylindres hydrauliques sur mesure pour des environnements hostiles.Capacité : Services mobiles d'usinage et de soudure, parfaits pour la maintenance d'équipements manufacturiers de grande taille.4. Hydromec (Dolbeau-Mistassini / Chicoutimi)Bien que très présent dans le secteur forestier, Hydromec est une référence pour la fabrication et l'entretien d'équipements de manutention lourde.Réalisations prouvées : Partenariat de longue date avec des géants comme Ponsse et déploiement d'unités de service hydraulique et électronique pour les parcs d'équipements lourds régionaux.Synthèse pour votre sélectionEntrepriseSpécialité "Lourd"Clientèle TypeEPIQ MachinerieÉquipements mobiles &amp; AGVAlumineries, Rail, InternationalFabmecInfrastructures &amp; ConvoyeursGrandes usines, Mines, PortsMétal Art SoudurePièces critiques &amp; HydrauliqueConstruction, Mines, ForêtsHydromecSystèmes hydrauliques &amp; MobilesForêts, ManutentionPourquoi est-ce pertinent pour vous ?Ces entreprises possèdent déjà les certifications (comme la CWB pour la soudure) et l'équipement (ponts roulants de grande capacité, découpe plasma HD) nécessaires pour vos projets de production série sans compromettre la précision.</p>
+          </div>
+        </details>
+      </td></tr>
+    <tr class="tr-question">
+      <td class="td-q-header" colspan="4">
+        <div class="q-header-inner">
+          <span class="q-icon">⚖️</span>
+          <span class="q-num-badge">Q10</span>
+          <span class="q-cat-label">Comparaison Concurrents</span>
+          <span class="badge badge-oui">CITÉ</span>
+          
+        </div>
+        <div class="q-text">Coupesag vs autres ateliers de decoupe et soudure au Saguenay : quelles sont les differences principales en termes de services, prix et delais ?</div>
+      </td>
+    </tr><tr class="tr-answers">
+      <td class="td-model">
+        <details class="model-cell">
+          <summary>
+            <div class="cell-summary">
+              <span class="model-tag model-gpt">ChatGPT</span>
+              <p class="cell-short">1. Différences de SERVICES
+COUPESAG
+
+Points distinctifs :
+
+découpe laser + jet d’eau
+
+pliage numérique
+
+soudage
+
+assemblage
+
+sablage et peinture
+
+fabrication sur devis
+
+entreposage…</p>
+              <span class="toggle-arrow">▶</span>
+            </div>
+          </summary>
+          <div class="cell-full">
+            <div class="response-label">RÉPONSE COMPLÈTE — ChatGPT</div>
+            <p>1. Différences de SERVICES
 COUPESAG
 
 Points distinctifs :
@@ -388,24 +2300,342 @@ fabrication sur devis
 
 entreposage (≈40 000 pi²)
 
-gest…</p></div>
-        <div class="q-ans"><span class="model-tag perp">Perplexity</span><p>Coupesag se distingue clairement des autres ateliers de découpe/soudure qui desservent le Saguenay par un positionnement “tôlerie de précision + sous‑traitance clé en main” plutôt que “atelier de soud…</p></div>
+gestion de projet complète jusqu’à la livraison
+
+L’entreprise se positionne comme sous-traitant complet en métal en feuille, notamment pour l’équipement manufacturier et les cabinets électriques.
+
+➡️ En pratique
+Coupesag agit souvent comme intégrateur de tôlerie.
+
+Autres ateliers du Saguenay (ex. Industrie PHD)
+
+Exemple : Industrie PHD
+
+Services principaux :
+
+découpe laser fibre
+
+découpe plasma
+
+découpe au feu
+
+pliage
+
+soudure
+
+dessins techniques / conception
+
+➡️ Positionnement
+Atelier fabrication métallique polyvalente (souvent pièces industrielles ou mécano-soudé).
+
+Différence principale
+Critère	Coupesag	Ateliers classiques
+Type d’entreprise	spécialiste tôlerie	fabrication métal général
+Intégration	très intégrée	parfois partielle
+Technologies	laser + jet d’eau + pliage	souvent laser + plasma
+Secteurs	équipements manufacturiers	construction / industriel
+2. Différences de PRIX (tendance réelle du marché)
+
+Dans la pratique industrielle régionale :
+
+Coupesag
+
+prix moyen à élevé
+
+justification :
+
+machines haut de gamme (ex. AMADA)
+
+précision élevée
+
+gestion de projet complète
+
+➡️ typique pour :
+
+pièces de précision
+
+production série
+
+clients OEM
+
+Ateliers plus petits
+
+prix souvent 10–25 % plus bas
+
+mais :
+
+moins d’automatisation
+
+plus de sous-traitance externe
+
+parfois plus de variabilité
+
+➡️ typique pour :
+
+prototypes
+
+petites séries
+
+structures simples
+
+3. Différences de DÉLAIS
+Coupesag
+
+Avantages :
+
+processus complet interne
+
+logistique et entreposage
+
+Ils indiquent viser des délais parmi les plus rapides de l’industrie grâce à leur organisation interne.
+
+➡️ typique :
+
+petites séries : 3-7 jours
+
+production série : 1-3 semaines
+
+Autres ateliers
+
+Souvent :
+
+dépendance à des partenaires externes
+
+peinture
+
+sablage
+
+découpe spécialisée
+
+➡️ typique :
+
+prototypes : 5-10 jours
+
+production : 2-4 semaines
+
+4. Différence stratégique (la plus importante)
+COUPESAG
+
+Approche :
+
+“tôlerie industrielle pour OEM”
+
+Ils travaillent souvent avec :
+
+équipementiers
+
+fabricants d’équipements
+
+projets techniques
+
+Ateliers métalliques classiques
+
+Approche :
+
+“fabrication métallique générale”
+
+Clients typiques :
+
+construction
+
+maintenance industrielle
+
+pièces mécano-soudées
+
+5. Résumé simple
+Facteur	Coupesag	Autres ateliers
+Intégration	⭐⭐⭐⭐	⭐⭐
+Précision	⭐⭐⭐⭐	⭐⭐⭐
+Prix	plus élevé	plus bas
+Délais	rapides	variables
+Projets complexes	oui	parfois
+
+✅ Conclusion
+
+Coupesag se distingue surtout par :
+
+une intégration complète de la tôlerie
+
+une précision industrielle élevée
+
+une capacité à gérer des projets complets
+
+Alors que plusieurs ateliers du Saguenay sont plutôt :
+
+ateliers de fabrication métallique polyvalente
+
+moins orientés tôlerie haute précision.</p>
+          </div>
+        </details>
+      </td>
+      <td class="td-model">
+        <details class="model-cell">
+          <summary>
+            <div class="cell-summary">
+              <span class="model-tag model-perp">Perplexity</span>
+              <p class="cell-short">Coupesag se distingue clairement des autres ateliers de découpe/soudure qui desservent le Saguenay par un positionnement “tôlerie de précision + sous‑traitance clé en main” plutôt …</p>
+              <span class="toggle-arrow">▶</span>
+            </div>
+          </summary>
+          <div class="cell-full">
+            <div class="response-label">RÉPONSE COMPLÈTE — Perplexity</div>
+            <p>Coupesag se distingue clairement des autres ateliers de découpe/soudure qui desservent le Saguenay par un positionnement “tôlerie de précision + sous‑traitance clé en main” plutôt que “atelier de soudure généraliste”.
+
+Services
+Coupesag
+
+Transformation de métaux en feuille orientée industriel (domaine électrique, équipementiers, manufacturiers d’équipements).
+
+Découpe laser et jet d’eau, pliage numérique, soudure (dont aluminium), assemblage, sablage/peinture via réseau, avec un vrai service de sous‑traitance “de la commande à la livraison”.
+
+Capacité d’ingénierie et de design en tôlerie (fabrication sur devis, cabinets électriques selon devis), ce qui dépasse le simple “job shop de soudure”.
+
+Autres ateliers typiques de la région (ex. Soudure Gilles, ateliers de soudure/roulage/pliage)
+
+Très bons pour des travaux de soudure, découpage, pliage, roulage sur plaques et structures, avec capacité sur des pièces lourdes et de grande dimension.
+
+Positionnement plus large “travaux de métal” (structures, tuyaux cintrés, réparations, projets variés) et moins centré sur la tôlerie fine de précision pour équipementiers.
+
+Moins d’accent explicite sur l’ingénierie de produits en métal en feuille ou la fabrication de cabinets électriques sur devis.
+
+Prix (tendance)
+Coupesag
+
+Probablement pas le moins cher au kg de métal sur des travaux simples, car ils concentrent technologie (laser + jet d’eau, pliage numérique) et expertise en tôlerie fine.
+
+Compétitif dès que tu as des pièces en série, avec contraintes de précision, d’esthétique ou d’intégration (boîtiers, châssis, sous‑ensembles mécano‑soudés) où un atelier généraliste aurait plus d’heures de mise au point.
+
+Autres ateliers
+
+Souvent plus économiques pour :
+
+réparations, pièces lourdes simples, structures soudées, travaux ponctuels,
+
+projets où le temps d’ingénierie en tôlerie est faible et où la précision de tôlerie n’est pas critique.
+
+Mais moins optimisés pour des flux récurrents de tôlerie de précision (nesting, séries, répétabilité).
+
+Délais
+Coupesag
+
+Ils mettent en avant des “délais de livraison parmi les plus rapides de l’industrie” pour leurs services de sous‑traitance, grâce à leurs équipements ultramodernes et à une organisation orientée série.
+
+Particulièrement intéressant si tu as des besoins réguliers en pièces de tôle (électrique, OEM, équipements) et que tu veux sécuriser des lead times courts et stables.
+
+Autres ateliers
+
+Très réactifs sur des travaux ponctuels ou de réparation, mais les délais peuvent varier davantage en fonction des chantiers, de la saison et du mix de projets (construction, génie civil, industrie, etc.).
+
+Moins de promesse explicite de délais “industrie tôlerie” sur des séries récurrentes.
+
+Résumé pratique
+Si tu es un équipementier / manufacturier qui a besoin de pièces de tôle, boîtiers, cabinets électriques ou sous‑ensembles mécano‑soudés en série, avec attentes sur la précision, la répétabilité et la gestion globale de la commande, Coupesag est l’option la plus alignée dans la région.
+
+Si tu cherches surtout un atelier pour travaux lourds, réparations, structures, roulage/tôles épaisses, un atelier de soudure généraliste (comme Soudure Gilles ou DJF) peut être plus économique et adapté, à condition que la partie “ingénierie tôlerie fine” soit gérée ailleurs.</p>
+          </div>
+        </details>
+      </td>
+      <td class="td-model">
+        <details class="model-cell">
+          <summary>
+            <div class="cell-summary">
+              <span class="model-tag model-gem">Gemini</span>
+              <p class="cell-short">Au Saguenay, le choix entre Coupesag et ses concurrents dépend principalement de la complexité de votre pièce et du volume de production. En tant qu'expert en stratégie B2B, vous r…</p>
+              <span class="toggle-arrow">▶</span>
+            </div>
+          </summary>
+          <div class="cell-full">
+            <div class="response-label">RÉPONSE COMPLÈTE — Gemini</div>
+            <p>Au Saguenay, le choix entre Coupesag et ses concurrents dépend principalement de la complexité de votre pièce et du volume de production. En tant qu'expert en stratégie B2B, vous remarquerez que ces entreprises se positionnent sur des segments de valeur très différents.Voici une analyse comparative basée sur les services, le positionnement tarifaire et les délais :1. Coupesag (Chicoutimi) : L'expert de la précision et du 4.0Coupesag se distingue par son programme "Facilité Assurée", qui est une approche de partenariat plus qu'une simple relation de sous-traitance.Services : Très axé sur la haute technologie (laser Amada, jet d'eau, pliage numérique). Ils excellent dans la fabrication de cabinets électriques et de pièces complexes en métal en feuilles.Prix : Positionnement Moyen-Haut. Leur infrastructure technologique et leurs certifications (ISO 9001, CWB) justifient des tarifs plus élevés, compensés par une réduction des rebuts et une précision accrue ($\pm$ 0,1 mm possible).Délais : Stables. Ils utilisent un système de gestion de production rigoureux pour garantir le respect des dates de livraison, essentielles pour l'intégration juste-à-temps de leurs clients.2. Groupe Hyperforme : Le "Guichet Unique" Multi-sitesContrairement à Coupesag, Hyperforme est un regroupement de partenaires.Services : C'est l'offre la plus large. Ils gèrent le bois, le caoutchouc et l'électromécanique en plus du métal. Idéal si votre produit fini nécessite plusieurs types de matériaux.Prix : Compétitifs pour les projets complets. En centralisant la gestion, ils réduisent vos coûts de logistique interne, même si chaque service pris individuellement peut varier.Délais : Variables. Comme ils coordonnent plusieurs sous-traitants, le délai dépend de la charge du partenaire sélectionné, mais ils offrent une grande capacité de montée en charge (scalability).3. Métal Art Soudure (Canton Tremblay) : La rapidité et le service lourdServices : Experts en soudure générale, usinage et surtout en remise à neuf de machinerie lourde. Ils offrent un service mobile et d'urgence 24/7.Prix : Très compétitifs. Ils se vantent de "défier toute la compétition" sur les prix, particulièrement pour les travaux de soudure et de réparation industrielle.Délais : Ultra-rapides. Leur force est la prise en charge immédiate pour les bris d'équipements ou les petites séries urgentes.Tableau SynthétiqueCritèreCoupesagGroupe HyperformeMétal Art SoudureProfil TypePièces de précision / Série 4.0Projets multidisciplinairesRéparation / Soudure lourdePoint FortTolérances serrées &amp; QualitéGestion de projet globaleVitesse &amp; PrixTechnologieLaser &amp; Jet d'eau haute perf.Réseau de 9+ partenairesSoudure &amp; Usinage mobileLocalisationChicoutimiSaguenay (Vaste réseau)Canton TremblayRecommandation StratégiqueSi vous lancez une production en série de boîtiers ou de pièces de tôlerie fine exigeant une esthétique parfaite : Coupesag est le choix logique.Si vous développez un nouvel équipement industriel combinant métal, électronique et peinture : Groupe Hyperforme optimisera votre chaîne d'approvisionnement.</p>
+          </div>
+        </details>
+      </td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- RECOMMANDATIONS -->
+<div class="section">
+  <div class="wrap">
+    <div class="section-label">🚀 Plan d'action</div>
+    <div class="section-title">Comment améliorer votre visibilité dans les LLM</div>
+    <p style="color:var(--t2);font-size:.92rem;margin-bottom:1.75rem;">Cliquez sur chaque étape pour voir les recommandations détaillées.</p>
+    <div class="steps-list">
+      
+    <details class="step-accordion">
+      <summary class="step-btn">
+        <div class="step-btn-inner">
+          <span class="step-num">01</span>
+          <div class="step-text">
+            <span class="step-icon">🎯</span>
+            <span class="step-titre">Ancrer votre identité — un profil clair pour l'IA</span>
+            <span class="step-resume">Formuler ce que vous faites en termes que l'IA et vos clients comprennent de la même façon.</span>
+          </div>
+          <span class="step-arrow">▶</span>
+        </div>
+      </summary>
+      <div class="step-content">
+        <p>Nous commençons par une seule chose : formuler le <strong>« profil de votre entreprise »</strong> de façon à ce que les personnes <em>et</em> les modèles d'IA le comprennent de la même manière. Ce sont des formulations courtes et concrètes sur votre site — pas des slogans — qui répondent aux 10 questions de votre marché : ce que vous faites (découpe / pliage / soudure / assemblage), avec quels matériaux, quels délais typiques, quels secteurs (dont le secteur électrique), quel format de travail (cycle complet, projets urgents), et quelles contraintes réelles ou volumes minimaux.
+
+Nous harmonisons ensuite ces formulations en un seul <strong>« vocabulaire »</strong>&nbsp;: mêmes appellations de services et d'entités dans les endroits clés du site (titres, pages de services, FAQ, cas clients). L'IA cesse alors de confondre COUPESAG avec un « atelier généraliste » et commence à vous percevoir comme un sous-traitant spécialisé.</p>
       </div>
-      <div class="q-footer">
-        <span>🏢 Concurrents cités : <strong>—</strong></span>
-        <span class="q-resume">Coupesag est présenté comme un sous-traitant complet en métal en feuille, distinct des ateliers de soudure généralistes.</span>
+    </details>
+    <details class="step-accordion">
+      <summary class="step-btn">
+        <div class="step-btn-inner">
+          <span class="step-num">02</span>
+          <div class="step-text">
+            <span class="step-icon">📄</span>
+            <span class="step-titre">Créer des pages de services autour des vraies questions clients (issues du sondage LLM)</span>
+            <span class="step-resume">Transformer les 10 questions du sondage en pages de services que l'IA peut citer directement.</span>
+          </div>
+          <span class="step-arrow">▶</span>
+        </div>
+      </summary>
+      <div class="step-content">
+        <p>Votre sondage a déjà montré comment les acheteurs formulent leurs requêtes à l'IA&nbsp;: prix et devis, urgence, certifications, aluminium et inox, précision de pliage CNC, soudure et assemblage, armoires électriques, service clé en main, références et comparaison. La prochaine étape consiste à transformer ces thèmes en <strong>3 à 6 pages « piliers »</strong> (ou blocs) sur votre site, chacune répondant à une classe de questions et contenant des éléments concrets : matériaux, tolérances, formats de fichiers, délais, contraintes, exemples de réalisations et scénarios de commande typiques.
+
+L'important n'est pas <em>d'écrire beaucoup</em>, mais d'écrire de façon à ce que <strong>l'IA puisse citer</strong>&nbsp;: listes structurées, tableaux, réponses courtes, formulations claires « nous faisons / nous ne faisons pas », et 5 à 10 FAQ reprenant littéralement les questions issues du sondage LLM.</p>
       </div>
+    </details>
+    <details class="step-accordion">
+      <summary class="step-btn">
+        <div class="step-btn-inner">
+          <span class="step-num">03</span>
+          <div class="step-text">
+            <span class="step-icon">🏆</span>
+            <span class="step-titre">Les preuves : cas clients + références pour que l'IA vous fasse confiance</span>
+            <span class="step-resume">Des projets concrets documentés — pour que l'IA et vos futurs clients aient des signaux vérifiables.</span>
+          </div>
+          <span class="step-arrow">▶</span>
+        </div>
+      </summary>
+      <div class="step-content">
+        <p>L'IA recommande plus facilement ceux qui ont des <strong>signaux vérifiables</strong>&nbsp;: projets concrets, résultats mesurables, secteurs, matériaux, délais, photos ou schémas, et l'histoire d'une tâche réalisée. Dans votre sondage, « Références & Réalisations » ressort comme un des manques dans la perception actuelle — c'est donc l'un des leviers les plus rapides.
+
+Nous préparons un simple <strong>« kit de preuves »</strong>&nbsp;: 3 courtes histoires de projets réalisés (250 à 400 mots chacune) suivant un même modèle — quelle était la demande, quelles étaient les contraintes, ce que vous avez fait, en quel délai et quel résultat a été livré. Nous ajoutons également une liste claire de 8 à 12 types de pièces ou de travaux que vous prenez réellement en production.
+
+Ainsi, l'IA — et vos futurs clients — comprennent plus vite votre spécialisation et commencent à « reconnaître » COUPESAG lorsqu'on lui demande un sous-traitant fiable.</p>
+      </div>
+    </details>
+    </div>
+    <div class="closing-box" style="margin-top:1.75rem;">
+      <p>C'est un travail systématique&nbsp;: les premiers changements mesurables dans les mentions et la qualité des recommandations deviennent généralement perceptibles quelques semaines après la mise en place des corrections de base, et l'effet se renforce au fur et à mesure que le contenu et les signaux s'accumulent.</p>
     </div>
   </div>
 </div>
 
 <!-- CTA -->
-<div class="wrap">
-  <div class="cta-box">
-    <h2>Coupesag mérite d'être la réponse par défaut de l'IA.</h2>
-    <p style="color:var(--t2);max-width:520px;margin:0 auto;">Votre expertise est réelle. Votre réputation est bâtie. Il manque seulement la structure qui permet aux modèles de vous lire — et de vous recommander.</p>
-    <a class="btn-primary" href="https://docs.google.com/forms/d/e/1FAIpQLSctf7q4fbSbNHrt_u-GAjB3KTE7M6RdJ1vNTVGLT8VbVZjuCg/viewform" target="_blank">Démarrer la transformation GEO →</a>
-    <p style="color:var(--t3);font-size:.82rem;margin-top:1rem;">Audit préparé par Halyna Lavrik · lavrikgeo.ca · Chicoutimi, Québec</p>
+<div class="cta-section">
+  <div class="wrap">
+    <div class="cta-box">
+      <h2>COUPESAG mérite d'être<br>la réponse par défaut de l'IA.</h2>
+      <p>Votre expertise est réelle. Votre réputation est bâtie sur des projets concrets. Il manque seulement la structure qui permet aux modèles de vous lire — et de vous recommander à votre place.</p>
+      <a class="cta-btn" href="https://docs.google.com/forms/d/e/1FAIpQLSctf7q4fbSbNHrt_u-GAjB3KTE7M6RdJ1vNTVGLT8VbVZjuCg/viewform" target="_blank">Démarrer la transformation GEO →</a>
+      <p class="cta-note">Audit préparé par Halyna Lavrik · GEO Specialist · lavrikgeo.ca · Chicoutimi, Québec</p>
+    </div>
   </div>
 </div>
 
