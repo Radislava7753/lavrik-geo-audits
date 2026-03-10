@@ -1,0 +1,1629 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tableau de bord client — Coupesag · Automatisation clôture mensuelle</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #faf8f2;
+    --bg-card: #ffffff;
+    --bg-dark: #1a1a1a;
+    --bg-dark2: #232323;
+    --bg-dark3: #2c2c2c;
+    --lime: #c8f000;
+    --lime2: #a8c400;
+    --lime-soft: #e8f8a0;
+    --text: #1a1a1a;
+    --text-muted: #6b6b6b;
+    --text-light: #9a9a9a;
+    --blue: #2563eb;
+    --blue-light: #eff6ff;
+    --blue-border: #93c5fd;
+    --amber: #d97706;
+    --amber-light: #fffbeb;
+    --amber-border: #fcd34d;
+    --border: #e5e0d5;
+    --radius: 10px;
+    --shadow: 0 2px 12px rgba(0,0,0,0.07);
+    --shadow-md: 0 4px 20px rgba(0,0,0,0.10);
+  }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* READING BANNER */
+  #reading-banner {
+    display: none;
+    background: #166534;
+    color: #bbf7d0;
+    text-align: center;
+    padding: 12px 20px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    border-bottom: 2px solid #4ade80;
+  }
+  #reading-banner.visible { display: block; }
+
+  /* SAVED TOAST */
+  #saved-toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--bg-dark);
+    color: var(--lime);
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.25s, transform 0.25s;
+    z-index: 9999;
+    pointer-events: none;
+    border: 1px solid var(--lime2);
+  }
+  #saved-toast.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* HEADER */
+  .site-header {
+    background: var(--bg-dark);
+    color: #fff;
+    padding: 40px 24px 36px;
+    text-align: center;
+  }
+  .header-tag {
+    display: inline-block;
+    background: var(--lime);
+    color: var(--bg-dark);
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+  }
+  .site-header h1 {
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+    line-height: 1.25;
+  }
+  .site-header .subtitle {
+    color: #9a9a9a;
+    font-size: 1rem;
+    letter-spacing: 0.03em;
+  }
+  .site-header .subtitle span {
+    color: var(--lime);
+  }
+
+  /* CONTAINER */
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 32px 20px 60px;
+  }
+
+  /* INTRO CARD */
+  .intro-card {
+    background: var(--bg-dark2);
+    border-left: 4px solid var(--lime);
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    margin-bottom: 24px;
+    color: #d4d4d4;
+    line-height: 1.75;
+  }
+  .intro-card p + p { margin-top: 14px; }
+
+  /* LEGEND */
+  .legend-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 24px;
+    margin-bottom: 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: center;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    box-shadow: var(--shadow);
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .legend-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+  .legend-dot.blue { background: var(--blue-light); border: 2px solid var(--blue-border); }
+  .legend-dot.amber { background: var(--amber-light); border: 2px solid var(--amber-border); }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+    margin-top: 36px;
+  }
+  .section-subtitle {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 18px;
+  }
+
+  /* STAGE CARDS (accordion) */
+  .stage-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 10px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  .stage-card:hover { box-shadow: var(--shadow-md); }
+
+  .stage-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+  }
+  .stage-header:hover { background: #f5f3ee; }
+
+  .stage-num {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--bg-dark);
+    color: var(--lime);
+    font-weight: 800;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .stage-title-wrap {
+    flex: 1;
+    min-width: 0;
+  }
+  .stage-title {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .stage-duration {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+  .stage-toggle {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    transition: transform 0.25s, background 0.15s;
+    font-weight: 300;
+    line-height: 1;
+  }
+  .stage-card.open .stage-toggle {
+    transform: rotate(45deg);
+    background: var(--lime);
+    color: var(--bg-dark);
+    border-color: var(--lime2);
+  }
+
+  .stage-body {
+    display: none;
+    padding: 0 20px 20px;
+    border-top: 1px solid var(--border);
+  }
+  .stage-card.open .stage-body { display: block; }
+
+  /* Two-column responsibility grid */
+  .resp-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 16px;
+  }
+  @media (max-width: 600px) { .resp-grid { grid-template-columns: 1fr; } }
+
+  .resp-col {
+    background: #f8f6f1;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .resp-col-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+  .resp-col p, .resp-col ul { font-size: 0.88rem; color: var(--text); }
+  .resp-col ul { padding-left: 18px; }
+  .resp-col ul li { margin-bottom: 4px; }
+  .resp-col.muted-italic p { color: var(--text-muted); font-style: italic; }
+
+  /* Result box */
+  .result-box {
+    background: #f0fce0;
+    border-left: 3px solid var(--lime2);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-top: 14px;
+    font-size: 0.88rem;
+  }
+  .result-box-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--lime2);
+    margin-bottom: 5px;
+  }
+
+  /* Duration detail */
+  .duration-box {
+    background: #f5f3ee;
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin-top: 12px;
+    font-size: 0.83rem;
+    color: var(--text-muted);
+  }
+  .duration-box-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: 4px;
+  }
+
+  /* Fill grid */
+  .fill-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 16px;
+  }
+  @media (max-width: 600px) { .fill-grid { grid-template-columns: 1fr; } }
+
+  .fill-col label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .fill-col.blue label { color: var(--blue); }
+  .fill-col.amber label { color: var(--amber); }
+
+  textarea {
+    width: 100%;
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-family: inherit;
+    font-size: 0.88rem;
+    line-height: 1.55;
+    resize: vertical;
+    min-height: 90px;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .fill-col.blue textarea {
+    border: 2px solid var(--blue-border);
+    background: var(--blue-light);
+    color: var(--text);
+  }
+  .fill-col.blue textarea:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+  }
+  .fill-col.amber textarea {
+    border: 2px solid var(--amber-border);
+    background: var(--amber-light);
+    color: var(--text);
+  }
+  .fill-col.amber textarea:focus {
+    border-color: var(--amber);
+    box-shadow: 0 0 0 3px rgba(217,119,6,0.12);
+  }
+
+  /* Doc link */
+  .doc-link-wrap {
+    margin-top: 12px;
+  }
+  .doc-link-wrap label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 6px;
+  }
+  .doc-link-wrap input[type="text"] {
+    width: 100%;
+    border: 2px solid var(--blue-border);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-family: inherit;
+    font-size: 0.85rem;
+    background: var(--blue-light);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .doc-link-wrap input[type="text"]:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+  }
+
+  /* STANDALONE ACCORDION (not stage) */
+  .accordion {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 10px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .accordion-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px;
+    cursor: pointer;
+    user-select: none;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--text);
+    transition: background 0.15s;
+  }
+  .accordion-header:hover { background: #f5f3ee; }
+  .accordion-toggle {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    transition: transform 0.25s, background 0.15s;
+  }
+  .accordion.open .accordion-toggle {
+    transform: rotate(45deg);
+    background: var(--lime);
+    color: var(--bg-dark);
+    border-color: var(--lime2);
+  }
+  .accordion-body {
+    display: none;
+    padding: 0 20px 20px;
+    border-top: 1px solid var(--border);
+  }
+  .accordion.open .accordion-body { display: block; }
+  .accordion-body p { font-size: 0.92rem; color: var(--text); margin-top: 14px; line-height: 1.7; }
+  .accordion-body ul { padding-left: 20px; margin-top: 8px; }
+  .accordion-body ul li { font-size: 0.92rem; color: var(--text); margin-bottom: 5px; line-height: 1.6; }
+
+  /* STAT BOXES */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 600px) { .stat-grid { grid-template-columns: 1fr; } }
+
+  .stat-box {
+    background: var(--bg-dark);
+    border-radius: var(--radius);
+    padding: 24px 20px;
+    text-align: center;
+    border: 1px solid #333;
+  }
+  .stat-num {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--lime);
+    line-height: 1.1;
+    margin-bottom: 6px;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat-label {
+    font-size: 0.82rem;
+    color: #9a9a9a;
+    line-height: 1.4;
+  }
+
+  /* TABLE */
+  .data-table-wrap {
+    overflow-x: auto;
+    margin-top: 18px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.86rem;
+  }
+  .data-table th {
+    background: var(--bg-dark);
+    color: var(--lime);
+    padding: 12px 14px;
+    text-align: left;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .data-table td {
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: top;
+    line-height: 1.55;
+  }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:nth-child(even) td { background: #f8f6f1; }
+  .data-table td:first-child { font-weight: 600; white-space: nowrap; }
+  .pct-high { color: #166534; font-weight: 700; }
+  .pct-mid { color: #1d4ed8; font-weight: 700; }
+  .pct-low { color: var(--amber); font-weight: 700; }
+
+  /* SHARE BLOCK */
+  .share-block {
+    background: var(--bg-dark);
+    border: 2px solid var(--lime2);
+    border-radius: var(--radius);
+    padding: 32px;
+    margin-top: 40px;
+  }
+  .share-title {
+    color: var(--lime);
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .share-subtitle {
+    color: #9a9a9a;
+    font-size: 0.9rem;
+    margin-bottom: 24px;
+    line-height: 1.5;
+  }
+
+  .steps-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  @media (max-width: 640px) {
+    .steps-row { grid-template-columns: repeat(2, 1fr); }
+  }
+  .step-box {
+    background: var(--bg-dark2);
+    border: 1px solid #3a3a3a;
+    border-radius: 8px;
+    padding: 16px 14px;
+    text-align: center;
+  }
+  .step-emoji { font-size: 1.5rem; margin-bottom: 8px; }
+  .step-text { font-size: 0.82rem; color: #c4c4c4; line-height: 1.45; }
+
+  .btn-generate {
+    display: block;
+    width: 100%;
+    background: var(--lime);
+    color: var(--bg-dark);
+    border: none;
+    border-radius: 8px;
+    padding: 16px 24px;
+    font-size: 1.05rem;
+    font-weight: 800;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    transition: background 0.15s, transform 0.1s;
+    text-align: center;
+    font-family: inherit;
+  }
+  .btn-generate:hover { background: var(--lime2); }
+  .btn-generate:active { transform: scale(0.99); }
+
+  #link-result {
+    display: none;
+    margin-top: 20px;
+    background: var(--bg-dark2);
+    border: 1px solid #3a3a3a;
+    border-radius: 8px;
+    padding: 18px;
+  }
+  #link-result.visible { display: block; }
+
+  #generated-url {
+    background: #111;
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 0.8rem;
+    color: #9a9a9a;
+    word-break: break-all;
+    margin-bottom: 12px;
+    font-family: 'Courier New', monospace;
+    max-height: 80px;
+    overflow-y: auto;
+  }
+
+  .btn-copy {
+    background: transparent;
+    border: 2px solid var(--lime);
+    color: var(--lime);
+    border-radius: 6px;
+    padding: 9px 20px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s, color 0.15s;
+  }
+  .btn-copy:hover { background: var(--lime); color: var(--bg-dark); }
+  .btn-copy.copied { background: #166534; border-color: #4ade80; color: #bbf7d0; }
+
+  .share-note {
+    color: #6b6b6b;
+    font-size: 0.82rem;
+    font-style: italic;
+    margin-top: 16px;
+    line-height: 1.55;
+  }
+
+  .gdrive-wrap {
+    margin-top: 20px;
+  }
+  .gdrive-wrap label {
+    display: block;
+    font-size: 0.82rem;
+    color: #9a9a9a;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .gdrive-wrap input[type="text"] {
+    width: 100%;
+    background: var(--bg-dark2);
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-family: inherit;
+    font-size: 0.88rem;
+    color: #d4d4d4;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .gdrive-wrap input[type="text"]:focus { border-color: var(--lime2); }
+
+  /* Utility */
+  .mt-4 { margin-top: 4px; }
+  .mt-8 { margin-top: 8px; }
+  .mt-12 { margin-top: 12px; }
+  .mt-16 { margin-top: 16px; }
+  .text-sm { font-size: 0.88rem; }
+  .text-muted { color: var(--text-muted); }
+</style>
+</head>
+<body>
+
+<!-- READING MODE BANNER -->
+<div id="reading-banner">
+  📖 Mode lecture — Réponses de Coupesag chargées depuis le lien partagé
+</div>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-tag">Tableau de bord client</div>
+  <h1>Automatisation de la clôture mensuelle</h1>
+  <div class="subtitle">Fidélio ERP &nbsp;·&nbsp; <span>Solution sur mesure</span> &nbsp;·&nbsp; Coupesag</div>
+</header>
+
+<!-- MAIN CONTENT -->
+<div class="container">
+
+  <!-- INTRO CARD -->
+  <div class="intro-card">
+    <p>Ce document décrit étape par étape comment nous allons automatiser ensemble votre processus de clôture mensuelle (fin de mois) basé sur votre ERP Fidélio (SQL) — de l'entente de confidentialité et de l'accès aux données jusqu'au projet pilote et à la mise à l'échelle.</p>
+    <p>Ce tableau et les sections ci-dessous constituent votre interface de travail principale : vous saisissez vos réponses et joignez vos documents, je consigne l'avancement et les commentaires.</p>
+  </div>
+
+  <!-- LEGEND -->
+  <div class="legend-card">
+    <strong style="color:var(--text-muted);font-size:0.85rem;">Légende :</strong>
+    <div class="legend-item">
+      <div class="legend-dot blue"></div>
+      <span>🔵 Vos questions / commentaires</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot amber"></div>
+      <span>🟡 Mes réponses / statut</span>
+    </div>
+  </div>
+
+  <!-- SECTION: STAGES -->
+  <div class="section-title">Étapes du projet et responsabilités</div>
+  <div class="section-subtitle">Cliquez sur une étape pour la développer. Saisissez vos questions directement dans les champs prévus.</div>
+
+  <!-- STAGE 1 -->
+  <div class="stage-card" id="stage-1">
+    <div class="stage-header" onclick="toggleStage('stage-1')">
+      <div class="stage-num">1</div>
+      <div class="stage-title-wrap">
+        <div class="stage-title">Entente de confidentialité</div>
+        <div class="stage-duration">⏱ 1–3 jours ouvrables</div>
+      </div>
+      <div class="stage-toggle">+</div>
+    </div>
+    <div class="stage-body">
+      <div class="resp-grid">
+        <div class="resp-col">
+          <div class="resp-col-title">Ce que fait votre équipe (Coupesag)</div>
+          <p>Vous fournissez votre modèle d'entente de confidentialité (si vous en avez un) ou confirmez son absence. Vous désignez un responsable pour la révision du document.</p>
+        </div>
+        <div class="resp-col">
+          <div class="resp-col-title">Ce que je fais</div>
+          <p>J'analyse votre modèle ou je prépare le mien si vous n'en avez pas. Nous apportons les modifications nécessaires et signons la version finale.</p>
+        </div>
+      </div>
+      <div class="result-box">
+        <div class="result-box-label">Résultat de l'étape</div>
+        Entente de confidentialité signée permettant de discuter en toute sécurité de la structure des données, du processus de clôture et d'échanger des exemples de rapports réels.
+      </div>
+      <div class="duration-box">
+        <div class="duration-box-label">Durée estimée</div>
+        En général 1 à 3 jours ouvrables. Dépend de la vitesse d'approbation interne chez vous et de l'implication éventuelle des juristes ou du siège social.
+      </div>
+      <div class="fill-grid">
+        <div class="fill-col blue">
+          <label for="s1_client">Vos questions / commentaires</label>
+          <textarea id="s1_client" placeholder="Saisissez vos questions ou commentaires ici…"></textarea>
+        </div>
+        <div class="fill-col amber">
+          <label for="s1_mine">Mes réponses / statut</label>
+          <textarea id="s1_mine" placeholder="Réponses et statut d'avancement…"></textarea>
+        </div>
+      </div>
+      <div class="doc-link-wrap">
+        <label for="s1_doc">Lien vers le document partagé (Google Drive, etc.)</label>
+        <input type="text" id="s1_doc" placeholder="https://drive.google.com/…">
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 2 -->
+  <div class="stage-card" id="stage-2">
+    <div class="stage-header" onclick="toggleStage('stage-2')">
+      <div class="stage-num">2</div>
+      <div class="stage-title-wrap">
+        <div class="stage-title">Environnement de travail et accès aux données</div>
+        <div class="stage-duration">⏱ 2–5 jours ouvrables</div>
+      </div>
+      <div class="stage-toggle">+</div>
+    </div>
+    <div class="stage-body">
+      <div class="resp-grid">
+        <div class="resp-col">
+          <div class="resp-col-title">Ce que fait votre équipe (Coupesag)</div>
+          <p>Vous indiquez quel type d'accès est possible aux données ERP/SQL (accès direct, extractions seulement, base de test). Vous désignez un contact TI. Vous confirmez les exigences de sécurité (RPV, restriction des droits, etc.).</p>
+        </div>
+        <div class="resp-col">
+          <div class="resp-col-title">Ce que je fais</div>
+          <p>En collaboration avec votre équipe TI, je configure un accès sécurisé aux données SQL du ERP (via des droits restreints, une base de test ou des extractions régulières — selon votre politique de sécurité). Je documente les tables accessibles et les formats disponibles.</p>
+        </div>
+      </div>
+      <div class="result-box">
+        <div class="result-box-label">Résultat de l'étape</div>
+        Possibilité technique de travailler avec les données ERP ou leurs extractions régulières dans un format convenu et sécurisé.
+      </div>
+      <div class="duration-box">
+        <div class="duration-box-label">Durée estimée</div>
+        En général 2 à 5 jours ouvrables, parfois davantage. Dépend du type d'accès (SQL direct, API, extractions ETL), des contraintes de sécurité, de la nécessité d'un RPV, du niveau d'accès aux tables, de l'implication d'un fournisseur ERP externe et des procédures TI internes.
+      </div>
+      <div class="fill-grid">
+        <div class="fill-col blue">
+          <label for="s2_client">Vos questions / commentaires</label>
+          <textarea id="s2_client" placeholder="Saisissez vos questions ou commentaires ici…"></textarea>
+        </div>
+        <div class="fill-col amber">
+          <label for="s2_mine">Mes réponses / statut</label>
+          <textarea id="s2_mine" placeholder="Réponses et statut d'avancement…"></textarea>
+        </div>
+      </div>
+      <div class="doc-link-wrap">
+        <label for="s2_doc">Lien vers le document partagé (Google Drive, etc.)</label>
+        <input type="text" id="s2_doc" placeholder="https://drive.google.com/…">
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 3 -->
+  <div class="stage-card" id="stage-3">
+    <div class="stage-header" onclick="toggleStage('stage-3')">
+      <div class="stage-num">3</div>
+      <div class="stage-title-wrap">
+        <div class="stage-title">Compréhension du processus de clôture mensuelle</div>
+        <div class="stage-duration">⏱ 2–4 jours ouvrables</div>
+      </div>
+      <div class="stage-toggle">+</div>
+    </div>
+    <div class="stage-body">
+      <div class="resp-grid">
+        <div class="resp-col">
+          <div class="resp-col-title">Ce que fait votre équipe (Coupesag)</div>
+          <p>Vous décrivez votre processus actuel de clôture : les étapes principales, les opérations manuelles, les rapports produits, les vérifications effectuées, les personnes impliquées et les étapes où surviennent le plus souvent des délais ou des erreurs. Si possible, utilisez un cycle récent comme exemple.</p>
+        </div>
+        <div class="resp-col">
+          <div class="resp-col-title">Ce que je fais</div>
+          <p>J'analyse la description du processus et je structure la séquence d'étapes, des données SQL brutes jusqu'aux états financiers finaux. Je prépare des questions de clarification sur les étapes, les responsables et les points de contrôle.</p>
+        </div>
+      </div>
+      <div class="result-box">
+        <div class="result-box-label">Résultat de l'étape</div>
+        Compréhension claire et partagée du processus actuel de clôture mensuelle et liste des informations à recueillir pour concevoir la solution.
+      </div>
+      <div class="duration-box">
+        <div class="duration-box-label">Durée estimée</div>
+        En général 2 à 4 jours ouvrables. Dépend de la complétude de la description du processus, de la disponibilité de votre équipe à partager les détails et de l'accessibilité des personnes clés.
+      </div>
+      <div class="fill-grid">
+        <div class="fill-col blue">
+          <label for="s3_client">Vos questions / commentaires</label>
+          <textarea id="s3_client" placeholder="Saisissez vos questions ou commentaires ici…"></textarea>
+        </div>
+        <div class="fill-col amber">
+          <label for="s3_mine">Mes réponses / statut</label>
+          <textarea id="s3_mine" placeholder="Réponses et statut d'avancement…"></textarea>
+        </div>
+      </div>
+      <div class="doc-link-wrap">
+        <label for="s3_doc">Lien vers le document partagé (Google Drive, etc.)</label>
+        <input type="text" id="s3_doc" placeholder="https://drive.google.com/…">
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 4 -->
+  <div class="stage-card" id="stage-4">
+    <div class="stage-header" onclick="toggleStage('stage-4')">
+      <div class="stage-num">4</div>
+      <div class="stage-title-wrap">
+        <div class="stage-title">Collecte des données et exemples</div>
+        <div class="stage-duration">⏱ 3–7 jours ouvrables</div>
+      </div>
+      <div class="stage-toggle">+</div>
+    </div>
+    <div class="stage-body">
+      <div class="resp-grid">
+        <div class="resp-col">
+          <div class="resp-col-title">Ce que fait votre équipe (Coupesag)</div>
+          <p>Vous fournissez des exemples de données utilisées lors de la préparation du rapport : extractions SQL, fichiers Excel, tableaux intermédiaires, exemples de calculs, états financiers actuels. Si possible, pour un ou plusieurs mois déjà clôturés.</p>
+        </div>
+        <div class="resp-col">
+          <div class="resp-col-title">Ce que je fais</div>
+          <p>J'analyse les matériaux reçus pour comprendre la structure des données, les algorithmes de calcul, la logique de formation des rapports et les éventuelles incohérences entre les sources. Au besoin, je demande des exemples ou des explications supplémentaires.</p>
+        </div>
+      </div>
+      <div class="result-box">
+        <div class="result-box-label">Résultat de l'étape</div>
+        Compréhension de la structure des données réelles et confirmation que leur volume et qualité sont suffisants pour automatiser le rapport. Élaboration d'une première « cartographie des données » de la clôture mensuelle.
+      </div>
+      <div class="duration-box">
+        <div class="duration-box-label">Durée estimée</div>
+        En général 3 à 7 jours ouvrables. Dépend du volume de matériaux, de la complexité de la structure ERP/SQL et du nombre de questions de clarification.
+      </div>
+      <div class="fill-grid">
+        <div class="fill-col blue">
+          <label for="s4_client">Vos questions / commentaires</label>
+          <textarea id="s4_client" placeholder="Saisissez vos questions ou commentaires ici…"></textarea>
+        </div>
+        <div class="fill-col amber">
+          <label for="s4_mine">Mes réponses / statut</label>
+          <textarea id="s4_mine" placeholder="Réponses et statut d'avancement…"></textarea>
+        </div>
+      </div>
+      <div class="doc-link-wrap">
+        <label for="s4_doc">Lien vers le document partagé (Google Drive, etc.)</label>
+        <input type="text" id="s4_doc" placeholder="https://drive.google.com/…">
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 5 -->
+  <div class="stage-card" id="stage-5">
+    <div class="stage-header" onclick="toggleStage('stage-5')">
+      <div class="stage-num">5</div>
+      <div class="stage-title-wrap">
+        <div class="stage-title">Architecture préliminaire et budget du projet pilote</div>
+        <div class="stage-duration">⏱ 2–4 jours ouvrables</div>
+      </div>
+      <div class="stage-toggle">+</div>
+    </div>
+    <div class="stage-body">
+      <div class="resp-grid">
+        <div class="resp-col">
+          <div class="resp-col-title">Ce que fait votre équipe (Coupesag)</div>
+          <p>Vous confirmez votre volonté d'avancer vers le projet pilote et convenez d'une fourchette budgétaire approximative et d'attentes quant aux résultats du pilote.</p>
+        </div>
+        <div class="resp-col">
+          <div class="resp-col-title">Ce que je fais</div>
+          <p>Sur la base des données recueillies, je propose une architecture préliminaire de la solution : quels modules sont inclus, comment les flux de données transitent du ERP/SQL jusqu'au rapport, quelles vérifications sont effectuées à chaque étape. J'évalue la charge de travail et formule un budget approximatif pour le pilote.</p>
+        </div>
+      </div>
+      <div class="result-box">
+        <div class="result-box-label">Résultat de l'étape</div>
+        Compréhension partagée de la structure du système, des tâches que le projet pilote résoudra et de son coût approximatif. Ébauche du plan d'étapes du pilote.
+      </div>
+      <div class="duration-box">
+        <div class="duration-box-label">Durée estimée</div>
+        En général 2 à 4 jours ouvrables après réception de tous les matériaux et résolution des questions principales sur les données.
+      </div>
+      <div class="fill-grid">
+        <div class="fill-col blue">
+          <label for="s5_client">Vos questions / commentaires</label>
+          <textarea id="s5_client" placeholder="Saisissez vos questions ou commentaires ici…"></textarea>
+        </div>
+        <div class="fill-col amber">
+          <label for="s5_mine">Mes réponses / statut</label>
+          <textarea id="s5_mine" placeholder="Réponses et statut d'avancement…"></textarea>
+        </div>
+      </div>
+      <div class="doc-link-wrap">
+        <label for="s5_doc">Lien vers le document partagé (Google Drive, etc.)</label>
+        <input type="text" id="s5_doc" placeholder="https://drive.google.com/…">
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 6 -->
+  <div class="stage-card" id="stage-6">
+    <div class="stage-header" onclick="toggleStage('stage-6')">
+      <div class="stage-num">6</div>
+      <div class="stage-title-wrap">
+        <div class="stage-title">Acompte et lancement du projet pilote</div>
+        <div class="stage-duration">⏱ Selon vos procédures internes</div>
+      </div>
+      <div class="stage-toggle">+</div>
+    </div>
+    <div class="stage-body">
+      <div class="resp-grid">
+        <div class="resp-col">
+          <div class="resp-col-title">Ce que fait votre équipe (Coupesag)</div>
+          <p>Vous confirmez le lancement du pilote et effectuez le premier versement (acompte) du montant convenu. Vous confirmez également sur quelles données (quel mois ou période) nous construisons le premier prototype.</p>
+        </div>
+        <div class="resp-col">
+          <div class="resp-col-title">Ce que je fais</div>
+          <p>Nous définissons le périmètre du pilote (quels rapports, quelles entités juridiques, quelles périodes) et lançons officiellement le projet. Les ressources sont réservées pour le développement et la configuration.</p>
+        </div>
+      </div>
+      <div class="result-box">
+        <div class="result-box-label">Résultat de l'étape</div>
+        Projet officiellement lancé, les deux parties ont convenu du périmètre du pilote, des périodes de données et des conditions de l'acompte.
+      </div>
+      <div class="duration-box">
+        <div class="duration-box-label">Durée estimée</div>
+        Dépend des procédures internes d'approbation budgétaire et de la révision du contrat de votre côté.
+      </div>
+      <div class="fill-grid">
+        <div class="fill-col blue">
+          <label for="s6_client">Vos questions / commentaires</label>
+          <textarea id="s6_client" placeholder="Saisissez vos questions ou commentaires ici…"></textarea>
+        </div>
+        <div class="fill-col amber">
+          <label for="s6_mine">Mes réponses / statut</label>
+          <textarea id="s6_mine" placeholder="Réponses et statut d'avancement…"></textarea>
+        </div>
+      </div>
+      <div class="doc-link-wrap">
+        <label for="s6_doc">Lien vers le document partagé (Google Drive, etc.)</label>
+        <input type="text" id="s6_doc" placeholder="https://drive.google.com/…">
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 7 -->
+  <div class="stage-card" id="stage-7">
+    <div class="stage-header" onclick="toggleStage('stage-7')">
+      <div class="stage-num">7</div>
+      <div class="stage-title-wrap">
+        <div class="stage-title">Validation de l'architecture de la solution (2 étapes)</div>
+        <div class="stage-duration">⏱ 3–5 jours ouvrables</div>
+      </div>
+      <div class="stage-toggle">+</div>
+    </div>
+    <div class="stage-body">
+      <div class="resp-grid">
+        <div class="resp-col">
+          <div class="resp-col-title">Ce que fait votre équipe (Coupesag)</div>
+          <p>Vous examinez l'architecture proposée, posez des questions, précisez les contraintes (sécurité, infrastructure, sous-traitants externes). Au besoin, vous faites participer les équipes TI et comptabilité.</p>
+        </div>
+        <div class="resp-col">
+          <div class="resp-col-title">Ce que je fais</div>
+          <p>Je détaille l'architecture du système et la corrige au besoin selon les résultats des discussions. Je divise la réalisation en blocs compréhensibles pour minimiser les risques et la dépendance à un seul intervenant.</p>
+        </div>
+      </div>
+      <div class="result-box">
+        <div class="result-box-label">Résultat de l'étape</div>
+        Architecture du système d'automatisation validée, compréhensible tant pour l'équipe technique que financière. Vision partagée de comment le système évoluera après le pilote.
+      </div>
+      <div class="duration-box">
+        <div class="duration-box-label">Durée estimée</div>
+        En général 3 à 5 jours ouvrables. Dépend du nombre d'intervenants impliqués et du volume des ajustements suite aux discussions.
+      </div>
+      <div class="fill-grid">
+        <div class="fill-col blue">
+          <label for="s7_client">Vos questions / commentaires</label>
+          <textarea id="s7_client" placeholder="Saisissez vos questions ou commentaires ici…"></textarea>
+        </div>
+        <div class="fill-col amber">
+          <label for="s7_mine">Mes réponses / statut</label>
+          <textarea id="s7_mine" placeholder="Réponses et statut d'avancement…"></textarea>
+        </div>
+      </div>
+      <div class="doc-link-wrap">
+        <label for="s7_doc">Lien vers le document partagé (Google Drive, etc.)</label>
+        <input type="text" id="s7_doc" placeholder="https://drive.google.com/…">
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 8 -->
+  <div class="stage-card" id="stage-8">
+    <div class="stage-header" onclick="toggleStage('stage-8')">
+      <div class="stage-num">8</div>
+      <div class="stage-title-wrap">
+        <div class="stage-title">Construction du prototype du système</div>
+        <div class="stage-duration">⏱ 1 cycle de clôture + 3–7 jours ouvrables</div>
+      </div>
+      <div class="stage-toggle">+</div>
+    </div>
+    <div class="stage-body">
+      <div class="resp-grid">
+        <div class="resp-col muted-italic">
+          <div class="resp-col-title">Ce que fait votre équipe (Coupesag)</div>
+          <p>(Aucune action requise à cette étape)</p>
+        </div>
+        <div class="resp-col">
+          <div class="resp-col-title">Ce que je fais</div>
+          <p>Je construis le prototype du système : traitement des données → vérifications → génération du rapport. Le travail est effectué dans un environnement de test, sans impact sur votre processus de clôture actuel. Les données du mois convenu sont utilisées.</p>
+        </div>
+      </div>
+      <div class="result-box">
+        <div class="result-box-label">Résultat de l'étape</div>
+        Prototype fonctionnel du rapport automatique basé sur un cycle de clôture mensuelle réel : à partir de vos données, un rapport est généré aussi proche que possible du rapport manuel actuel.
+      </div>
+      <div class="duration-box">
+        <div class="duration-box-label">Durée estimée</div>
+        En général un cycle de clôture mensuelle + 3 à 7 jours ouvrables. Dépend de la complexité de la logique du rapport et du nombre de vérifications supplémentaires requises.
+      </div>
+      <div class="fill-grid">
+        <div class="fill-col blue">
+          <label for="s8_client">Vos questions / commentaires</label>
+          <textarea id="s8_client" placeholder="Saisissez vos questions ou commentaires ici…"></textarea>
+        </div>
+        <div class="fill-col amber">
+          <label for="s8_mine">Mes réponses / statut</label>
+          <textarea id="s8_mine" placeholder="Réponses et statut d'avancement…"></textarea>
+        </div>
+      </div>
+      <div class="doc-link-wrap">
+        <label for="s8_doc">Lien vers le document partagé (Google Drive, etc.)</label>
+        <input type="text" id="s8_doc" placeholder="https://drive.google.com/…">
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 9 -->
+  <div class="stage-card" id="stage-9">
+    <div class="stage-header" onclick="toggleStage('stage-9')">
+      <div class="stage-num">9</div>
+      <div class="stage-title-wrap">
+        <div class="stage-title">Tests sur vos données</div>
+        <div class="stage-duration">⏱ 3–7 jours ouvrables</div>
+      </div>
+      <div class="stage-toggle">+</div>
+    </div>
+    <div class="stage-body">
+      <div class="resp-grid">
+        <div class="resp-col">
+          <div class="resp-col-title">Ce que fait votre équipe (Coupesag)</div>
+          <p>Vous vérifiez les résultats du prototype : vous comparez le rapport aux états financiers actuels, laissez des commentaires, signalez les écarts ou souhaitez des ajustements de format. Au besoin, vous faites participer la comptabilité ou les auditeurs externes.</p>
+        </div>
+        <div class="resp-col">
+          <div class="resp-col-title">Ce que je fais</div>
+          <p>J'analyse les commentaires, précise les calculs et les règles de traitement des données, corrige les écarts identifiés. Je consigne les modifications convenues comme nouvelles règles du système.</p>
+        </div>
+      </div>
+      <div class="result-box">
+        <div class="result-box-label">Résultat de l'étape</div>
+        Le système devient aussi fidèle que possible à votre processus actuel de production du rapport, tout en conservant la transparence des calculs et l'historique des modifications.
+      </div>
+      <div class="duration-box">
+        <div class="duration-box-label">Durée estimée</div>
+        En général 3 à 7 jours ouvrables, selon le volume de rétroaction et le nombre d'itérations de correction.
+      </div>
+      <div class="fill-grid">
+        <div class="fill-col blue">
+          <label for="s9_client">Vos questions / commentaires</label>
+          <textarea id="s9_client" placeholder="Saisissez vos questions ou commentaires ici…"></textarea>
+        </div>
+        <div class="fill-col amber">
+          <label for="s9_mine">Mes réponses / statut</label>
+          <textarea id="s9_mine" placeholder="Réponses et statut d'avancement…"></textarea>
+        </div>
+      </div>
+      <div class="doc-link-wrap">
+        <label for="s9_doc">Lien vers le document partagé (Google Drive, etc.)</label>
+        <input type="text" id="s9_doc" placeholder="https://drive.google.com/…">
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 10 -->
+  <div class="stage-card" id="stage-10">
+    <div class="stage-header" onclick="toggleStage('stage-10')">
+      <div class="stage-num">10</div>
+      <div class="stage-title-wrap">
+        <div class="stage-title">Démarrage automatique du rapport</div>
+        <div class="stage-duration">⏱ 3–5 jours ouvrables après les tests</div>
+      </div>
+      <div class="stage-toggle">+</div>
+    </div>
+    <div class="stage-body">
+      <div class="resp-grid">
+        <div class="resp-col muted-italic">
+          <div class="resp-col-title">Ce que fait votre équipe (Coupesag)</div>
+          <p>(Aucune action requise à cette étape)</p>
+        </div>
+        <div class="resp-col">
+          <div class="resp-col-title">Ce que je fais</div>
+          <p>Je configure l'exécution régulière du système et le format de livraison des rapports (Excel, PDF ou tableau de bord). Nous convenons de qui, de votre côté, est responsable du contrôle et de l'approbation des rapports lors des premiers mois de fonctionnement du système.</p>
+        </div>
+      </div>
+      <div class="result-box">
+        <div class="result-box-label">Résultat de l'étape</div>
+        Dès le prochain cycle de clôture, le rapport est généré automatiquement avec un minimum d'interventions manuelles, et le responsable de votre côté contrôle la qualité et approuve les rapports.
+      </div>
+      <div class="duration-box">
+        <div class="duration-box-label">Durée estimée</div>
+        En général 3 à 5 jours ouvrables après la fin des tests. Dépend de l'infrastructure choisie (local/infonuagique) et des formats de livraison des rapports.
+      </div>
+      <div class="fill-grid">
+        <div class="fill-col blue">
+          <label for="s10_client">Vos questions / commentaires</label>
+          <textarea id="s10_client" placeholder="Saisissez vos questions ou commentaires ici…"></textarea>
+        </div>
+        <div class="fill-col amber">
+          <label for="s10_mine">Mes réponses / statut</label>
+          <textarea id="s10_mine" placeholder="Réponses et statut d'avancement…"></textarea>
+        </div>
+      </div>
+      <div class="doc-link-wrap">
+        <label for="s10_doc">Lien vers le document partagé (Google Drive, etc.)</label>
+        <input type="text" id="s10_doc" placeholder="https://drive.google.com/…">
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 11 -->
+  <div class="stage-card" id="stage-11">
+    <div class="stage-header" onclick="toggleStage('stage-11')">
+      <div class="stage-num">11</div>
+      <div class="stage-title-wrap">
+        <div class="stage-title">Budget, ententes finales et évolution du système</div>
+        <div class="stage-duration">⏱ Selon vos procédures internes</div>
+      </div>
+      <div class="stage-toggle">+</div>
+    </div>
+    <div class="stage-body">
+      <div class="resp-grid">
+        <div class="resp-col">
+          <div class="resp-col-title">Ce que fait votre équipe (Coupesag)</div>
+          <p>Vous communiquez votre budget approximatif et vos attentes internes quant aux délais de développement du système après le pilote. Vous précisez quels autres processus (en plus de la clôture mensuelle) vous souhaiteriez potentiellement automatiser à l'avenir.</p>
+        </div>
+        <div class="resp-col">
+          <div class="resp-col-title">Ce que je fais</div>
+          <p>Après les étapes 3 à 5, je propose l'architecture de la solution et le déroulement des étapes du pilote. Nous fixons le budget du pilote et les conditions de l'acompte. Le montant de l'acompte dépend notamment de l'architecture choisie (infonuagique ou locale) et du volume prévu de traitement par les modèles d'IA. Nous élaborons une feuille de route d'évolution après le pilote réussi.</p>
+        </div>
+      </div>
+      <div class="result-box">
+        <div class="result-box-label">Résultat de l'étape</div>
+        Budget clair pour les deux parties, architecture de la solution et conditions d'évolution ultérieure (du pilote à l'exploitation régulière et à l'extension à d'autres processus).
+      </div>
+      <div class="duration-box">
+        <div class="duration-box-label">Durée estimée</div>
+        Dépend avant tout des procédures internes d'approbation budgétaire et des priorités stratégiques d'automatisation dans votre entreprise.
+      </div>
+      <div class="fill-grid">
+        <div class="fill-col blue">
+          <label for="s11_client">Vos questions / commentaires</label>
+          <textarea id="s11_client" placeholder="Saisissez vos questions ou commentaires ici…"></textarea>
+        </div>
+        <div class="fill-col amber">
+          <label for="s11_mine">Mes réponses / statut</label>
+          <textarea id="s11_mine" placeholder="Réponses et statut d'avancement…"></textarea>
+        </div>
+      </div>
+      <div class="doc-link-wrap">
+        <label for="s11_doc">Lien vers le document partagé (Google Drive, etc.)</label>
+        <input type="text" id="s11_doc" placeholder="https://drive.google.com/…">
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION: HOW SYSTEM IMPROVES -->
+  <div class="section-title" style="margin-top:40px;">Comment le système s'améliore avec le temps</div>
+
+  <div class="accordion" id="acc-improve">
+    <div class="accordion-header" onclick="toggleAccordion('acc-improve')">
+      <span>Mécanisme d'apprentissage et d'amélioration continue</span>
+      <div class="accordion-toggle">+</div>
+    </div>
+    <div class="accordion-body">
+      <p>Aucun système sérieux d'automatisation des états financiers n'est parfait dès le premier jour — surtout dans les processus de clôture mensuelle, où chaque entreprise a sa propre méthodologie, sa politique comptable et ses particularités sectorielles.</p>
+      <p>C'est pourquoi le système est conçu dès le départ avec un mécanisme d'apprentissage contrôlé : chaque écart constaté et chaque correction convenue deviennent une nouvelle règle.</p>
+      <p><strong>Chaque rapport consigne :</strong></p>
+      <ul>
+        <li>les écarts constatés ;</li>
+        <li>vos commentaires ;</li>
+        <li>les corrections confirmées et la « vérité » retenue (quelle formule ou quelle table fait référence).</li>
+      </ul>
+      <p>Cela permet au système de s'adapter progressivement à votre logique de clôture financière, sans perturber le processus en place.</p>
+      <p><strong>Concrètement, cela signifie que :</strong></p>
+      <ul>
+        <li>les premiers rapports du projet pilote peuvent nécessiter des vérifications supplémentaires et une comparaison avec vos fichiers actuels ;</li>
+        <li>vos corrections permettent d'affiner les règles de calcul et les vérifications des données ;</li>
+        <li>le système mémorise les exceptions convenues et les applique automatiquement à l'avenir, tandis que l'historique de ces décisions reste accessible pour l'audit.</li>
+      </ul>
+
+      <div class="data-table-wrap" style="margin-top:20px;">
+        <p style="padding:12px 14px 0;font-weight:700;font-size:0.9rem;color:var(--text);">Évolution de l'automatisation par mois</p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Période</th>
+              <th>Part automatisée</th>
+              <th>Vérification manuelle</th>
+              <th>Ce qui se passe</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Mois 1<br><small style="font-weight:400;color:#888">(premier rapport pilote)</small></td>
+              <td><span class="pct-low">~50–60 %</span></td>
+              <td><span class="pct-low">~40–50 %</span></td>
+              <td>Transfert de la logique de calcul actuelle dans le système. Comparaison des résultats automatiques avec les rapports actuels. Consignation des écarts et collecte de vos commentaires.</td>
+            </tr>
+            <tr>
+              <td>Mois 2</td>
+              <td><span class="pct-mid">~70–80 %</span></td>
+              <td><span class="pct-mid">~20–30 %</span></td>
+              <td>Prise en compte des principales corrections sur les formules et les formats. Ajout de vérifications supplémentaires des données et de contrôles techniques de qualité.</td>
+            </tr>
+            <tr>
+              <td>Mois 3</td>
+              <td><span class="pct-high">~80–90 %</span></td>
+              <td><span class="pct-mid">~10–20 %</span></td>
+              <td>Le système reproduit de façon stable le rapport type. La vérification manuelle est principalement requise pour les situations non standard et les corrections ponctuelles.</td>
+            </tr>
+            <tr>
+              <td>Mois 4 et plus</td>
+              <td><span class="pct-high">90 %+</span></td>
+              <td><span class="pct-high">≤ 10 %</span></td>
+              <td>Le système fonctionne de façon stable ; le travail manuel se limite à l'audit, à l'analyse des écarts et aux rares modifications de la logique d'affaires ou de la politique comptable.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION: PRACTICE RESULTS -->
+  <div class="section-title" style="margin-top:40px;">Ce que montre la pratique</div>
+
+  <div class="stat-grid">
+    <div class="stat-box">
+      <div class="stat-num">38 h</div>
+      <div class="stat-label">économisées par mois<br>(consolidation multi-entités)</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">180 h</div>
+      <div class="stat-label">économisées par an sur les<br>journal entries hebdomadaires</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num">7,5 jours</div>
+      <div class="stat-label">de réduction de la durée<br>de clôture en moyenne</div>
+    </div>
+  </div>
+
+  <div class="accordion" id="acc-practice">
+    <div class="accordion-header" onclick="toggleAccordion('acc-practice')">
+      <span>En savoir plus sur ces chiffres</span>
+      <div class="accordion-toggle">+</div>
+    </div>
+    <div class="accordion-body">
+      <p>La pratique de mise en œuvre de l'automatisation dans les services financiers des entreprises de petite et moyenne taille montre une réduction significative du temps consacré aux processus de clôture mensuelle et une diminution des risques opérationnels. Voici des exemples typiques d'effets observés.</p>
+      <p><strong>Exemple 1.</strong> Une entreprise avec plusieurs entités juridiques consacrait environ 40 heures par mois à la consolidation manuelle des rapports. Après la mise en œuvre de l'automatisation — environ 2 heures, soit une économie de 38 heures à chaque cycle de clôture (y compris le contrôle et l'approbation finale).</p>
+      <p><strong>Exemple 2.</strong> L'automatisation des journal entries hebdomadaires a réduit le temps de traitement :</p>
+      <ul>
+        <li>de 4 heures par semaine</li>
+        <li>à 15 minutes.</li>
+      </ul>
+      <p>Soit environ 180 heures d'économie par an pour ce seul type d'opération, sans compter la réduction du risque d'erreurs lors de la saisie manuelle.</p>
+      <p>Les études sur les projets ERP (notamment Dynamics 365, Acumatica) montrent que l'automatisation de la clôture financière avec des outils IA réduit la durée du monthly close en moyenne de 7,5 jours par rapport aux processus entièrement manuels.</p>
+    </div>
+  </div>
+
+  <!-- SECTION: COST -->
+  <div class="section-title" style="margin-top:40px;">Coût et approche tarifaire</div>
+
+  <div class="accordion" id="acc-cost">
+    <div class="accordion-header" onclick="toggleAccordion('acc-cost')">
+      <span>Comprendre la structure de coûts</span>
+      <div class="accordion-toggle">+</div>
+    </div>
+    <div class="accordion-body">
+      <p>Le coût des projets d'automatisation des états financiers peut varier considérablement selon :</p>
+      <ul>
+        <li>la structure et la version du ERP ;</li>
+        <li>la complexité et la qualité des données SQL ;</li>
+        <li>le nombre de vérifications, de règles d'affaires et le niveau de détail requis dans les rapports ;</li>
+        <li>les exigences en matière de sécurité et d'infrastructure (infonuagique ou sur site).</li>
+      </ul>
+      <p><strong>Pour vous aider à vous orienter :</strong></p>
+      <ul>
+        <li>vous pouvez comparer les prix typiques des projets d'automatisation de la clôture financière (ERP + SQL + IA) sur le marché ;</li>
+        <li>de mon côté, je propose un tarif inférieur à la moyenne du marché, car il s'agit pour moi du premier projet de ce type dans un contexte québécois francophone — ce qui vous apporte une attention supplémentaire à un prix plus avantageux.</li>
+      </ul>
+      <p>Le coût final du projet pilote est déterminé après les étapes 3 à 5, lorsque nous connaissons :</p>
+      <ul>
+        <li>le volume et la structure des données ;</li>
+        <li>la composition du rapport actuel et le format cible des états financiers ;</li>
+        <li>le nombre de vérifications, d'exceptions et de scénarios « si/alors » nécessaires.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION: PAYMENT MODEL -->
+  <div class="section-title" style="margin-top:40px;">Modèle de paiement</div>
+
+  <div class="accordion" id="acc-payment">
+    <div class="accordion-header" onclick="toggleAccordion('acc-payment')">
+      <span>Acompte, pilote et accompagnement à long terme</span>
+      <div class="accordion-toggle">+</div>
+    </div>
+    <div class="accordion-body">
+      <p>Après la validation de l'architecture préliminaire et du périmètre du pilote :</p>
+      <ul>
+        <li>le budget du projet pilote est fixé ;</li>
+        <li>un acompte est facturé, couvrant : l'infrastructure, les ressources de calcul, l'utilisation des modèles IA (volume de jetons, fréquence d'exécution, conservation des journaux, etc.).</li>
+      </ul>
+      <p>Après le pilote réussi, nous pouvons passer à un format d'accompagnement et de développement à long terme, où le paiement est lié soit au volume d'utilisation (nombre de rapports/mois), soit à un abonnement fixe pour la maintenance et l'évolution de la logique d'affaires.</p>
+    </div>
+  </div>
+
+  <!-- SECTION: BLOCAGES -->
+  <div class="section-title" style="margin-top:40px;">Blocages possibles et comment nous les résolvons</div>
+
+  <div class="accordion" id="acc-blocages">
+    <div class="accordion-header" onclick="toggleAccordion('acc-blocages')">
+      <span>Y aura-t-il des blocages ? Comment les gérer ?</span>
+      <div class="accordion-toggle">+</div>
+    </div>
+    <div class="accordion-body">
+      <p><strong>Question :</strong> Y aura-t-il des « blocages » en cours de projet ?</p>
+      <p><strong>Réponse :</strong> Oui, il y aura des moments du type :</p>
+      <ul>
+        <li>« Ici, le rapport indique 1 234 567, mais la formule SQL explicite donne 1 220 000. Pourquoi ? »</li>
+        <li>« Dans cette table, le champ ressemble par son nom à ce qu'il nous faut, mais les valeurs ne correspondent pas. Est-ce bien la bonne table ? »</li>
+        <li>« Deux tables différentes donnent des chiffres de chiffre d'affaires différents pour le même compte — laquelle fait référence ? »</li>
+      </ul>
+      <p>Aucune IA (moi non plus) ne peut tirer une réponse du néant si les données n'envoient pas de signal clair ou s'il existe plusieurs sources contradictoires. Mais ce n'est pas un arrêt de jeu — c'est une étape normale du processus :</p>
+      <ul>
+        <li>l'agent consigne l'écart et formule une question précise ;</li>
+        <li>je la transmets à votre comptable ou à votre équipe TI : « voici deux formules, voici deux chiffres — lequel est correct et pourquoi ? » ;</li>
+        <li>la réponse devient une nouvelle règle, et le système s'en souvient : dans ce type de situation, on prend l'option B, pas l'option A.</li>
+      </ul>
+      <p>Il n'existe pas de projet IA sans désaccords en phase de construction — il n'y a que des validations contrôlées, qui se transforment en règles stables et réduisent le nombre de questions à l'avenir.</p>
+    </div>
+  </div>
+
+  <!-- SHARE BLOCK -->
+  <div class="share-block">
+    <div class="share-title">📤 Comment partager vos réponses</div>
+    <div class="share-subtitle">Vos réponses sont sauvegardées dans votre navigateur. Pour les partager avec moi, utilisez le bouton ci-dessous.</div>
+
+    <div class="steps-row">
+      <div class="step-box">
+        <div class="step-emoji">✏️</div>
+        <div class="step-text">Remplissez vos réponses dans les champs bleus du tableau</div>
+      </div>
+      <div class="step-box">
+        <div class="step-emoji">🔗</div>
+        <div class="step-text">Cliquez sur le bouton « Générer le lien »</div>
+      </div>
+      <div class="step-box">
+        <div class="step-emoji">📋</div>
+        <div class="step-text">Copiez le lien généré</div>
+      </div>
+      <div class="step-box">
+        <div class="step-emoji">📧</div>
+        <div class="step-text">Envoyez-le par courriel ou messagerie</div>
+      </div>
+    </div>
+
+    <button class="btn-generate" onclick="generateLink()">Générer le lien à partager →</button>
+
+    <div id="link-result">
+      <div id="generated-url"></div>
+      <button class="btn-copy" id="copy-btn" onclick="copyLink()">Copier le lien</button>
+    </div>
+
+    <div class="gdrive-wrap">
+      <label for="gdrive_link">Lien vers votre dossier Google Drive (documents à partager) :</label>
+      <input type="text" id="gdrive_link" placeholder="https://drive.google.com/drive/folders/…">
+    </div>
+
+    <div class="share-note">Le lien contient toutes vos réponses encodées. Lorsque je l'ouvre, je vois votre tableau complet avec vos réponses. Aucune donnée n'est envoyée à un serveur externe.</div>
+  </div>
+
+</div><!-- /container -->
+
+<!-- SAVED TOAST -->
+<div id="saved-toast">Sauvegardé ✓</div>
+
+<script>
+  // ============================================================
+  // FIELD IDS
+  // ============================================================
+  var FIELDS = [
+    's1_client','s1_mine','s1_doc',
+    's2_client','s2_mine','s2_doc',
+    's3_client','s3_mine','s3_doc',
+    's4_client','s4_mine','s4_doc',
+    's5_client','s5_mine','s5_doc',
+    's6_client','s6_mine','s6_doc',
+    's7_client','s7_mine','s7_doc',
+    's8_client','s8_mine','s8_doc',
+    's9_client','s9_mine','s9_doc',
+    's10_client','s10_mine','s10_doc',
+    's11_client','s11_mine','s11_doc',
+    'gdrive_link'
+  ];
+
+  var STORAGE_KEY = 'coupesag_dashboard';
+  var _generatedUrl = '';
+  var _toastTimer = null;
+
+  // ============================================================
+  // DATA COLLECTION & LOADING
+  // ============================================================
+  function getAllData() {
+    var data = {};
+    FIELDS.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) data[id] = el.value;
+    });
+    return data;
+  }
+
+  function loadData(data) {
+    if (!data) return;
+    FIELDS.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el && data[id] !== undefined) {
+        el.value = data[id];
+      }
+    });
+  }
+
+  // ============================================================
+  // LOCALSTORAGE
+  // ============================================================
+  function saveToStorage() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(getAllData()));
+    } catch(e) {}
+    showSavedToast();
+  }
+
+  function loadFromStorage() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        loadData(JSON.parse(raw));
+        return true;
+      }
+    } catch(e) {}
+    return false;
+  }
+
+  // ============================================================
+  // TOAST
+  // ============================================================
+  function showSavedToast() {
+    var toast = document.getElementById('saved-toast');
+    toast.classList.add('show');
+    if (_toastTimer) clearTimeout(_toastTimer);
+    _toastTimer = setTimeout(function() {
+      toast.classList.remove('show');
+    }, 1800);
+  }
+
+  // ============================================================
+  // URL SHARING
+  // ============================================================
+  function generateLink() {
+    var data = getAllData();
+    var json = JSON.stringify(data);
+    var encoded;
+    try {
+      encoded = btoa(unescape(encodeURIComponent(json)));
+    } catch(e) {
+      encoded = btoa(json);
+    }
+    var base = window.location.href.split('?')[0].split('#')[0];
+    _generatedUrl = base + '?data=' + encoded;
+
+    var urlDiv = document.getElementById('generated-url');
+    urlDiv.textContent = _generatedUrl;
+
+    var resultDiv = document.getElementById('link-result');
+    resultDiv.classList.add('visible');
+
+    // Reset copy button
+    var btn = document.getElementById('copy-btn');
+    btn.textContent = 'Copier le lien';
+    btn.classList.remove('copied');
+  }
+
+  function copyLink() {
+    if (!_generatedUrl) return;
+    var btn = document.getElementById('copy-btn');
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(_generatedUrl).then(function() {
+        btn.textContent = 'Copié ✓';
+        btn.classList.add('copied');
+        setTimeout(function() {
+          btn.textContent = 'Copier le lien';
+          btn.classList.remove('copied');
+        }, 2500);
+      }).catch(function() {
+        fallbackCopy(btn);
+      });
+    } else {
+      fallbackCopy(btn);
+    }
+  }
+
+  function fallbackCopy(btn) {
+    var ta = document.createElement('textarea');
+    ta.value = _generatedUrl;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand('copy');
+      btn.textContent = 'Copié ✓';
+      btn.classList.add('copied');
+      setTimeout(function() {
+        btn.textContent = 'Copier le lien';
+        btn.classList.remove('copied');
+      }, 2500);
+    } catch(e) {}
+    document.body.removeChild(ta);
+  }
+
+  function loadFromUrl() {
+    var search = window.location.search;
+    if (!search) return false;
+    var match = search.match(/[?&]data=([^&]+)/);
+    if (!match) return false;
+    try {
+      var decoded = decodeURIComponent(escape(atob(match[1])));
+      var data = JSON.parse(decoded);
+      loadData(data);
+      return true;
+    } catch(e) {
+      try {
+        var data2 = JSON.parse(atob(match[1]));
+        loadData(data2);
+        return true;
+      } catch(e2) {}
+    }
+    return false;
+  }
+
+  // ============================================================
+  // ACCORDION / STAGE TOGGLE
+  // ============================================================
+  function toggleStage(id) {
+    var card = document.getElementById(id);
+    if (card) card.classList.toggle('open');
+  }
+
+  function toggleAccordion(id) {
+    var acc = document.getElementById(id);
+    if (acc) acc.classList.toggle('open');
+  }
+
+  // ============================================================
+  // INIT
+  // ============================================================
+  (function init() {
+    // Bind input events
+    FIELDS.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('input', saveToStorage);
+      }
+    });
+
+    // Check URL first, then localStorage
+    var fromUrl = loadFromUrl();
+    if (fromUrl) {
+      var banner = document.getElementById('reading-banner');
+      if (banner) banner.classList.add('visible');
+    } else {
+      loadFromStorage();
+    }
+  })();
+</script>
+</body>
+</html>
