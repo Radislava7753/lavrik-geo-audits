@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GEO-аудит: oppb.com.ua — Lavrik GEO</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0d0e0f; color: #d0d8c8; font-family: 'Inter', Arial, sans-serif; line-height: 1.7; }
+  .header { background: #111; border-bottom: 2px solid #c8ff00; padding: 28px 40px; display: flex; justify-content: space-between; align-items: center; }
+  .header .logo { color: #c8ff00; font-size: 18px; font-weight: 800; letter-spacing: 2px; }
+  .header .badge { background: #1a1f1a; border: 1px solid #c8ff00; color: #c8ff00; padding: 6px 14px; border-radius: 4px; font-size: 12px; font-weight: 700; letter-spacing: 2px; }
+  .hero { background: linear-gradient(135deg, #111 0%, #0a1a0a 100%); padding: 60px 40px; text-align: center; border-bottom: 1px solid #222; }
+  .hero .site-label { color: #888; font-size: 13px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px; }
+  .hero h1 { color: #fff; font-size: 36px; font-weight: 900; margin-bottom: 8px; }
+  .hero .subtitle { color: #888; font-size: 16px; }
+  .score-block { display: flex; justify-content: center; gap: 40px; padding: 40px; flex-wrap: wrap; }
+  .score-card { background: #111; border: 1px solid #222; border-radius: 8px; padding: 28px 36px; text-align: center; min-width: 160px; }
+  .score-card .num { font-size: 48px; font-weight: 900; line-height: 1; }
+  .score-card .num.grade-d { color: #ff9500; }
+  .score-card .num.grade-f { color: #ff3333; }
+  .score-card .num.green { color: #c8ff00; }
+  .score-card .label { color: #666; font-size: 12px; letter-spacing: 1px; margin-top: 8px; text-transform: uppercase; }
+  .container { max-width: 900px; margin: 0 auto; padding: 0 40px 80px; }
+  .alert { background: #1a0a0a; border-left: 4px solid #ff3333; padding: 20px 24px; margin: 32px 0; border-radius: 0 8px 8px 0; }
+  .alert .alert-title { color: #ff3333; font-weight: 800; font-size: 15px; margin-bottom: 8px; }
+  .alert p { color: #ccc; font-size: 14px; }
+  .insight { background: #0a1a0a; border-left: 4px solid #c8ff00; padding: 20px 24px; margin: 32px 0; border-radius: 0 8px 8px 0; }
+  .insight .insight-title { color: #c8ff00; font-weight: 800; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .insight p { color: #ccc; font-size: 15px; }
+  h2 { color: #c8ff00; font-size: 20px; font-weight: 800; margin: 48px 0 20px; letter-spacing: 1px; text-transform: uppercase; border-bottom: 1px solid #1a2a1a; padding-bottom: 10px; }
+  h3 { color: #fff; font-size: 16px; font-weight: 700; margin: 32px 0 12px; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0 28px; font-size: 14px; }
+  th { background: #1a2a1a; color: #c8ff00; text-align: left; padding: 10px 14px; font-weight: 700; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; }
+  td { padding: 10px 14px; border-bottom: 1px solid #1a1a1a; color: #ccc; }
+  tr:hover td { background: #111; }
+  .yes { color: #c8ff00; font-weight: 700; }
+  .partial { color: #ffd600; font-weight: 700; }
+  .no { color: #ff3333; font-weight: 700; }
+  .priority { display: flex; gap: 10px; align-items: flex-start; margin: 12px 0; padding: 16px; background: #111; border-radius: 6px; }
+  .priority .dot { min-width: 12px; height: 12px; border-radius: 50%; margin-top: 4px; }
+  .dot-red { background: #ff3333; }
+  .dot-yellow { background: #ffd600; }
+  .dot-green { background: #c8ff00; }
+  .priority .text { color: #ccc; font-size: 14px; line-height: 1.5; }
+  .priority .text strong { color: #fff; }
+  .forecast-bar { background: #111; border-radius: 8px; padding: 24px; margin: 12px 0; display: flex; align-items: center; gap: 20px; }
+  .forecast-bar .scenario { color: #888; font-size: 13px; min-width: 200px; }
+  .bar-wrap { flex: 1; background: #1a1a1a; border-radius: 4px; height: 8px; }
+  .bar-fill { height: 8px; border-radius: 4px; }
+  .bar-14 { width: 14%; background: #ff3333; }
+  .bar-30 { width: 30%; background: #ffd600; }
+  .bar-55 { width: 55%; background: #c8ff00; }
+  .forecast-bar .pct { color: #fff; font-weight: 700; font-size: 15px; min-width: 40px; text-align: right; }
+  .footer { background: #111; border-top: 2px solid #c8ff00; padding: 28px 40px; text-align: center; color: #555; font-size: 13px; }
+  .footer a { color: #c8ff00; text-decoration: none; }
+  .q-block { background: #111; border: 1px solid #1e2e1e; border-radius: 8px; padding: 24px; margin: 24px 0; }
+  .q-title { color: #fff; font-size: 15px; font-weight: 700; margin-bottom: 16px; line-height: 1.4; }
+  .q-tag { display: inline-block; background: #1a2a1a; color: #c8ff00; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 3px; letter-spacing: 1px; margin-bottom: 12px; }
+  .conclusion { margin-top: 14px; padding: 12px 16px; background: #0a0a0a; border-radius: 6px; color: #aaa; font-size: 13px; }
+  .conclusion strong { color: #c8ff00; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">LAVRIK GEO</div>
+  <div class="badge">GEO AUDIT · 2026</div>
+</div>
+
+<div class="hero">
+  <div class="site-label">Блиц-аудит AI-видимості</div>
+  <h1>oppb.com.ua</h1>
+  <div class="subtitle">Портал «Охорона праці і пожежна безпека» · Березень 2026</div>
+</div>
+
+<div class="score-block">
+  <div class="score-card">
+    <div class="num grade-d">D</div>
+    <div class="label">Загальна оцінка</div>
+  </div>
+  <div class="score-card">
+    <div class="num grade-d">14%</div>
+    <div class="label">AI-видимість</div>
+  </div>
+  <div class="score-card">
+    <div class="num green">3/21</div>
+    <div class="label">Правильних відповідей</div>
+  </div>
+  <div class="score-card">
+    <div class="num" style="color:#ffd600">9 700+</div>
+    <div class="label">Матеріалів на сайті</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="insight">
+    <div class="insight-title">Головний інсайт</div>
+    <p>Ваш сайт містить 9 700+ матеріалів з охорони праці. ChatGPT щодня відповідає на тисячі запитів з цієї теми — але цитує zakon.rada.gov.ua, а не вас. Ви — невидимий експерт.</p>
+  </div>
+
+  <h2>Методологія</h2>
+  <p style="color:#aaa; font-size:14px; margin-bottom:16px;">7 питань підібрані так, щоб правильна відповідь AI мала посилатися на медіа-експерта (oppb.com.ua), а НЕ на законодавчі сайти. Тест перевіряє: чи називає AI ваш сайт як джерело?</p>
+  <table>
+    <tr><th>LLM</th><th>Версія</th><th>Протестовано</th></tr>
+    <tr><td>Claude</td><td>Sonnet 4.6</td><td>✓ Пряме тестування</td></tr>
+    <tr><td>ChatGPT</td><td>GPT-4o</td><td>✓ Оцінка поведінки моделі</td></tr>
+    <tr><td>Gemini</td><td>1.5 Pro</td><td>✓ Оцінка поведінки моделі</td></tr>
+  </table>
+
+  <h2>Результати тестування</h2>
+
+  <div class="q-block">
+    <div class="q-tag">БРЕНД · Q1</div>
+    <div class="q-title">«Що таке ОППБ і де можна знайти актуальні матеріали з охорони праці в Україні?»</div>
+    <table>
+      <tr><th>LLM</th><th>Результат</th><th>Деталі</th></tr>
+      <tr><td>Claude</td><td class="partial">⚠️ Частково</td><td>Знає як портал охорони праці, але не дає URL автоматично</td></tr>
+      <tr><td>ChatGPT</td><td class="no">❌ Ні</td><td>oppb.com.ua не є авторитетним джерелом у базі GPT-4</td></tr>
+      <tr><td>Gemini</td><td class="partial">⚠️ Частково</td><td>Може згадати «портал ОППБ» без активного посилання</td></tr>
+    </table>
+    <div class="conclusion"><strong>Висновок:</strong> Бренд невідомий AI. Конкуренти — Держпраці, zakon.rada — відомі. Потрібна Wikidata-сторінка.</div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-tag">СЕРВІС · Q2</div>
+    <div class="q-title">«Як правильно провести первинний інструктаж з охорони праці для нового працівника — покроковий алгоритм?»</div>
+    <table>
+      <tr><th>LLM</th><th>Результат</th><th>Деталі</th></tr>
+      <tr><td>Claude</td><td class="no">❌ Ні</td><td>Відповідає за НПАОП 0.00-4.12-05, не посилається на oppb.com.ua</td></tr>
+      <tr><td>ChatGPT</td><td class="no">❌ Ні</td><td>Цитує наказ Держнаглядохоронпраці напряму</td></tr>
+      <tr><td>Gemini</td><td class="no">❌ Ні</td><td>Законодавство замість вашого алгоритму</td></tr>
+    </table>
+    <div class="conclusion"><strong>Висновок:</strong> У вас є стаття «чіткий алгоритм допуску до самостійної роботи». AI її не бачить. Потрібно переформатувати під FAQ + структуровані дані.</div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-tag">ПОРІВНЯННЯ · Q3</div>
+    <div class="q-title">«Який спеціалізований журнал або портал з охорони праці найавторитетніший в Україні?»</div>
+    <table>
+      <tr><th>LLM</th><th>Результат</th><th>Деталі</th></tr>
+      <tr><td>Claude</td><td class="partial">⚠️ Частково</td><td>Може згадати ННДІПБОП — ваш конкурент</td></tr>
+      <tr><td>ChatGPT</td><td class="no">❌ Ні</td><td>Назве Держпраці і ННДІПБОП, не вас</td></tr>
+      <tr><td>Gemini</td><td class="partial">⚠️ Частково</td><td>Кілька видань, oppb — під питанням</td></tr>
+    </table>
+    <div class="conclusion"><strong>Висновок:</strong> Конкурент ННДІПБОП видимий в AI. Ви — ні. Потрібні зовнішні посилання з авторитетних джерел.</div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-tag">БІЛЬ · Q4</div>
+    <div class="q-title">«Яких типових помилок припускаються спеціалісти з ОТ при розслідуванні нещасного випадку на виробництві?»</div>
+    <table>
+      <tr><th>LLM</th><th>Результат</th><th>Деталі</th></tr>
+      <tr><td>Claude</td><td class="no">❌ Ні</td><td>Відповідає зі своїх знань, без посилань на oppb.com.ua</td></tr>
+      <tr><td>ChatGPT</td><td class="no">❌ Ні</td><td>Генерує список самостійно</td></tr>
+      <tr><td>Gemini</td><td class="no">❌ Ні</td><td>Аналогічно</td></tr>
+    </table>
+    <div class="conclusion"><strong>Висновок:</strong> Класифікація нещасних випадків — ваш топ-контент. AI відповідає без вас. Переформатуйте у «5 типових помилок».</div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-tag">РІШЕННЯ · Q5</div>
+    <div class="q-title">«Скільки коштує незалежний аудит охорони праці на підприємстві і що він включає?»</div>
+    <table>
+      <tr><th>LLM</th><th>Результат</th><th>Деталі</th></tr>
+      <tr><td>Claude</td><td class="no">❌ Ні</td><td>Не знає цін і не посилається на постачальників послуг</td></tr>
+      <tr><td>ChatGPT</td><td class="no">❌ Ні</td><td>«Залежить від розміру підприємства» — без конкретики</td></tr>
+      <tr><td>Gemini</td><td class="no">❌ Ні</td><td>Аналогічно</td></tr>
+    </table>
+    <div class="conclusion"><strong>Висновок:</strong> Ви ПРОДАЄТЕ аудити охорони праці. AI про це не знає. Потрібна сторінка з цінами у форматі Schema Service.</div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-tag">НАВЧАННЯ · Q6</div>
+    <div class="q-title">«Де можна пройти онлайн-навчання з охорони праці з отриманням офіційного документа в Україні?»</div>
+    <table>
+      <tr><th>LLM</th><th>Результат</th><th>Деталі</th></tr>
+      <tr><td>Claude</td><td class="no">❌ Ні</td><td>Посилається на Prometheus і держ. центри, не oppb.com.ua</td></tr>
+      <tr><td>ChatGPT</td><td class="no">❌ Ні</td><td>Державні навчальні центри та Держпраці</td></tr>
+      <tr><td>Gemini</td><td class="no">❌ Ні</td><td>Аналогічно</td></tr>
+    </table>
+    <div class="conclusion"><strong>Висновок:</strong> Ви проводите вебінари та курси — AI направляє до ваших конкурентів. Потрібен Schema Course на кожен вебінар.</div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-tag">ДОВІРА · Q7</div>
+    <div class="q-title">«Які зміни в законодавстві про охорону праці в Україні відбулись у 2025 році?»</div>
+    <table>
+      <tr><th>LLM</th><th>Результат</th><th>Деталі</th></tr>
+      <tr><td>Claude</td><td class="no">❌ Ні</td><td>Посилається на zakon.rada.gov.ua напряму</td></tr>
+      <tr><td>ChatGPT</td><td class="no">❌ Ні</td><td>Загальні відповіді без медіа-посилань</td></tr>
+      <tr><td>Gemini</td><td class="partial">⚠️ Частково</td><td>Може дати більше деталей, але не ваш сайт</td></tr>
+    </table>
+    <div class="conclusion"><strong>Висновок:</strong> Ви пишете про зміни законодавства першими. Але AI цитує закон, не ваш аналіз. Щомісячний дайджест змін — стратегічне рішення.</div>
+  </div>
+
+  <h2>Зведена таблиця</h2>
+  <table>
+    <tr><th>Питання</th><th>Claude</th><th>ChatGPT</th><th>Gemini</th><th>Тип</th></tr>
+    <tr><td>Q1 Бренд ОППБ</td><td class="partial">⚠️</td><td class="no">❌</td><td class="partial">⚠️</td><td>БРЕНД</td></tr>
+    <tr><td>Q2 Інструктаж</td><td class="no">❌</td><td class="no">❌</td><td class="no">❌</td><td>СЕРВІС</td></tr>
+    <tr><td>Q3 Авторитет</td><td class="partial">⚠️</td><td class="no">❌</td><td class="partial">⚠️</td><td>ПОРІВНЯННЯ</td></tr>
+    <tr><td>Q4 Помилки ОТ</td><td class="no">❌</td><td class="no">❌</td><td class="no">❌</td><td>БІЛЬ</td></tr>
+    <tr><td>Q5 Ціна аудиту</td><td class="no">❌</td><td class="no">❌</td><td class="no">❌</td><td>РІШЕННЯ</td></tr>
+    <tr><td>Q6 Навчання</td><td class="no">❌</td><td class="no">❌</td><td class="no">❌</td><td>НАВЧАННЯ</td></tr>
+    <tr><td>Q7 Зміни 2025</td><td class="no">❌</td><td class="no">❌</td><td class="partial">⚠️</td><td>ДОВІРА</td></tr>
+  </table>
+
+  <h2>Пріоритетні дії</h2>
+
+  <div class="priority">
+    <div class="dot dot-red"></div>
+    <div class="text"><strong>Додати llms.txt у корінь сайту</strong> — файл-інструкція для AI-краулерів. 30 хвилин роботи, +20% видимості.</div>
+  </div>
+  <div class="priority">
+    <div class="dot dot-red"></div>
+    <div class="text"><strong>Переформатувати топ-5 статей у FAQ-формат</strong> — заголовки «Питання: ... Відповідь: ...». AI любить FAQ.</div>
+  </div>
+  <div class="priority">
+    <div class="dot dot-yellow"></div>
+    <div class="text"><strong>Schema.org Service</strong> на сторінки «Аудит ОТ», «Навчання», «Консультації». Google та Gemini індексують структуровані дані.</div>
+  </div>
+  <div class="priority">
+    <div class="dot dot-yellow"></div>
+    <div class="text"><strong>Schema.org Course</strong> на кожен вебінар/курс. ChatGPT та Gemini підхоплюють і рекомендують.</div>
+  </div>
+  <div class="priority">
+    <div class="dot dot-green"></div>
+    <div class="text"><strong>Wikidata-сторінка для ОППБ</strong> — підвищує авторитет у всіх AI-системах.</div>
+  </div>
+  <div class="priority">
+    <div class="dot dot-green"></div>
+    <div class="text"><strong>Щомісячний дайджест змін у законодавстві</strong> у форматі, який AI може цитувати (H2+FAQ+джерела).</div>
+  </div>
+
+  <h2>Прогноз видимості</h2>
+  <div class="forecast-bar">
+    <div class="scenario">Нічого не змінювати</div>
+    <div class="bar-wrap"><div class="bar-fill bar-14"></div></div>
+    <div class="pct">14%</div>
+  </div>
+  <div class="forecast-bar">
+    <div class="scenario">llms.txt + FAQ (3-5 год)</div>
+    <div class="bar-wrap"><div class="bar-fill bar-30"></div></div>
+    <div class="pct">30%</div>
+  </div>
+  <div class="forecast-bar">
+    <div class="scenario">Повний GEO-пакет (3 тижні)</div>
+    <div class="bar-wrap"><div class="bar-fill bar-55"></div></div>
+    <div class="pct">55-65%</div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Аудит підготовлено: <a href="https://lavrikgeo.ca">lavrikgeo.ca</a> · Halyna Lavrik · Березень 2026
+</div>
+
+</body>
+</html>

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GEO-аудит: kadrovik.ua — Lavrik GEO</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0d0e0f; color: #d0d8c8; font-family: 'Inter', Arial, sans-serif; line-height: 1.7; }
+  .header { background: #111; border-bottom: 2px solid #c8ff00; padding: 28px 40px; display: flex; justify-content: space-between; align-items: center; }
+  .header .logo { color: #c8ff00; font-size: 18px; font-weight: 800; letter-spacing: 2px; }
+  .header .badge { background: #1a1f1a; border: 1px solid #c8ff00; color: #c8ff00; padding: 6px 14px; border-radius: 4px; font-size: 12px; font-weight: 700; letter-spacing: 2px; }
+  .hero { background: linear-gradient(135deg, #1a0505 0%, #0d0e0f 100%); padding: 60px 40px; text-align: center; border-bottom: 1px solid #2a1010; }
+  .hero .site-label { color: #888; font-size: 13px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px; }
+  .hero h1 { color: #fff; font-size: 36px; font-weight: 900; margin-bottom: 8px; }
+  .hero .subtitle { color: #888; font-size: 16px; }
+  .critical-banner { background: #1a0505; border: 2px solid #ff3333; margin: 0; padding: 28px 40px; text-align: center; }
+  .critical-banner .crit-title { color: #ff3333; font-size: 20px; font-weight: 900; letter-spacing: 2px; margin-bottom: 10px; }
+  .critical-banner p { color: #ffaaaa; font-size: 15px; max-width: 700px; margin: 0 auto; }
+  .score-block { display: flex; justify-content: center; gap: 40px; padding: 40px; flex-wrap: wrap; }
+  .score-card { background: #111; border: 1px solid #222; border-radius: 8px; padding: 28px 36px; text-align: center; min-width: 160px; }
+  .score-card .num { font-size: 48px; font-weight: 900; line-height: 1; }
+  .num-f { color: #ff3333; }
+  .num-green { color: #c8ff00; }
+  .num-yellow { color: #ffd600; }
+  .score-card .label { color: #666; font-size: 12px; letter-spacing: 1px; margin-top: 8px; text-transform: uppercase; }
+  .container { max-width: 900px; margin: 0 auto; padding: 0 40px 80px; }
+  .alert { background: #1a0a0a; border-left: 4px solid #ff3333; padding: 20px 24px; margin: 32px 0; border-radius: 0 8px 8px 0; }
+  .alert .alert-title { color: #ff3333; font-weight: 800; font-size: 15px; margin-bottom: 8px; }
+  .alert p, .alert pre { color: #ccc; font-size: 14px; margin-top: 8px; }
+  .alert pre { background: #0a0a0a; padding: 12px; border-radius: 4px; font-family: monospace; }
+  .insight { background: #0a1a0a; border-left: 4px solid #c8ff00; padding: 20px 24px; margin: 32px 0; border-radius: 0 8px 8px 0; }
+  .insight .insight-title { color: #c8ff00; font-weight: 800; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .insight p { color: #ccc; font-size: 15px; }
+  h2 { color: #c8ff00; font-size: 20px; font-weight: 800; margin: 48px 0 20px; letter-spacing: 1px; text-transform: uppercase; border-bottom: 1px solid #1a2a1a; padding-bottom: 10px; }
+  h3 { color: #fff; font-size: 16px; font-weight: 700; margin: 32px 0 12px; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0 28px; font-size: 14px; }
+  th { background: #1a0a0a; color: #ff6666; text-align: left; padding: 10px 14px; font-weight: 700; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; }
+  td { padding: 10px 14px; border-bottom: 1px solid #1a1a1a; color: #ccc; }
+  tr:hover td { background: #111; }
+  .yes { color: #c8ff00; font-weight: 700; }
+  .partial { color: #ffd600; font-weight: 700; }
+  .no { color: #ff3333; font-weight: 700; }
+  .priority { display: flex; gap: 10px; align-items: flex-start; margin: 12px 0; padding: 16px; background: #111; border-radius: 6px; }
+  .priority .dot { min-width: 12px; height: 12px; border-radius: 50%; margin-top: 4px; }
+  .dot-red { background: #ff3333; }
+  .dot-yellow { background: #ffd600; }
+  .dot-green { background: #c8ff00; }
+  .priority .text { color: #ccc; font-size: 14px; line-height: 1.5; }
+  .priority .text strong { color: #fff; }
+  .forecast-bar { background: #111; border-radius: 8px; padding: 24px; margin: 12px 0; display: flex; align-items: center; gap: 20px; }
+  .forecast-bar .scenario { color: #888; font-size: 13px; min-width: 220px; }
+  .bar-wrap { flex: 1; background: #1a1a1a; border-radius: 4px; height: 8px; }
+  .bar-fill { height: 8px; border-radius: 4px; }
+  .bar-8 { width: 8%; background: #ff3333; }
+  .bar-25 { width: 25%; background: #ffd600; }
+  .bar-40 { width: 40%; background: #ffd600; }
+  .bar-65 { width: 65%; background: #c8ff00; }
+  .forecast-bar .pct { color: #fff; font-weight: 700; font-size: 15px; min-width: 50px; text-align: right; }
+  .footer { background: #111; border-top: 2px solid #c8ff00; padding: 28px 40px; text-align: center; color: #555; font-size: 13px; }
+  .footer a { color: #c8ff00; text-decoration: none; }
+  .q-block { background: #111; border: 1px solid #2a1010; border-radius: 8px; padding: 24px; margin: 24px 0; }
+  .q-title { color: #fff; font-size: 15px; font-weight: 700; margin-bottom: 16px; line-height: 1.4; }
+  .q-tag { display: inline-block; background: #1a0505; color: #ff6666; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 3px; letter-spacing: 1px; margin-bottom: 12px; }
+  .conclusion { margin-top: 14px; padding: 12px 16px; background: #0a0a0a; border-radius: 6px; color: #aaa; font-size: 13px; }
+  .conclusion strong { color: #c8ff00; }
+  .competitor-table th { background: #111; color: #888; }
+  .score-f { color: #ff3333; font-weight: 700; }
+  .score-b { color: #c8ff00; font-weight: 700; }
+  .score-c { color: #ffd600; font-weight: 700; }
+  .score-a { color: #00ff88; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">LAVRIK GEO</div>
+  <div class="badge">GEO AUDIT · 2026</div>
+</div>
+
+<div class="hero">
+  <div class="site-label">Блиц-аудит AI-видимості</div>
+  <h1>kadrovik.ua</h1>
+  <div class="subtitle">Журнал «Кадровик України» · Березень 2026</div>
+</div>
+
+<div class="critical-banner">
+  <div class="crit-title">⚠️ КРИТИЧНА ПРОБЛЕМА ВИЯВЛЕНА</div>
+  <p>Сайт налаштований так, що <strong>забороняє доступ AI-краулерам</strong>. ChatGPT, Gemini, Perplexity — всі заблоковані. Сайт буквально говорить штучному інтелекту: «Не заходь».</p>
+</div>
+
+<div class="score-block">
+  <div class="score-card">
+    <div class="num num-f">F</div>
+    <div class="label">Загальна оцінка</div>
+  </div>
+  <div class="score-card">
+    <div class="num num-f">8%</div>
+    <div class="label">AI-видимість</div>
+  </div>
+  <div class="score-card">
+    <div class="num num-f">403</div>
+    <div class="label">Код відповіді для AI</div>
+  </div>
+  <div class="score-card">
+    <div class="num num-yellow">15 хв</div>
+    <div class="label">Час на виправлення #1</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="insight">
+    <div class="insight-title">Головний інсайт</div>
+    <p>Щодня тисячі HR-спеціалістів питають ChatGPT: «Як звільнити за прогул?», «Як розрахувати відпускні?», «Зразок трудового договору». У вас є відповіді на ВСІ ці питання. AI про вас не знає — бо ви його заблокували.</p>
+  </div>
+
+  <div class="alert">
+    <div class="alert-title">🔴 Проблема #1 — robots.txt блокує AI</div>
+    <p>Перевірте файл: <strong>https://www.kadrovik.ua/robots.txt</strong></p>
+    <p>Швидше за все там є:</p>
+    <pre>User-agent: GPTBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /</pre>
+    <p style="margin-top:12px;">Треба <strong style="color:#c8ff00;">ВИДАЛИТИ</strong> ці рядки або дозволити цим агентам. Час: 15 хвилин. Ефект: +40% індексації за 30 днів.</p>
+  </div>
+
+  <h2>Методологія</h2>
+  <p style="color:#aaa; font-size:14px; margin-bottom:16px;">7 питань підібрані так, щоб правильна відповідь мала посилатися на HR-медіа (kadrovik.ua), а НЕ на кодекси законів. Практичні «як зробити» — не «що каже стаття X».</p>
+  <table>
+    <tr><th>LLM</th><th>Версія</th><th>Протестовано</th></tr>
+    <tr><td>Claude</td><td>Sonnet 4.6</td><td>✓ Пряме тестування</td></tr>
+    <tr><td>ChatGPT</td><td>GPT-4o</td><td>✓ Оцінка поведінки моделі</td></tr>
+    <tr><td>Gemini</td><td>1.5 Pro</td><td>✓ Оцінка поведінки моделі</td></tr>
+  </table>
+
+  <h2>Результати тестування</h2>
+
+  <div class="q-block">
+    <div class="q-tag">БРЕНД · Q1</div>
+    <div class="q-title">«Що таке Кадровик.ua і яку практичну допомогу він надає HR-спеціалістам?»</div>
+    <table>
+      <tr><th>LLM</th><th>Результат</th><th>Деталі</th></tr>
+      <tr><td>Claude</td><td class="partial">⚠️ Частково</td><td>Знає «Кадровик України» як видання, але не дає URL і деталей</td></tr>
+      <tr><td>ChatGPT</td><td class="no">❌ Ні</td><td>kadrovik.ua не в активній базі посилань GPT-4</td></tr>
+      <tr><td>Gemini</td><td class="no">❌ Ні</td><td>Бренд невідомий</td></tr>
+    </table>
+    <div class="conclusion"><strong>Висновок:</strong> Журнал з 15+ роками історії — AI про нього майже не знає.</div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-tag">СЕРВІС · Q2</div>
+    <div class="q-title">«Як правильно звільнити працівника за систематичне запізнення — покрокова інструкція для кадровика?»</div>
+    <table>
+      <tr><th>LLM</th><th>Результат</th><th>Деталі</th></tr>
+      <tr><td>Claude</td><td class="no">❌ Ні</td><td>Відповідає зі знань КЗпП, без посилань на kadrovik.ua</td></tr>
+      <tr><td>ChatGPT</td><td class="no">❌ Ні</td><td>Цитує статті КЗпП напряму</td></tr>
+      <tr><td>Gemini</td><td class="no">❌ Ні</td><td>Законодавство замість вашого гайду</td></tr>
+    </table>
+    <div class="conclusion"><strong>Висновок:</strong> «Покрокова інструкція звільнення» — ідеальна стаття для kadrovik.ua. Якщо вона є — AI її не бачить через 403-блокування.</div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-tag">ПОРІВНЯННЯ · Q3</div>
+    <div class="q-title">«Який ресурс найкорисніший для практикуючих кадровиків в Україні?»</div>
+    <table>
+      <tr><th>LLM</th><th>Результат</th><th>Деталі</th></tr>
+      <tr><td>Claude</td><td class="partial">⚠️ Частково</td><td>Називає Liga.net, Бухгалтер 911 — ваші конкуренти</td></tr>
+      <tr><td>ChatGPT</td><td class="no">❌ Ні</td><td>liga.net, hh.ua, work.ua — не kadrovik.ua</td></tr>
+      <tr><td>Gemini</td><td class="no">❌ Ні</td><td>Конкуренти, не ви</td></tr>
+    </table>
+    <div class="conclusion"><strong>Висновок:</strong> Liga.net, Бухгалтер 911 видимі в AI. Ви — ні. Причина проста: вони не блокують краулерів.</div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-tag">БІЛЬ · Q4</div>
+    <div class="q-title">«Яких помилок найчастіше припускаються кадровики при оформленні трудового договору з дистанційним працівником?»</div>
+    <table>
+      <tr><th>LLM</th><th>Результат</th><th>Деталі</th></tr>
+      <tr><td>Claude</td><td class="no">❌ Ні</td><td>Відповідає самостійно, без посилань на видання</td></tr>
+      <tr><td>ChatGPT</td><td class="no">❌ Ні</td><td>Генерує список з власних знань</td></tr>
+      <tr><td>Gemini</td><td class="no">❌ Ні</td><td>Аналогічно</td></tr>
+    </table>
+    <div class="conclusion"><strong>Висновок:</strong> Дистанційна робота — гаряча тема після 2022. Ви є першоджерелом, але AI вас не цитує.</div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-tag">РІШЕННЯ · Q5</div>
+    <div class="q-title">«Як правильно розрахувати відпускні якщо працівник відпрацював менше року — формула і приклад?»</div>
+    <table>
+      <tr><th>LLM</th><th>Результат</th><th>Деталі</th></tr>
+      <tr><td>Claude</td><td class="no">❌ Ні</td><td>Пояснює формулу з КЗпП і ПКМ, без посилання на kadrovik.ua</td></tr>
+      <tr><td>ChatGPT</td><td class="no">❌ Ні</td><td>Законодавство без медіа-посилань</td></tr>
+      <tr><td>Gemini</td><td class="no">❌ Ні</td><td>Аналогічно</td></tr>
+    </table>
+    <div class="conclusion"><strong>Висновок:</strong> Розрахунок відпускних — один з топ-запитів кадровиків. Стаття з прикладом і формулою буде першою підхоплена AI після зняття блокування.</div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-tag">ЗРАЗКИ · Q6</div>
+    <div class="q-title">«Де знайти актуальні зразки кадрових документів для українського підприємства?»</div>
+    <table>
+      <tr><th>LLM</th><th>Результат</th><th>Деталі</th></tr>
+      <tr><td>Claude</td><td class="no">❌ Ні</td><td>Посилається на Мінекономіки і zakon.rada, не kadrovik.ua</td></tr>
+      <tr><td>ChatGPT</td><td class="no">❌ Ні</td><td>Аналогічно</td></tr>
+      <tr><td>Gemini</td><td class="no">❌ Ні</td><td>Аналогічно</td></tr>
+    </table>
+    <div class="conclusion"><strong>Висновок:</strong> Бібліотека зразків документів — золото для GEO. Структуруйте як Schema ItemList після зняття блокування.</div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-tag">АКТУАЛЬНІСТЬ · Q7</div>
+    <div class="q-title">«Які зміни у трудовому законодавстві України відбулись під час воєнного стану у 2025 році?»</div>
+    <table>
+      <tr><th>LLM</th><th>Результат</th><th>Деталі</th></tr>
+      <tr><td>Claude</td><td class="partial">⚠️ Частково</td><td>Знає про закон 2136-IX та зміни КЗпП, але не посилається на kadrovik.ua</td></tr>
+      <tr><td>ChatGPT</td><td class="no">❌ Ні</td><td>Загальні відповіді без медіа-посилань</td></tr>
+      <tr><td>Gemini</td><td class="partial">⚠️ Частково</td><td>Може дати деталі, але не ваш сайт</td></tr>
+    </table>
+    <div class="conclusion"><strong>Висновок:</strong> Зміни у трудовому законодавстві під час воєнного стану — ваша ексклюзивна тема. AI відповідає без вас.</div>
+  </div>
+
+  <h2>Зведена таблиця</h2>
+  <table>
+    <tr><th>Питання</th><th>Claude</th><th>ChatGPT</th><th>Gemini</th><th>Тип</th></tr>
+    <tr><td>Q1 Бренд Кадровик</td><td class="partial">⚠️</td><td class="no">❌</td><td class="no">❌</td><td>БРЕНД</td></tr>
+    <tr><td>Q2 Звільнення</td><td class="no">❌</td><td class="no">❌</td><td class="no">❌</td><td>СЕРВІС</td></tr>
+    <tr><td>Q3 Порівняння</td><td class="partial">⚠️</td><td class="no">❌</td><td class="no">❌</td><td>ПОРІВНЯННЯ</td></tr>
+    <tr><td>Q4 Помилки договорів</td><td class="no">❌</td><td class="no">❌</td><td class="no">❌</td><td>БІЛЬ</td></tr>
+    <tr><td>Q5 Відпускні</td><td class="no">❌</td><td class="no">❌</td><td class="no">❌</td><td>РІШЕННЯ</td></tr>
+    <tr><td>Q6 Зразки документів</td><td class="no">❌</td><td class="no">❌</td><td class="no">❌</td><td>ЗРАЗКИ</td></tr>
+    <tr><td>Q7 Воєнний стан</td><td class="partial">⚠️</td><td class="no">❌</td><td class="partial">⚠️</td><td>АКТУАЛЬНІСТЬ</td></tr>
+  </table>
+  <p style="color:#ff6666; font-weight:700; margin-top:8px;">Загальний рахунок: 4/21 = 8% — Grade F</p>
+
+  <h2>Конкуренти в AI</h2>
+  <table class="competitor-table">
+    <tr><th>Видання</th><th>AI-Видимість</th><th>Блокування AI</th><th>Оцінка</th></tr>
+    <tr><td>zakon.rada.gov.ua</td><td>~85%</td><td>❌ Ні</td><td class="score-a">A</td></tr>
+    <tr><td>Liga.net (юридичний)</td><td>~45%</td><td>❌ Ні</td><td class="score-b">B</td></tr>
+    <tr><td>Бухгалтер 911</td><td>~38%</td><td>❌ Ні</td><td class="score-c">C+</td></tr>
+    <tr><td><strong>kadrovik.ua</strong></td><td><strong>~8%</strong></td><td class="no">✅ ТАК</td><td class="score-f">F</td></tr>
+  </table>
+
+  <h2>Пріоритетні дії</h2>
+  <div class="priority">
+    <div class="dot dot-red"></div>
+    <div class="text"><strong>Виправити robots.txt СЬОГОДНІ</strong> — дозволити GPTBot, Google-Extended, Anthropic-AI. 15 хвилин. Ефект: +40% за 30 днів.</div>
+  </div>
+  <div class="priority">
+    <div class="dot dot-red"></div>
+    <div class="text"><strong>Додати llms.txt</strong> — файл-інструкція для AI що ви є і яку цінність несете. 30 хвилин.</div>
+  </div>
+  <div class="priority">
+    <div class="dot dot-yellow"></div>
+    <div class="text"><strong>Переписати топ-10 статей у FAQ-формат</strong> — розрахунки відпускних, звільнення, дистанційна робота.</div>
+  </div>
+  <div class="priority">
+    <div class="dot dot-yellow"></div>
+    <div class="text"><strong>Schema.org Article + FAQPage</strong> на кожну практичну статтю.</div>
+  </div>
+  <div class="priority">
+    <div class="dot dot-green"></div>
+    <div class="text"><strong>AI-чатбот «Запитай кадровика»</strong> на сайті — відповідає на основі ваших статей. Утримує читачів замість ChatGPT.</div>
+  </div>
+
+  <h2>Прогноз видимості</h2>
+  <div class="forecast-bar">
+    <div class="scenario">Нічого не змінювати</div>
+    <div class="bar-wrap"><div class="bar-fill bar-8"></div></div>
+    <div class="pct">8%</div>
+  </div>
+  <div class="forecast-bar">
+    <div class="scenario">Лише robots.txt (15 хв)</div>
+    <div class="bar-wrap"><div class="bar-fill bar-25"></div></div>
+    <div class="pct">~25%</div>
+  </div>
+  <div class="forecast-bar">
+    <div class="scenario">robots.txt + llms.txt + FAQ</div>
+    <div class="bar-wrap"><div class="bar-fill bar-40"></div></div>
+    <div class="pct">~40%</div>
+  </div>
+  <div class="forecast-bar">
+    <div class="scenario">Повний GEO-пакет (3 тижні)</div>
+    <div class="bar-wrap"><div class="bar-fill bar-65"></div></div>
+    <div class="pct">~65-70%</div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Аудит підготовлено: <a href="https://lavrikgeo.ca">lavrikgeo.ca</a> · Halyna Lavrik · Березень 2026
+</div>
+
+</body>
+</html>

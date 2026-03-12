@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapport Analytique Antigravity — Risques IA PME 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        :root { --accent: #c8ff00; --bg: #0a0a0a; --card: #121212; --text: #e8e8e8; --muted: #888; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; line-height: 1.6; padding: 60px 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        header { border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 40px; margin-bottom: 40px; }
+        .logo { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 1.2rem; color: var(--accent); margin-bottom: 20px; }
+        h1 { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 2.5rem; line-height: 1.1; margin-bottom: 16px; letter-spacing: -0.03em; }
+        .meta { display: flex; gap: 20px; font-size: 0.85rem; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+        .status { color: var(--accent); border: 1px solid var(--accent); padding: 2px 8px; border-radius: 4px; }
+        
+        section { margin-bottom: 60px; }
+        h2 { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 1.8rem; margin-bottom: 24px; color: #fff; border-left: 4px solid var(--accent); padding-left: 20px; }
+        h3 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.3rem; margin-top: 32px; margin-bottom: 16px; color: var(--accent); }
+        p { margin-bottom: 20px; color: #ccc; font-size: 1.05rem; }
+        ul { margin-bottom: 24px; padding-left: 20px; list-style: none; }
+        li { margin-bottom: 12px; position: relative; padding-left: 25px; color: #ccc; }
+        li::before { content: '→'; position: absolute; left: 0; color: var(--accent); }
+        
+        .highlight-box { background: rgba(200, 255, 0, 0.05); border: 1px solid rgba(200, 255, 0, 0.2); border-radius: 12px; padding: 30px; margin: 40px 0; }
+        .highlight-box p { color: #fff; font-weight: 500; font-style: italic; font-size: 1.2rem; margin-bottom: 0; }
+        
+        table { width: 100%; border-collapse: collapse; margin: 30px 0; background: var(--card); border-radius: 8px; overflow: hidden; }
+        th, td { text-align: left; padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        th { background: rgba(255,255,255,0.03); font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; color: var(--muted); }
+        tr:last-child td { border-bottom: none; }
+        
+        .mermaid { background: #fff; padding: 30px; border-radius: 12px; margin: 40px 0; }
+        .mermaid-caption { text-align: center; font-size: 0.9rem; color: var(--muted); margin-top: -30px; margin-bottom: 40px; font-weight: 500; }
+
+        .footer { margin-top: 100px; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; color: var(--muted); font-size: 0.9rem; }
+        strong { color: #fff; }
+    </style>
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'default', flowchart: { curve: 'basis' } });
+    </script>
+</head>
+<body>
+<div class="container">
+    <header>
+        <div class="logo">ANTIGRAVITY BOOST</div>
+        <h1>Rapport Analytique : L'IA et les PME manufacturières</h1>
+        <div class="meta">
+            <span>Édition Québec Q1 2026</span>
+            <span class="status">Final — Révision Direction</span>
+            <span>12 Mars 2026</span>
+        </div>
+    </header>
+
+    <section>
+        <h2>0. Le diagnostic</h2>
+        <div class="highlight-box">
+            <p>Posez-vous la question. Avez-vous vraiment sauvé 150 000 $ en coupant un directeur des opérations pour finalement brûler 750 000 $ dans l'urgence en 2027, juste pour sauver votre chaîne d'approvisionnement ?</p>
+        </div>
+        <p>Ce qu'on observe dans le manufacturier québécois en ce début 2026, ce n'est pas une belle « transformation numérique ». C'est de l'hystérie classique. On coupe dans le gras, on jette la mémoire institutionnelle par la fenêtre, le système plante, puis on engage en panique à prix d'or. La différence ? Le <strong>silent failure</strong> d'une IA dans un bureau, ça fait un client fâché. Dans une usine, ça paralyse la ligne de montage. Ça attire les amendes de la CNESST. Ça fait sursauter les auditeurs ISO.</p>
+        <p>Ce rapport ? Oubliez les tendances. C'est la carte des mines plantées sous votre plancher d'usine. En ce moment même.</p>
+    </section>
+
+    <section>
+        <h2>1. L'heure de vérité</h2>
+        <p>Avez-vous commencé à purger vos cadres intermédiaires ?</p>
+        <p>Selon que votre bureau donne sur le Vieux-Montréal, Granby ou ici, au Saguenay—Lac-Saint-Jean — la réponse varie. Dans les grands centres, la folie de l'automatisation a déjà avalé 30 % des gestionnaires, remplacés par des « agents cognitifs ». En région, dans une usine de 80 employés, on hésite encore. Mais la décision approche. Et vous voilà à la croisée des chemins.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Scénario</th>
+                    <th>An 1</th>
+                    <th>An 3 (2027–2028)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>A : Le mirage DIY</strong></td>
+                    <td>Économie de 120 000 $</td>
+                    <td><strong>La crise.</strong> Perte d'un fournisseur clé, amende, embauche d'un pompier à 200 000 $.</td>
+                </tr>
+                <tr>
+                    <td><strong>B : Gouvernance</strong></td>
+                    <td>Investissement de 80 000 $</td>
+                    <td><strong>Le roc.</strong> Croissance sans perte de contrôle. Pas de panique.</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <p>Sur le terrain, on ne remplace pas l'humain par la machine. On déplace la charge mentale. Couper des têtes sans bâtir une couche de gouvernance, c'est signer un chèque en blanc à la catastrophe. Une dette technique qui va exploer dans votre cour d'ici 18 mois.</p>
+    </section>
+
+    <section>
+        <h2>2. L'illusion d'optique</h2>
+        <h3>2.1 Le piège du cheap</h3>
+        <p>L'erreur des DG en région est profonde. Les vendeurs vous promettent du <em>plug-and-play</em>. <strong>Bullshit.</strong> On parle de systèmes de décision qui exigent des fondations solides :</p>
+        <ul>
+            <li>Une intégration viscérale avec vos ERP (SAP, Oracle, ou systèmes legacy).</li>
+            <li>Le respect féroce de la conformité (CNESST, normes environnementales).</li>
+            <li>Des filets de sécurité pour rattraper les hallucinations de la machine.</li>
+        </ul>
+
+        <h3>2.2 L'échec silencieux sur le plancher</h3>
+        <p>En usine, l'échec ne pardonne pas :</p>
+        <ul>
+            <li><strong>Logistique :</strong> La patente commande les mauvaises pièces. L'erreur pop juste quand on assemble. Trop tard.</li>
+            <li><strong>Qualité :</strong> Le robot valide un certificat périmé. Bonjour le rappel de produit.</li>
+            <li><strong>Gouvernance :</strong> Impossible de prouver pourquoi l'IA a pris cette décision devant l'auditeur ISO. Échec.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>3. La carte des dommages</h2>
+        <div class="mermaid">
+            flowchart TD
+                A["<b>La décision du DG (2026)</b><br/>Lâcher l'IA dans les opérations"] --> B{"<b>Le vrai choix</b><br/>Avez-vous un architecte<br/>pour encadrer la patente ?"}
+                
+                B -->|Non. On fait ça cheap.| C["<b>Économie illusoire</b><br/>-80 000 $/an<br/>On sabre le champagne."]
+                B -->|Oui. Gouvernance pro.| D["<b>On investit</b><br/>+40 000 $/an<br/>Contrôle et filet de sécurité."]
+                
+                C --> E["<b>Bilan de mi-parcours</b><br/>On perd 3 bons gérants.<br/>La mémoire de l'usine s'évapore."]
+                D --> F["<b>Bilan de mi-parcours</b><br/>L'humain évolue.<br/>Le gérant devient superviseur IA."]
+                
+                E --> G["<b>Le mur</b><br/>L'IA dérape solide.<br/>Audit échoué / Bris de conformité."]
+                F --> H["<b>Le roc</b><br/>Ça grossit sans casser.<br/>Traçabilité totale."]
+                
+                G --> I["<b>La crise de 2027</b><br/>Le sauveur coûte 300 $/h.<br/>Facture : 300 000 $<br/>La réputation encaisse un coup."]
+                H --> J["<b>Vitesse de croisière</b><br/>Profits en hausse.<br/>Prêt pour le grand saut."]
+                
+                I --> K["<b>Bilan final (3 ans)</b><br/>NET : -150 000 $<br/>Et un climat toxique sur le plancher."]
+                J --> L["<b>Bilan final (3 ans)</b><br/>NET : +180 000 $<br/>Le capital intellectuel est sauf."]
+                
+                style C fill:#ffcccc,stroke:#ef4444
+                style I fill:#ff9999,stroke:#ef4444
+                style D fill:#ccffcc,stroke:#22c55e
+                style L fill:#99ff99,stroke:#22c55e
+                style B fill:#ffffcc,stroke:#eab308
+        </div>
+        <div class="mermaid-caption">Figure 1 : La grande bifurcation stratégique pour la direction.</div>
+    </section>
+
+    <section>
+        <h2>4. On fait quoi ce matin</h2>
+        <ol>
+            <li><strong>Sauvez les meubles.</strong> Avant de couper, pompez le savoir. Documentez les règles cachées.</li>
+            <li><strong>Ériger la clôture.</strong> Chaque agent IA sur le plancher a besoin de sa laisse (Human-in-the-loop).</li>
+            <li><strong>Le gérant 2.0.</strong> Le boss des opérations mute. Il devient le pont entre l'usine и la patente virtuelle.</li>
+            <li><strong>Jouez prudent.</strong> Testez l'IA sur la maintenance préventive avant de toucher à l'approvisionnement.</li>
+        </ol>
+    </section>
+
+    <div class="footer">
+        Confidentialité : Propriété de <strong>Antigravity Boost</strong>. Ne pas distribuer sans autorisation.<br>
+        © 2026 Lavrik GEO — Expertise en Gouvernance IA.
+    </div>
+</div>
+</body>
+</html>
